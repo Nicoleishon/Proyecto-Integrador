@@ -1,0 +1,57 @@
+
+@startuml
+
+class Hospital {
+
+}
+
+class Persona {
+
+}
+
+class Medico {
+
+}
+
+class Paciente {
+
+}
+
+class Enfermero {
+
+}
+
+class PersonalHospital {
+
+}
+
+class HistorialMedico {
+}
+
+class Factura {
+}
+
+class Turno {
+}
+
+class Menu {
+}
+
+class Recepcionista {
+}
+
+Hospital "1" *-- "0..*" Medico
+Hospital "1" *-- "0..*" Enfermero
+Medico "0..*" -- "0..*" Paciente
+Enfermero "0..*" -- "0..*" Paciente
+Medico --|> PersonalHospital
+Enfermero --|> PersonalHospital
+Recepcionista --|> PersonalHospital
+Paciente --|> Persona
+PersonalHospital --|> Persona
+Medico "1" -- "0..*" Turno
+Paciente "1" -- "0..*" Turno
+Recepcionista ..> Medico
+Recepcionista ..> Turno
+Recepcionista ..> Paciente
+@enduml

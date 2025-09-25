@@ -1,0 +1,138 @@
+@startuml
+
+
+class Persona {
+  - id: String
+  - nombre: String
+  - apellido: String
+  - fechaNacimiento: Date
+  - direccion: String
+  - telefono: String
+  + getNombreCompleto(): String
+  + getEdad(): int
+  + actualizarDatos(): void
+}
+
+abstract class PersonalHospital {
+  - empleadoId: String
+  - fechaIngreso: Date
+  - departamento: String
+  - turnoAsignado: String
+  + registrarEntrada(): void
+  + asignarTurno(t: Turno): void
+  + generarReporte(): String
+}
+
+class Medico {
+  - matricula: String
+  - especialidad: String
+  - horarios: List<String>
+  + atenderPaciente(p: Paciente, t: Turno): void
+  + emitirReceta(p: Paciente, textoReceta: String): void
+  + verHistorial(p: Paciente): HistorialMedico
+}
+
+class Enfermero {
+  - licencia: String
+  - area: String
+  + administrarMedicación(p: Paciente, medicamento: String): void
+  + tomarSignosVitales(p: Paciente): Map
+  + registrarEvolucion(p: Paciente, nota: String): void
+}
+
+class Recepcionista {
+  - usuario: String
+  - passwordHash: String
+  - turnoTrabajo: String
+  + crearTurno(p: Paciente, m: Medico, fecha: Date): Turno
+  + cancelarTurno(t: Turno): void
+  + buscarPaciente(id: String): Paciente
+  + facturar(p: Paciente): Factura
+}
+
+class Paciente {
+  - pacienteId: String
+  - nroSeguroSocial: String
+  - fechaRegistro: Date
+  + reservarTurno(m: Medico, fecha: Date): Turno
+  + cancelarTurno(t: Turno): void
+  + verHistorial(): HistorialMedico
+  + verFacturas(): List<Factura>
+}
+
+class HistorialMedico {
+  - historialId: String
+  - alergias: String
+  - medicamentos: String
+  - cirugias: String
+  - historialVacunacion: String
+
+
+}
+
+class Factura {
+  - facturaId: String
+  - fecha: Date
+  - monto: double
+  - items: List<String>
+  - pagada: boolean
+  + generar(): String
+  + pagar(modoPago: String): boolean
+}
+
+class Turno {
+  - turnoId: String
+  - fechaHora: Date
+  - estado: String    ' (Pendiente, Confirmado, Realizado, Cancelado)
+  - tipoConsulta: String
+  + reservar(): boolean
+  + reprogramar(nuevaFecha: Date): boolean
+  + cancelar(): boolean
+  + marcarAsistencia(presente: boolean): void
+}
+
+class Hospital {
+  - hospitalId: String
+  - nombre: String
+  - direccion: String
+  - listaPersonal: Lista<PersonalHospital>
+  - listaPacientes: Lista<Paciente>
+  - listaTurnos: Lista<Turno>
+  + agregarPersonal(p: PersonalHospital): void
+  + registrarPaciente(p: Paciente): void
+  + buscarMedicoPorEspecialidad(esp: String): List<Medico>
+  + generarReporteDiario(): String
+}
+
+class Menu {
+  - opciones: Lista<String>
+  + mostrar(): void
+  + seleccionar(op: int): void
+}
+
+' --- Herencias ---
+PersonalHospital --|> Persona
+Paciente --|> Persona
+
+Medico --|> PersonalHospital
+Enfermero --|> PersonalHospital
+Recepcionista --|> PersonalHospital
+
+' --- Relaciones y multiplicidades ---
+Hospital "1" *-- "0..*" PersonalHospital
+Hospital "1" *-- "0..*" Paciente
+
+Medico "1" -- "0..*" Turno
+Paciente "1" -- "0..*" Turno
+
+Paciente "1" *-- "1" HistorialMedico
+Paciente "1" -- "0..*" Factura
+
+Recepcionista ..> Turno : "crea/gestiona"
+Recepcionista ..> Paciente : "busca/registro"
+Recepcionista ..> Medico : "consulta disponibilidad"
+Recepcionista ..> Menu : "usa"
+
+HistorialMedico ..> Persona : "entradas por" 
+
+@enduml
