@@ -1,28 +1,30 @@
 package com.mycompany.proyectointegrador;
 
+import java.util.Date;
 
-public class Persona {
-    private String id;
+abstract class Persona {
+    private int id;
     private String nombre;
     private String apellido;
-    private String fechaNacimiento;
+    private Date fechaNacimiento; 
     private String direccion;
     private int telefono;
+    private int dni;
 
-    public Persona(String id, String nombre, String apellido, String fechaNacimiento, String direccion, int telefono) {
+    public Persona(int id, String nombre, String apellido, String fechaNacimiento, String direccion, int telefono, int dni) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
-        this.fechaNacimiento = fechaNacimiento;
+        this.fechaNacimiento = fechaNacimiento; //preferiria colocar directamente la edad - tira un error
         this.direccion = direccion;
         this.telefono = telefono;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -66,6 +68,16 @@ public class Persona {
         this.telefono = telefono;
     }
     
+    public String obtenerNombreCompleto(){
+       return nombre + " " + apellido;
+    }
     
+    public String obtenerEdad(){
+        return fechaNacimiento; // hay que hacer el calculo de la edad
+    }
+    
+    public void actualizarDatos(){ // falta completar
+        
+    }
     
 }
