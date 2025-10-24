@@ -3,26 +3,30 @@ package com.mycompany.proyectointegrador;
 import java.util.List;
 
 
-public class Factura {
-    private String facturaId;
-    private String fecha;
-    private double monto;
-    private List<String> items;
-    private boolean pagada;
+import java.time.LocalDate;
+import java.util.List;
 
-    public Factura(String facturaId, String fecha, double monto, List<String> items, boolean pagada) {
-        this.facturaId = facturaId;
-        this.fecha = fecha;
-        this.monto = monto;
-        this.items = items;
-        this.pagada = pagada;
+public class Factura {
+    private int idFactura;
+    private LocalDate fechaEmision;
+    private Paciente paciente;
+    private Turno turno;
+    private List<ItemFactura> items;
+    private Double montoTotal;
+    private Double montoCubierto;  // lo que cubre la obra social o seguro
+    private Double montoPaciente;  // lo que debe pagar el paciente
+    private FormaPago formaPago;   // ENUM: OBRA_SOCIAL, SEGURO_MEDICO, PARTICULAR
+    private Object cobertura;      // ObraSocial | SeguroMedico | null
+    private Boolean pagada;
+
+    // Métodos
+    public void generar() {
+        // implementación pendiente
     }
-    
-    public String generar(){
-        
-    }
-    
-    public boolean pagar(String modoPago){
-        
+
+    public Boolean pagar() {
+        // implementación pendiente
+        return null;
     }
 }
+
