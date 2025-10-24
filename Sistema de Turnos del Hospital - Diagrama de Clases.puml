@@ -32,18 +32,18 @@ enum Rol {
 }
 
 enum EstadoTurno {
-  PENDIENTE,
-  CONFIRMADO,
-  REALIZADO,
-  CANCELADO,
+  PENDIENTE
+  CONFIRMADO
+  REALIZADO
+  CANCELADO
   AUSENTE
 }
 
 enum Especialidad {
-  CARDIOLOGIA,
-  PEDIATRIA,
-  ODONTOLOGIA,
-  DERMATOLOGIA,
+  CARDIOLOGIA
+  PEDIATRIA
+  ODONTOLOGIA
+  DERMATOLOGIA
   CLINICA_GENERAL
 }
 
@@ -233,28 +233,28 @@ class Factura {
   - paciente: Paciente
   - turno: Turno
   - items: List<ItemFactura>
-  - montoTotal: double
-  - montoCubierto: double      // lo que cubre la obra social o seguro
-  - montoPaciente: double      // lo que debe pagar el paciente
+  - montoTotal: Double
+  - montoCubierto: Double      // lo que cubre la obra social o seguro
+  - montoPaciente: Double      // lo que debe pagar el paciente
   - formaPago: FormaPago       // ENUM: OBRA_SOCIAL, SEGURO_MEDICO, PARTICULAR
-  - cobertura: ObraSocial | SeguroMedico | null
-  - pagada: boolean
+  - cobertura: Object {ObraSocial | SeguroMedico | null}
+  - pagada: Boolean
 
   + generar(): void             // calcula totales según cobertura
-  + pagar(): boolean
+  + pagar(): Boolean
 }
 
 enum FormaPago {
-  OBRA_SOCIAL,
-  SEGURO_MEDICO,
+  OBRA_SOCIAL
+  SEGURO_MEDICO
   PARTICULAR
 }
 
 class ItemFactura {
   - descripcion: String
   - cantidad: int
-  - precioUnitario: double
-  + calcularSubtotal(): double
+  - precioUnitario: Double
+  + calcularSubtotal(): Double
 }
 
 
