@@ -1,4 +1,4 @@
-@startuml
+@startuml Diagrama de Clases - Sistema Médico
 title Diagrama de Clases - Sistema Médico
 
 class Hospital {
