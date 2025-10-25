@@ -6,7 +6,7 @@ abstract class Persona {
     private int id;
     private String nombre;
     private String apellido;
-    private Date fechaNacimiento; 
+    private String fechaNacimiento; // string para que no tire error, revisar para poder colocar "Date" 
     private String direccion;
     private int telefono;
     private int dni;
