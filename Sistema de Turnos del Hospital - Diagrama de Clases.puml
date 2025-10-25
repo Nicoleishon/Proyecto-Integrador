@@ -1,4 +1,4 @@
-@startuml Diagrama de Clases - Sistema Médico
+@startuml
 title Diagrama de Clases - Sistema Médico
 
 class Hospital {
@@ -9,41 +9,41 @@ class Hospital {
   - listaPacientes: List<Paciente>
   - listaTurnos: List<Turno>
   
-  + registrarPaciente(Paciente paciente): void
   + buscarMedicoPorEspecialidad(Especialidad especialidad): List<Medico>
-  + generarReporteDiario(): String
+
 }
 
-class Administrador {
-  - idAdministrador: int
-  + contratarPersonal(PersonalHospital personal): void
-  + despedirPersonal(PersonalHospital personal): void
-  + asignarRol(PersonalHospital personal, Rol rol): void
-  + generarReporteHospital(): String
+abstract class Usuario {
+  - nombreUsuario: String
+  - hashContraseña: String
+  + iniciarSesion(): boolean
+  + cerrarSesion(): void
 }
 
-
-
-enum Rol {
-  PACIENTE
-  MEDICO
-  RECEPCIONISTA
-  ADMINISTRADOR
+enum DiaSemana {
+  LUNES,
+  MARTES,
+  MIERCOLES,
+  JUEVES,
+  VIERNES,
+  SABADO,
+  DOMINGO
 }
+
 
 enum EstadoTurno {
-  PENDIENTE
-  CONFIRMADO
-  REALIZADO
-  CANCELADO
+  PENDIENTE,
+  CONFIRMADO,
+  REALIZADO,
+  CANCELADO,
   AUSENTE
 }
 
 enum Especialidad {
-  CARDIOLOGIA
-  PEDIATRIA
-  ODONTOLOGIA
-  DERMATOLOGIA
+  CARDIOLOGIA,
+  PEDIATRIA,
+  ODONTOLOGIA,
+  DERMATOLOGIA,
   CLINICA_GENERAL
 }
 
@@ -62,11 +62,6 @@ abstract class Persona {
   + actualizarDatos(): void
 }
 
-abstract class Usuario {
-  - nombreUsuario: String      // para login, puede ser DNI
-  - hashContraseña: String     // contraseña segura
-  - rol: Rol                   // tipo de usuario en el sistema
-}
 
 abstract class PersonalHospital {
   - idPersonalHospital: int
@@ -85,121 +80,33 @@ class Medico {
 
   + iniciarAtencion(Turno turno): void
   + finalizarAtencion(Turno turno, resumen: String): void
-  + registrarReceta(Paciente paciente, MedicamentoPrescrito medicamento): void
-  + registrarEstudio(Paciente paciente, Estudio estudio): void
-  + consultarHistorial(Paciente paciente): HistorialMedico
-  + actualizarHistorial(Paciente paciente, HistorialMedico historial): void
   + puedeAtender(): Boolean
 }
 
 
 class Horario {
   - idHorario: int
-  - diaSemana: String
-  - horaInicio: String
-  - horaFin: String
+  - diaSemana: DiaSemana
+  - horaInicio: Time
+  - horaFin: Time
 }
 
 class Recepcionista {
   - idRecepcionista: int
   + registrarPaciente(Paciente datos): void
-  + agendarTurno(Paciente paciente, Medico medico, Date fechaHora): void
-  + cancelarTurno(Turno turno): void
-  + emitirFactura(Turno turno): Factura
-}
-
-class GestorTurnos {
   + crearTurno(Paciente paciente, Medico medico, Date fechaHora): Turno
+  + agendarTurno(Turno turno): void
   + cancelarTurno(Turno turno): void
   + reprogramarTurno(Turno turno, Date nuevaFecha): void
-  + obtenerTurnosPorPaciente(Paciente paciente): List<Turno>
-}
-
-class GestorPacientes {
-  + registrarPaciente(Paciente paciente): void
-  + obtenerHistorial(Paciente paciente): HistorialMedico
-  + actualizarDatos(Paciente paciente): void
 }
 
 
 class Paciente {
   - idPaciente: int
   - fechaRegistro: Date
-  - obraSocial: ObraSocial
-  - segurosMedicos: List<SeguroMedico>
-  - historial: HistorialMedico
   + solicitarTurno(Medico medico, Date fechaHora): Turno
   + cancelarTurno(Turno turno): void
-  + consultarHistorialMedico(): HistorialMedico
-  + verFacturas(): List<Factura>
 }
-
-class ObraSocial {
-  - idObraSocial: int
-  - nombre: String
-  - numeroAfiliado: String
-  - cobertura: String
-}
-
-class SeguroMedico {
-  - idSeguro: int
-  - nombre: String
-  - numeroPoliza: String
-  - plan: String
-  - cobertura: String
-}
-
-class HistorialMedico {
-  - idHistorial: int
-  - paciente: Paciente
-  - observacionesGenerales: String
-  - fechaUltimaActualizacion: Date
-  - alergias: List<Alergia>
-  - medicamentos: List<MedicamentoPrescrito>
-  - cirugias: List<Cirugia>
-  - vacunas: List<VacunaAplicada>
-  - estudios: List<Estudio>
-}
-
-class Alergia {
-  - idAlergia: int
-  - nombre: String
-  - descripcion: String
-  - gravedad: String
-}
-
-class MedicamentoPrescrito {
-  - idMedicamento: int
-  - nombre: String
-  - dosis: String
-  - frecuencia: String
-  - fechaInicio: Date
-  - fechaFin: Date
-}
-
-class Cirugia {
-  - idCirugia: int
-  - nombre: String
-  - fecha: Date
-  - descripcion: String
-}
-
-class VacunaAplicada {
-  - idVacuna: int
-  - nombre: String
-  - fechaAplicacion: Date
-  - dosis: String
-}
-
-class Estudio {
-  - idEstudio: int
-  - descripcion: String
-  - fechaSolicitud: Date
-  - resultados: String
-  - medicoSolicitante: Medico
-}
-
-
 
 
 class Turno {
@@ -213,103 +120,25 @@ class Turno {
 }
 
 
-class Receta {
-  - idReceta: int
-  - fechaEmision: Date
-  - medico: Medico
-  - paciente: Paciente
-  - medicamentos: List<MedicamentoPrescrito>
-  - observaciones: String    // indicaciones adicionales, notas del médico
-
-  + agregarMedicamento(MedicamentoPrescrito medicamentoPrescrito): void
-  + quitarMedicamento(MedicamentoPrescrito medicamentoPrescrito): void
-  + obtenerMedicamentos(): List<MedicamentoPrescrito>
-}
-
-
-class Factura {
-  - idFactura: int
-  - fechaEmision: Date
-  - paciente: Paciente
-  - turno: Turno
-  - items: List<ItemFactura>
-  - montoTotal: Double
-  - montoCubierto: Double      // lo que cubre la obra social o seguro
-  - montoPaciente: Double      // lo que debe pagar el paciente
-  - formaPago: FormaPago       // ENUM: OBRA_SOCIAL, SEGURO_MEDICO, PARTICULAR
-  - cobertura: Object {ObraSocial | SeguroMedico | null}
-  - pagada: Boolean
-
-  + generar(): void             // calcula totales según cobertura
-  + pagar(): Boolean
-}
-
-enum FormaPago {
-  OBRA_SOCIAL
-  SEGURO_MEDICO
-  PARTICULAR
-}
-
-class ItemFactura {
-  - descripcion: String
-  - cantidad: int
-  - precioUnitario: Double
-  + calcularSubtotal(): Double
-}
-
-
 ' Relaciones de herencia
 Persona <|-- Usuario
-Usuario <|-- PersonalHospital
+Usuario <|-- Paciente
+Usuario <|-- Recepcionista
+Persona <|-- PersonalHospital
 PersonalHospital <|-- Medico
 PersonalHospital <|-- Recepcionista
-Usuario <|-- Paciente
+
 
 ' Relaciones de asociación
-Medico ..> Receta
-Medico ..> Estudio
 Medico ..> Especialidad
 Turno ..> EstadoTurno
-Usuario ..> Rol
 
 PersonalHospital "1" --> "1..*" Horario
 Recepcionista "1" --> "*" Turno
 Paciente "1" --> "*" Turno
-Paciente "1" --> "0..1" ObraSocial
-Paciente "1" --> "0..*" SeguroMedico
-HistorialMedico "1" --> "0..*" Alergia
-HistorialMedico "1" --> "0..*" Cirugia
-HistorialMedico "1" --> "0..*" VacunaAplicada
-Paciente "1" --> "1" HistorialMedico
-HistorialMedico "1" --> "0..*" Estudio
-Receta "1" --> "1..*" MedicamentoPrescrito
-HistorialMedico "1" --> "0..*" Receta
 Medico "1" --> "0..*" Turno
-Receta "1" --> "1" Medico
-Receta "1" --> "1" Paciente
-Paciente "1" --> "*" Factura
-Turno "1" --> "0..1" Factura
-Factura "1" --> "*" ItemFactura
-Factura "1" --> "1" Paciente
-Factura "1" --> "1" Turno
-Factura ..> FormaPago
-Factura ..> ObraSocial
-Factura ..> SeguroMedico
-GestorTurnos "1" --> "*" Turno
-Recepcionista "1" --> "1" GestorTurnos
-Paciente "1" --> "0..1" GestorTurnos : solicitaTurno
-GestorPacientes "1" --> "*" Paciente
-Recepcionista "1" --> "1" GestorPacientes
-Medico "1" --> "1" GestorPacientes : consultarHistorial
-' Relaciones
 Hospital "1" --> "*" PersonalHospital : listaPersonal
 Hospital "1" --> "*" Paciente : listaPacientes
 Hospital "1" --> "*" Turno : listaTurnos
-Administrador "1" --> "1" Hospital : gestiona
-
-PersonalHospital <|-- Administrador
-
-
-
+Horario ..> DiaSemana
 @enduml
-
