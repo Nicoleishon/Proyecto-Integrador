@@ -61,11 +61,11 @@ abstract class Persona {
         this.direccion = direccion;
     }
 
-    public int getTelefono() {
+    public String getTelefono() {
         return telefono;
     }
 
-    public void setTelefono(int telefono) {
+    public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
     
@@ -81,8 +81,8 @@ abstract class Persona {
         String nombre,
         String apellido,
         String direccion,
-        Integer telefono,
-        Integer dni
+        String telefono,
+        String dni
     ) {
         if (nombre != null && !nombre.isBlank()) {
             this.nombre = nombre;
@@ -93,10 +93,10 @@ abstract class Persona {
         if (direccion != null && !direccion.isBlank()) {
             this.direccion = direccion;
         }
-        if (telefono != null && telefono > 0) {
+        if (telefono != null && !telefono.isBlank()) {
             this.telefono = telefono;
         }
-        if (dni != null && dni > 0) {
+        if (dni != null && !dni.isBlank()) {
             this.dni = dni;
         }
     }
