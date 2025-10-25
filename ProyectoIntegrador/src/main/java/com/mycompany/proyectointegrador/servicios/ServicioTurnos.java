@@ -1,9 +1,9 @@
 
-package com.mycompany.proyectointegrador.servicio;
+package com.mycompany.proyectointegrador.servicios;
 
 import com.mycompany.proyectointegrador.modelo.EstadoTurno;
 
-public class ServicioTurno {
+public class ServicioTurnos {
 
     public static EstadoTurno validarEstadoTurno(String estado) {
         try {
