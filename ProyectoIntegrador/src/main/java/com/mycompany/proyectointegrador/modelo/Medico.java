@@ -12,18 +12,14 @@ class Medico extends PersonalHospital {
     private List<Turno> agendaTurnos;
     private Turno turnoEnCurso;
 
- 
-    public Medico(int idPersonalHospital, Date fechaIngreso, String departamento,
-                  List<Horario> horarios, int idMedico, String matricula,
-                  String especialidad, List<Turno> agendaTurnos) {
+    public Medico(int idMedico, String matricula, String especialidad, List<Turno> agendaTurnos, Turno turnoEnCurso, int idPersonalHospital, Date fechaIngreso, String departamento, List<Horario> horarios) {
         super(idPersonalHospital, fechaIngreso, departamento, horarios);
         this.idMedico = idMedico;
         this.matricula = matricula;
         this.especialidad = especialidad;
-        this.agendaTurnos = agendaTurnos != null ? agendaTurnos : new ArrayList<>();
-        this.turnoEnCurso = null;
+        this.agendaTurnos = agendaTurnos;
+        this.turnoEnCurso = turnoEnCurso;
     }
-
    
     public int getIdMedico() {
         return idMedico;
@@ -45,7 +41,6 @@ class Medico extends PersonalHospital {
         return turnoEnCurso;
     }
 
-    // Setters
     public void setIdMedico(int idMedico) {
         this.idMedico = idMedico;
     }
@@ -65,6 +60,6 @@ class Medico extends PersonalHospital {
     public void setTurnoEnCurso(Turno turnoEnCurso) {
         this.turnoEnCurso = turnoEnCurso;
     }
-
+}
 
 

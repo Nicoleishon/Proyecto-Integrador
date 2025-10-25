@@ -4,12 +4,12 @@ package com.mycompany.proyectointegrador.modelo;
 
 public class Paciente {
     private String pacienteId;
-    private int nroSeguroSocial;
+    private SeguroMedico seguro;
     private String fechaRegristo;
 
     public Paciente(String pacienteId, int nroSeguroSocial, String fechaRegristo) {
         this.pacienteId = pacienteId;
-        this.nroSeguroSocial = nroSeguroSocial;
+        this.seguro = seguro;
         this.fechaRegristo = fechaRegristo;
     }
     
