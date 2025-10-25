@@ -1,12 +1,28 @@
-C:\Users\Usuario\OneDrive\Documentos\NetBeansProjects\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\Enfermero.java
-C:\Users\Usuario\OneDrive\Documentos\NetBeansProjects\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\Factura.java
-C:\Users\Usuario\OneDrive\Documentos\NetBeansProjects\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\HistorialMedico.java
-C:\Users\Usuario\OneDrive\Documentos\NetBeansProjects\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\Hospital.java
-C:\Users\Usuario\OneDrive\Documentos\NetBeansProjects\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\Medico.java
-C:\Users\Usuario\OneDrive\Documentos\NetBeansProjects\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\Menu.java
-C:\Users\Usuario\OneDrive\Documentos\NetBeansProjects\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\Paciente.java
-C:\Users\Usuario\OneDrive\Documentos\NetBeansProjects\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\Persona.java
-C:\Users\Usuario\OneDrive\Documentos\NetBeansProjects\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\PersonalHospital.java
-C:\Users\Usuario\OneDrive\Documentos\NetBeansProjects\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\ProyectoIntegrador.java
-C:\Users\Usuario\OneDrive\Documentos\NetBeansProjects\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\Recepcionista.java
-C:\Users\Usuario\OneDrive\Documentos\NetBeansProjects\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\Turno.java
+F:\Facultad\2do Semestre\Programación 2\TP Integrador\Proyecto-Integrador\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\controlador\Menu.java
+F:\Facultad\2do Semestre\Programación 2\TP Integrador\Proyecto-Integrador\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\controlador\ProyectoIntegrador.java
+F:\Facultad\2do Semestre\Programación 2\TP Integrador\Proyecto-Integrador\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\modelo\Alergia.java
+F:\Facultad\2do Semestre\Programación 2\TP Integrador\Proyecto-Integrador\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\modelo\Cirugia.java
+F:\Facultad\2do Semestre\Programación 2\TP Integrador\Proyecto-Integrador\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\modelo\DiaSemana.java
+F:\Facultad\2do Semestre\Programación 2\TP Integrador\Proyecto-Integrador\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\modelo\Especialidad.java
+F:\Facultad\2do Semestre\Programación 2\TP Integrador\Proyecto-Integrador\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\modelo\EstadoTurno.java
+F:\Facultad\2do Semestre\Programación 2\TP Integrador\Proyecto-Integrador\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\modelo\Estudio.java
+F:\Facultad\2do Semestre\Programación 2\TP Integrador\Proyecto-Integrador\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\modelo\Factura.java
+F:\Facultad\2do Semestre\Programación 2\TP Integrador\Proyecto-Integrador\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\modelo\FormaPago.java
+F:\Facultad\2do Semestre\Programación 2\TP Integrador\Proyecto-Integrador\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\modelo\HistorialMedico.java
+F:\Facultad\2do Semestre\Programación 2\TP Integrador\Proyecto-Integrador\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\modelo\Horario.java
+F:\Facultad\2do Semestre\Programación 2\TP Integrador\Proyecto-Integrador\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\modelo\Hospital.java
+F:\Facultad\2do Semestre\Programación 2\TP Integrador\Proyecto-Integrador\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\modelo\ItemFactura.java
+F:\Facultad\2do Semestre\Programación 2\TP Integrador\Proyecto-Integrador\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\modelo\MedicamentoPrescrito.java
+F:\Facultad\2do Semestre\Programación 2\TP Integrador\Proyecto-Integrador\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\modelo\Medico.java
+F:\Facultad\2do Semestre\Programación 2\TP Integrador\Proyecto-Integrador\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\modelo\ObraSocial.java
+F:\Facultad\2do Semestre\Programación 2\TP Integrador\Proyecto-Integrador\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\modelo\Paciente.java
+F:\Facultad\2do Semestre\Programación 2\TP Integrador\Proyecto-Integrador\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\modelo\Persona.java
+F:\Facultad\2do Semestre\Programación 2\TP Integrador\Proyecto-Integrador\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\modelo\PersonalHospital.java
+F:\Facultad\2do Semestre\Programación 2\TP Integrador\Proyecto-Integrador\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\modelo\Recepcionista.java
+F:\Facultad\2do Semestre\Programación 2\TP Integrador\Proyecto-Integrador\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\modelo\Receta.java
+F:\Facultad\2do Semestre\Programación 2\TP Integrador\Proyecto-Integrador\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\modelo\SeguroMedico.java
+F:\Facultad\2do Semestre\Programación 2\TP Integrador\Proyecto-Integrador\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\modelo\Turno.java
+F:\Facultad\2do Semestre\Programación 2\TP Integrador\Proyecto-Integrador\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\modelo\Usuario.java
+F:\Facultad\2do Semestre\Programación 2\TP Integrador\Proyecto-Integrador\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\modelo\VacunaAplicada.java
+F:\Facultad\2do Semestre\Programación 2\TP Integrador\Proyecto-Integrador\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\servicios\ServicioPacientes.java
+F:\Facultad\2do Semestre\Programación 2\TP Integrador\Proyecto-Integrador\ProyectoIntegrador\src\main\java\com\mycompany\proyectointegrador\servicios\ServicioTurnos.java
