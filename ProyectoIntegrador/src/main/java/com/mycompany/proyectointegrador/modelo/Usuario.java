@@ -1,4 +1,4 @@
-package com.mycompany.proyectointegrador;
+package com.mycompany.proyectointegrador.modelo;
 
 
 abstract class Usuario {

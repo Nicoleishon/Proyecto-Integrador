@@ -1,5 +1,5 @@
 
-package com.mycompany.proyectointegrador;
+package com.mycompany.proyectointegrador.modelo;
 import java.util.List;
 
 

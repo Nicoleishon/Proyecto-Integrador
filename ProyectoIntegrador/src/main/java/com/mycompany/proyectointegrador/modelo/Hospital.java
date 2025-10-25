@@ -1,4 +1,4 @@
-package com.mycompany.proyectointegrador;
+package com.mycompany.proyectointegrador.modelo;
 import java.util.ArrayList;
 
 public class Hospital {

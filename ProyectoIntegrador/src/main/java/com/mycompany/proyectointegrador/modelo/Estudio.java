@@ -1,6 +1,6 @@
 
 
-package com.mycompany.proyectointegrador;
+package com.mycompany.proyectointegrador.modelo;
 
 import java.time.LocalDate;
 
