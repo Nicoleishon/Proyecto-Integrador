@@ -1,5 +1,6 @@
-package com.mycompany.proyectointegrador;
+package com.mycompany.proyectointegrador.modelo;
 
+import com.mycompany.proyectointegrador.modelo.MedicamentoPrescrito;
 import java.util.ArrayList; // Importamos ArrayList
 import java.util.List;
 import java.util.Date;

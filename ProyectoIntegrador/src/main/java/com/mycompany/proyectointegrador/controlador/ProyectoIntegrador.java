@@ -1,6 +1,6 @@
 
 
-package com.mycompany.proyectointegrador;
+package com.mycompany.proyectointegrador.controlador;
 
 public class ProyectoIntegrador {
 
