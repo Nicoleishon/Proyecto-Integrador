@@ -8,4 +8,6 @@ public class Recepcionista{
     private int idRecepcionista;
     
     
+    
+    
 }
