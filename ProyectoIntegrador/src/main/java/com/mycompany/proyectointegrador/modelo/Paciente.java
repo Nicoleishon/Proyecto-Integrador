@@ -1,10 +1,9 @@
-
 package com.mycompany.proyectointegrador.modelo;
 
 import java.util.Date;
 import java.util.List;
 
-class Paciente {
+public class Paciente {
     private int idPaciente;
     private Date fechaRegistro;
     private ObraSocial obraSocial;
