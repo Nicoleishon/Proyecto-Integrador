@@ -1,29 +1,34 @@
 
 
 package com.mycompany.proyectointegrador.modelo;
-
-
-import java.time.LocalDate;
-
+import java.time.LocalDateTime;
+import com.mycompany.proyectointegrador.servicios.ServicioTurnos;
 
 public class Turno {
     private String idTurno;
-    private LocalDate fechaHora;
-    private String tipoConsulta;
-    private EstadoTurno estado;
+    private LocalDateTime fechaHora;
+    private EstadoTurno estado = EstadoTurno.PENDIENTE;
     private String motivoConsulta;
     private Medico medico;
     private Paciente paciente;
 
-    public Turno(String turnoId, LocalDate fechaHora, String tipoConsulta, EstadoTurno estado) {
+    
+    public Turno(String idTurno, LocalDateTime fechaHora, String motivoConsulta, String estado) {
         this.idTurno = idTurno;
         this.fechaHora = fechaHora;
-        this.tipoConsulta = tipoConsulta;
-        this.estado = estado;
+        this.motivoConsulta = motivoConsulta;
+        this.estado = ServicioTurnos.validarEstadoTurno(estado);
     }
     
-    public void cambiarEstadoTurno(EstadoTurno nuevoEstado){
-        this.estado = nuevoEstado;
+    public Turno(String idTurno, LocalDateTime fechaHora, String motivoConsulta) {
+        this.idTurno = idTurno;
+        this.fechaHora = fechaHora;
+        this.motivoConsulta = motivoConsulta;
+        this.estado = EstadoTurno.PENDIENTE;
+    }
+    
+    public void cambiarEstadoTurno(String nuevoEstado){
+        this.estado = ServicioTurnos.validarEstadoTurno(nuevoEstado);
     }
     
 }

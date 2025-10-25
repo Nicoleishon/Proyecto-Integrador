@@ -1,31 +1,32 @@
 
 package com.mycompany.proyectointegrador.modelo;
 
+import java.util.Date;
+import java.util.List;
 
-public class Paciente {
-    private String pacienteId;
-    private SeguroMedico seguro;
-    private String fechaRegristo;
+class Paciente {
+    private int idPaciente;
+    private Date fechaRegistro;
+    private ObraSocial obraSocial;
+    private List<SeguroMedico> segurosMedicos;
+    private HistorialMedico historial;
 
-    public Paciente(String pacienteId, int nroSeguroSocial, String fechaRegristo) {
-        this.pacienteId = pacienteId;
-        this.seguro = seguro;
-        this.fechaRegristo = fechaRegristo;
+    public Turno solicitarTurno(Medico medico, Date fechaHora) {
+        // implementación
+        return null;
     }
-    
-    public Turno reservarTurno(Medico medico, String fecha){
-        
+
+    public void cancelarTurno(Turno turno) {
+        // implementación
     }
-    
-    public void cancelarTurno(Turno turno){
-        
+
+    public HistorialMedico consultarHistorialMedico() {
+        // implementación
+        return null;
     }
-    
-    public HistorialMedico verHistorial(){
-        
-    }
-    
-    public List<Factura> verFacturas(){
-        
+
+    public List<Factura> verFacturas() {
+        // implementación
+        return null;
     }
 }
