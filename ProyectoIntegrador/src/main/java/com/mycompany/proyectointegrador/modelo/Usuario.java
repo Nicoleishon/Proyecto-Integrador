@@ -51,8 +51,8 @@ abstract class Usuario {
     }
     
     
-    public void iniciarSesion(String contraseñaIngresada) throws InvalidCredentialsException {
-        if (this.hashContraseña.equals(contraseñaIngresada)) {
+    public void iniciarSesion(String contraseñaHasheada) throws InvalidCredentialsException {
+        if (this.hashContraseña.equals(contraseñaHasheada)) {
             this.sesionIniciada = true;
         }
     }
