@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 
-class Medico extends PersonalHospital {
+public class Medico extends PersonalHospital {
     private int idMedico;
     private String matricula;
     private Especialidad especialidad;
@@ -21,7 +21,19 @@ class Medico extends PersonalHospital {
         this.turnoEnCurso = turnoEnCurso;
     }
     
+    // Constructor usado por el repo
+    public Medico(int idMedico, String matricula, Especialidad especialidad, int idPersonalHospital, Date fechaIngreso, String departamento, List<Horario> horarios) {
+    // Llama al constructor del padre PersonalHospital
+    super(idPersonalHospital, fechaIngreso, departamento, horarios);
     
+    this.idMedico = idMedico;
+    this.matricula = matricula;
+    this.especialidad = especialidad;
+    
+    // Inicializa las listas y objetos no persistentes como vacíos o nulos
+    this.agendaTurnos = new ArrayList<>(); 
+    this.turnoEnCurso = null;
+}
    
     public int getIdMedico() {
         return idMedico;

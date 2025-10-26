@@ -15,7 +15,7 @@ import com.mycompany.proyectointegrador.persistencias.ConexionDB;
 
 public abstract class PacienteRepositorio implements IRepositorio<Paciente> { 
 
-    // @Override
+    @Override
     public void crear(Paciente paciente) throws SQLException {
         
         String sqlPersona = "INSERT INTO personas (nombre, apellido, fechaNacimiento, direccion, telefono, dni) VALUES (?, ?, ?, ?, ?, ?)";
@@ -34,7 +34,7 @@ public abstract class PacienteRepositorio implements IRepositorio<Paciente> {
             
             stmtPersona.setString(1, paciente.getNombre());
             stmtPersona.setString(2, paciente.getApellido());
-            stmtPersona.setString(3, paciente.getFechaNacimiento().toString());
+            stmtPersona.setString(3, paciente.getFechaNacimiento().toString()); 
             stmtPersona.setString(4, paciente.getDireccion());
             stmtPersona.setString(5, paciente.getTelefono());
             stmtPersona.setString(6, paciente.getDni());
@@ -81,7 +81,7 @@ public abstract class PacienteRepositorio implements IRepositorio<Paciente> {
         }
     }
     
-    @Override
+    //@Override
     public Paciente obtenerPorId(int id) throws SQLException {
         String sql = "SELECT p.idPersona, p.nombre, p.apellido, p.fechaNacimiento, p.direccion, p.telefono, p.dni, pa.fechaRegistro " +
                      "FROM personas p JOIN pacientes pa ON p.idPersona = pa.idPaciente " +
@@ -191,7 +191,7 @@ public abstract class PacienteRepositorio implements IRepositorio<Paciente> {
         System.out.println("Se actualizaron los datos del paciente con éxito.");
     }
     
-    @Override
+    //@Override
     public void eliminar(int idPaciente) throws SQLException {
         String sql = "DELETE FROM pacientes WHERE ID = ?";
         
