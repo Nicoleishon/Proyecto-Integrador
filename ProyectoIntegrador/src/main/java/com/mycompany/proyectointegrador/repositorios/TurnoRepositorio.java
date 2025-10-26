@@ -1,11 +1,11 @@
 package com.mycompany.proyectointegrador.repositorios;
 
+
 import com.mycompany.proyectointegrador.modelo.EstadoTurno;
 import com.mycompany.proyectointegrador.modelo.Medico;
 import com.mycompany.proyectointegrador.modelo.Paciente;
 import com.mycompany.proyectointegrador.modelo.Turno;
 import com.mycompany.proyectointegrador.persistencias.ConexionDB;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,9 +20,9 @@ public class TurnoRepositorio implements IRepositorio<Turno> {
     private MedicoRepositorio medicoRepo = new MedicoRepositorio();
     private PacienteRepositorio pacienteRepo = new PacienteRepositorio();
     
-    // NOTA: El CRUD de Turno usará el ID de String, no un int.
+    
 
-    // @Override (Ajustar IRepositorio para que acepte String o un ID genérico)
+     @Override 
     public void crear(Turno turno) throws SQLException {
         String sql = "INSERT INTO turnos (idTurno, fechaHora, estado, motivoConsulta, idMedico, idPaciente) " +
                      "VALUES (?, ?, ?, ?, ?, ?)";
@@ -45,30 +45,27 @@ public class TurnoRepositorio implements IRepositorio<Turno> {
         }
     }
 
-    // @Override
-    public Turno obtenerPorId(String id) throws SQLException {
+    @Override
+    public Turno obtenerPorId(int id) throws SQLException {
         String sql = "SELECT * FROM turnos WHERE idTurno = ?";
         
         try (Connection conn = ConexionDB.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             
-            stmt.setString(1, id);
+            stmt.setInt(1, id);
             
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    // 1. Extraer datos simples y IDs
+                    
                     String idTurno = rs.getString("idTurno");
                     LocalDateTime fechaHora = LocalDateTime.parse(rs.getString("fechaHora"));
                     String estadoStr = rs.getString("estado");
                     String motivo = rs.getString("motivoConsulta");
                     int idMedico = rs.getInt("idMedico");
                     int idPaciente = rs.getInt("idPaciente");
-
-                    // 2. Crear el objeto Turno base
-                    // Usamos el constructor de Turno: (id, fechaHora, motivo, estado)
+                   
                     Turno turno = new Turno(idTurno, fechaHora, motivo, estadoStr);
 
-                    // 3. Hidratar (cargar) los objetos asociados
                     Medico medico = medicoRepo.obtenerPorId(idMedico);
                     Paciente paciente = pacienteRepo.obtenerPorId(idPaciente);
                     
@@ -85,7 +82,7 @@ public class TurnoRepositorio implements IRepositorio<Turno> {
         return null; // No encontrado
     }
 
-    // @Override
+    @Override
     public List<Turno> obtenerTodos() throws SQLException {
         String sql = "SELECT * FROM turnos";
         List<Turno> turnos = new ArrayList<>();
@@ -103,13 +100,8 @@ public class TurnoRepositorio implements IRepositorio<Turno> {
                 int idMedico = rs.getInt("idMedico");
                 int idPaciente = rs.getInt("idPaciente");
 
-                // 2. Crear objeto base
                 Turno turno = new Turno(idTurno, fechaHora, motivo, estadoStr);
 
-                // 3. Hidratar
-                // ¡Advertencia! Esto causa un problema de N+1 queries.
-                // Es funcional pero lento si hay muchos turnos.
-                // Una solución avanzada usa JOINs y mapeo manual.
                 turno.setMedico(medicoRepo.obtenerPorId(idMedico));
                 turno.setPaciente(pacienteRepo.obtenerPorId(idPaciente));
                 
@@ -122,7 +114,7 @@ public class TurnoRepositorio implements IRepositorio<Turno> {
         return turnos;
     }
 
-    // @Override
+     @Override
     public void actualizar(Turno turno) throws SQLException {
         String sql = "UPDATE turnos SET fechaHora = ?, estado = ?, motivoConsulta = ?, " +
                      "idMedico = ?, idPaciente = ? WHERE idTurno = ?";
@@ -145,14 +137,14 @@ public class TurnoRepositorio implements IRepositorio<Turno> {
         }
     }
 
-    // @Override
-    public void eliminar(String id) throws SQLException {
+    @Override
+    public void eliminar(int id) throws SQLException {
         String sql = "DELETE FROM turnos WHERE idTurno = ?";
         
         try (Connection conn = ConexionDB.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             
-            stmt.setString(1, id);
+            stmt.setInt(1, id);
             stmt.executeUpdate();
             
         } catch (SQLException e) {

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import com.mycompany.proyectointegrador.persistencias.ConexionDB; 
 
 
-public abstract class PacienteRepositorio implements IRepositorio<Paciente> { 
+public class PacienteRepositorio implements IRepositorio<Paciente> { 
 
     @Override
     public void crear(Paciente paciente) throws SQLException {
@@ -81,7 +81,7 @@ public abstract class PacienteRepositorio implements IRepositorio<Paciente> {
         }
     }
     
-    //@Override
+    @Override
     public Paciente obtenerPorId(int id) throws SQLException {
         String sql = "SELECT p.idPersona, p.nombre, p.apellido, p.fechaNacimiento, p.direccion, p.telefono, p.dni, pa.fechaRegistro " +
                      "FROM personas p JOIN pacientes pa ON p.idPersona = pa.idPaciente " +
@@ -191,7 +191,7 @@ public abstract class PacienteRepositorio implements IRepositorio<Paciente> {
         System.out.println("Se actualizaron los datos del paciente con éxito.");
     }
     
-    //@Override
+    @Override
     public void eliminar(int idPaciente) throws SQLException {
         String sql = "DELETE FROM pacientes WHERE ID = ?";
         
