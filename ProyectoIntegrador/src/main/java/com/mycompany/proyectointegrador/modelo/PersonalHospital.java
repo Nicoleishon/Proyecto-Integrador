@@ -9,7 +9,7 @@ abstract class PersonalHospital {
     private int idPersonalHospital;
     private Date fechaIngreso;
     private String departamento;
-    private List<Horario> horarios;
+    public  List<Horario> horarios;
 
     // Constructor
     public PersonalHospital(int idPersonalHospital, Date fechaIngreso, 

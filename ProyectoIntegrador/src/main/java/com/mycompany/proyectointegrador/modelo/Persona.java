@@ -21,6 +21,7 @@ public abstract class Persona {
         this.fechaNacimiento = LocalDate.parse(fechaNacimiento);
         this.direccion = direccion;
         this.telefono = telefono;
+        this.dni = dni;
     }
 
     public int getId() {
@@ -86,9 +87,6 @@ public abstract class Persona {
     public void setDni(String dni) {
         this.dni = dni;
     }
-    
-    
-
     
     public void actualizarDatos(
         String nombre,

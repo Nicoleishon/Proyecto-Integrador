@@ -17,9 +17,11 @@ class Medico extends PersonalHospital {
         this.idMedico = idMedico;
         this.matricula = matricula;
         this.especialidad = especialidad;
-        this.agendaTurnos = (agendaTurnos != null) ? agendaTurnos : new ArrayList<>();
+        this.agendaTurnos = agendaTurnos;
         this.turnoEnCurso = turnoEnCurso;
     }
+    
+    
    
     public int getIdMedico() {
         return idMedico;
@@ -69,23 +71,6 @@ class Medico extends PersonalHospital {
 
     public void finalizarAtencion(Turno turno, String resumen) {
         // implementación
-    }
-
-    public void registrarReceta(Paciente paciente, MedicamentoPrescrito medicamento) {
-        // implementación
-    }
-
-    public void registrarEstudio(Paciente paciente, Estudio estudio) {
-        // implementación
-    }
-
-    public HistorialMedico consultarHistorial(Paciente paciente) {
-        // implementación
-        return null;
-    }
-
-    public void actualizarHistorial(Paciente paciente, HistorialMedico historial) {
-        this.turnoEnCurso.getPaciente().consultarHistorialMedico()
     }
 
     public Boolean puedeAtender() {

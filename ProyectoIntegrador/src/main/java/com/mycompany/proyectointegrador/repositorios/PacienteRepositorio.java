@@ -9,110 +9,201 @@ import java.sql.Statement;
 import java.util.List;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
 import com.mycompany.proyectointegrador.persistencias.ConexionDB; 
 
-abstract class PacienteRepositorio implements IRepositorio <Paciente> {
-    
-    @Override
+
+public abstract class PacienteRepositorio implements IRepositorio<Paciente> { 
+
+    // @Override
     public void crear(Paciente paciente) throws SQLException {
         
-        String sqlPersona = "INSERT INTO personas (idPersona, nombre, apellido, fechaNacimiento, direccion, telefono, dni) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        
+        String sqlPersona = "INSERT INTO personas (nombre, apellido, fechaNacimiento, direccion, telefono, dni) VALUES (?, ?, ?, ?, ?, ?)";
         String sqlPaciente = "INSERT INTO pacientes (idPaciente, fechaRegistro) VALUES (?, ?)";
-      
-        try (Connection conn = ConexionDB.conectar()) {
-         
-            try (PreparedStatement stmt = conn.prepareStatement(sqlPersona, Statement.RETURN_GENERATED_KEYS)) {
-                
-                
-                // mapeo de atributos de Persona
-                stmt.setInt(1, 0); // configurado como autoincrement
-                stmt.setString(2, paciente.getNombre());
-                stmt.setString(3, paciente.getApellido());
-                stmt.setString(4, paciente.getFechaNacimiento().toString());
-                stmt.setString(5, paciente.getDireccion());
-                stmt.setString(6, paciente.getTelefono());
-                stmt.setString(7, paciente.getDni());
-                stmt.executeUpdate();
-               
-                try (ResultSet rs = stmt.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        int idPersonaGenerado = rs.getInt(1);
-                        paciente.setId(idPersonaGenerado); // Actualizamos el objeto Paciente
+        
+        Connection conn = null;
+        PreparedStatement stmtPersona = null;
+        PreparedStatement stmtPaciente = null;
+        ResultSet rs = null;
+        
+        try {
+            conn = ConexionDB.conectar();
+            conn.setAutoCommit(false); 
+            
+            stmtPersona = conn.prepareStatement(sqlPersona, Statement.RETURN_GENERATED_KEYS);
+            
+            stmtPersona.setString(1, paciente.getNombre());
+            stmtPersona.setString(2, paciente.getApellido());
+            stmtPersona.setString(3, paciente.getFechaNacimiento().toString());
+            stmtPersona.setString(4, paciente.getDireccion());
+            stmtPersona.setString(5, paciente.getTelefono());
+            stmtPersona.setString(6, paciente.getDni());
+            stmtPersona.executeUpdate();
+            
+            rs = stmtPersona.getGeneratedKeys();
+            int idPersonaGenerado;
+            if (rs.next()) {
+                idPersonaGenerado = rs.getInt(1);
+                paciente.setId(idPersonaGenerado); // Actualizamos el objeto Paciente
+            } else {
+                throw new SQLException("La inserción de la persona falló, no se pudo obtener el ID.");
+            }
 
-                        try (PreparedStatement stmtPaciente = conn.prepareStatement(sqlPaciente)) {
-                            
-                            // Usamos el ID generado como FK y PK de la tabla Paciente
-                            stmtPaciente.setInt(1, idPersonaGenerado);
-                            
-                            // Mapeo de atributo específico de Paciente
-                            stmtPaciente.setString(2, paciente.getFechaRegistro().toString()); 
-                            
-                            stmtPaciente.executeUpdate();
-                        }
-                    } else {
-                         throw new SQLException("La inserción de la persona falló, no se pudo obtener el ID.");
-                    }
+            stmtPaciente = conn.prepareStatement(sqlPaciente);
+            
+            stmtPaciente.setInt(1, idPersonaGenerado); 
+            
+            stmtPaciente.setString(2, paciente.getFechaRegistro().toString());  
+            
+            stmtPaciente.executeUpdate();
+
+            conn.commit(); 
+            
+        } catch (SQLException e) {
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException ex) {
+                    System.err.println("Error al hacer rollback: " + ex.getMessage());
+                }
+            }
+            System.err.println("Error SQL al guardar el paciente: " + e.getMessage());
+            throw new SQLException("Error de base de datos al crear el paciente.", e);
+        } finally {
+            
+            if (rs != null) rs.close();
+            if (stmtPersona != null) stmtPersona.close();
+            if (stmtPaciente != null) stmtPaciente.close();
+            if (conn != null) {
+                conn.setAutoCommit(true); 
+                conn.close();
+            }
+        }
+    }
+    
+    @Override
+    public Paciente obtenerPorId(int id) throws SQLException {
+        String sql = "SELECT p.idPersona, p.nombre, p.apellido, p.fechaNacimiento, p.direccion, p.telefono, p.dni, pa.fechaRegistro " +
+                     "FROM personas p JOIN pacientes pa ON p.idPersona = pa.idPaciente " +
+                     "WHERE p.idPersona = ?";
+        
+        try (Connection conn = ConexionDB.conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setInt(1, id);  
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                
+                if (rs.next()) {
+                   
+                    int idPersona = rs.getInt("idPersona");
+                    String nombre = rs.getString("nombre");
+                    String apellido = rs.getString("apellido");
+                    String fechaNacimientoStr = rs.getString("fechaNacimiento");
+                    String direccion = rs.getString("direccion");
+                    String telefono = rs.getString("telefono");
+                    String dni = rs.getString("dni");
+                    LocalDate fechaRegistro = LocalDate.parse(rs.getString("fechaRegistro"));
+
+                    Paciente paciente = new Paciente(
+                        idPersona,         
+                        fechaRegistro,      
+                        idPersona,          
+                        nombre,
+                        apellido,
+                        fechaNacimientoStr,
+                        direccion,
+                        telefono,
+                        dni
+                    );
+                    
+                    return paciente;
                 }
             }
         } catch (SQLException e) {
-            // se puede lanzar una excepción personalizada 
-            System.err.println("Error SQL al guardar el paciente: " + e.getMessage());
-            throw new SQLException("Error de base de datos al crear el paciente.", e);
+            System.err.println("Error al obtener paciente por ID: " + e.getMessage());
+            throw e;
         }
+        return null; 
     }
-    
-  @Override
-  
-    public Paciente obtenerPorId(int id) throws SQLException {
-    String sql = "SELECT p.idPersona, p.nombre, p.apellido, p.fechaNacimiento, p.direccion, p.telefono, p.dni, pa.fechaRegistro " +
-                 "FROM personas p JOIN pacientes pa ON p.idPersona = pa.idPaciente " +
-                 "WHERE p.idPersona = ?";
-    
-    try (Connection conn = ConexionDB.conectar();
-         PreparedStatement stmt = conn.prepareStatement(sql)) {
-        
-        stmt.setInt(1, id); 
-        
-        try (ResultSet rs = stmt.executeQuery()) {
-            if (rs.next()) {
-                Paciente paciente = new Paciente();
-                
-                // Mapeo de columnas a atributos
-                paciente.setId(rs.getInt("idPersona"));
-                paciente.setNombre(rs.getString("nombre"));
-                paciente.setApellido(rs.getString("apellido"));
-                paciente.setFechaNacimiento(LocalDate.parse(rs.getString("fechaNacimiento")));
-                paciente.setDireccion(rs.getString("direccion"));
-                paciente.setTelefono(rs.getString("telefono"));
-                paciente.setDni(rs.getString("dni"));
-                paciente.setIdPaciente(rs.getInt("idPaciente"));
-                paciente.setFechaRegistro(LocalDate.parse(rs.getString("fechaRegistro")));
-                
-                return paciente;
-            }
-        }
-    } catch (SQLException e) {
-        System.err.println("Error al obtener paciente por ID: " + e.getMessage());
-        throw e;
-    }
-    return null; // si no se encuentra el paciente
-}
-
 
     @Override
     public List<Paciente> obtenerTodos() throws SQLException {
-        // ... lógica para leer todos
-        return null;
+        String sql = "SELECT p.idPersona, p.nombre, p.apellido, p.fechaNacimiento, p.direccion, p.telefono, p.dni, pa.fechaRegistro " +
+                     "FROM personas p JOIN pacientes pa ON p.idPersona = pa.idPaciente";
+        
+        List<Paciente> pacientes = new ArrayList<>();
+        
+        try (Connection conn = ConexionDB.conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            
+            while (rs.next()) {
+                
+                int idPersona = rs.getInt("idPersona");
+                String nombre = rs.getString("nombre");
+                String apellido = rs.getString("apellido");
+                String fechaNacimientoStr = rs.getString("fechaNacimiento");
+                String direccion = rs.getString("direccion");
+                String telefono = rs.getString("telefono");
+                String dni = rs.getString("dni");
+                LocalDate fechaRegistro = LocalDate.parse(rs.getString("fechaRegistro"));
+
+                Paciente paciente = new Paciente(
+                    idPersona,          
+                    fechaRegistro,      
+                    idPersona,          
+                    nombre,
+                    apellido,
+                    fechaNacimientoStr,
+                    direccion,
+                    telefono,
+                    dni
+                );
+                
+                pacientes.add(paciente);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al obtener todos los pacientes: " + e.getMessage());
+            throw e;
+        }
+        return pacientes;
     }
 
     @Override
     public void actualizar(Paciente paciente) throws SQLException {
-        // ... lógica para actualizar
+        String sql = "UPDATE pacientes SET idPersona = ?, nombre = ?, apellido = ?, fechaNaciemiento = ?, direccion = ?, telefono = ?, dni = ?, fechaRegistro = ?, WHERE id = ?";
+        
+        try (Connection conn = ConexionDB.conectar();
+        PreparedStatement pstmt = conn.prepareStatement(sql)){
+            pstmt.setInt(1, paciente.getId());
+            pstmt.setString(2, paciente.getNombre());
+            pstmt.setString(3, paciente.getApellido());
+            pstmt.setString(4, paciente.getFechaNacimiento().toString());
+            pstmt.setString(5, paciente.getDireccion());
+            pstmt.setString(6, paciente.getTelefono());
+            pstmt.setString(7, paciente.getDni());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error al actualizar datos del paciente: " + e.getMessage());
+            throw e;
+        }
+        System.out.println("Se actualizaron los datos del paciente con éxito.");
     }
-
+    
     @Override
-    public void eliminar(int id) throws SQLException {
-        // ... lógica para eliminar
+    public void eliminar(int idPaciente) throws SQLException {
+        String sql = "DELETE FROM pacientes WHERE ID = ?";
+        
+        try (Connection conn = ConexionDB.conectar();
+        PreparedStatement pstmt = conn.prepareStatement(sql)){
+            pstmt.setInt(1, idPaciente);
+            pstmt.executeUpdate();
+        } catch (SQLException e){
+            System.err.println("Error al eliminar paciente: " + e.getMessage());
+            throw e;
+        }
+        System.out.println("El paciente se eliminó de la lista con éxito.");
     }
+    
 }
