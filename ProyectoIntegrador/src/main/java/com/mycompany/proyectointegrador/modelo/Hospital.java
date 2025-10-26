@@ -1,9 +1,12 @@
-package com.mycompany.proyectointegrador.modelo;
-import java.util.ArrayList;
 
+package com.mycompany.proyectointegrador.modelo;
+
+import java.util.ArrayList;
 import java.util.List;
 
-class Hospital {
+
+public class Hospital {
+
     private int idHospital;
     private String nombre;
     private String direccion;
@@ -11,20 +14,75 @@ class Hospital {
     private List<Paciente> listaPacientes;
     private List<Turno> listaTurnos;
 
-    public void registrarPaciente(Paciente paciente) {
-        // implementación
+    public Hospital(int idHospital, String nombre, String direccion) {
+        this.idHospital = idHospital;
+        this.nombre = nombre;
+        this.direccion = direccion;
+        this.listaPersonal = new ArrayList<>();
+        this.listaPacientes = new ArrayList<>();
+        this.listaTurnos = new ArrayList<>();
     }
 
+    // Métodos de consulta
     public List<Medico> buscarMedicoPorEspecialidad(Especialidad especialidad) {
-        // implementación
-        return null;
+        List<Medico> medicosPorEspecialidad = new ArrayList<>();
+        for (PersonalHospital p : listaPersonal) {
+            if (p instanceof Medico) {
+                Medico m = (Medico) p;
+                if (m.getEspecialidad().equals(especialidad)) {
+                    medicosPorEspecialidad.add(m);
+                }
+            }
+        }
+        return medicosPorEspecialidad;
     }
 
-    public String generarReporteDiario() {
-        // implementación
-        return null;
+    public List<Turno> obtenerTurnosPorPaciente(Paciente paciente) {
+        List<Turno> turnosPorPaciente = new ArrayList<>();
+        for (Turno t : listaTurnos) {
+            if (t.getPaciente().equals(paciente)) {
+                turnosPorPaciente.add(t);
+            }
+        }
+        return turnosPorPaciente;
     }
 
+    public List<Turno> obtenerTurnosPorMedico(Medico medico) {
+        List<Turno> turnosPorMedico = new ArrayList<>();
+        for (Turno t : listaTurnos) {
+            if (t.getMedico().equals(medico)) {
+                turnosPorMedico.add(t);
+            }
+        }
+        return turnosPorMedico;
+    }
+
+    // Métodos de modificación de listas
+    public void agregarMedico(Medico medico) {
+        listaPersonal.add(medico);
+    }
+
+    public void eliminarMedico(Medico medico) {
+        listaPersonal.remove(medico);
+    }
+
+    public void agregarPaciente(Paciente paciente) {
+        listaPacientes.add(paciente);
+    }
+
+    public void eliminarPaciente(Paciente paciente) {
+        listaPacientes.remove(paciente);
+    }
+
+    public void agregarTurno(Turno turno) {
+        listaTurnos.add(turno);
+    }
+
+    public void eliminarTurno(Turno turno) {
+        listaTurnos.remove(turno);
+    }
+
+    // Getters y setters
     public int getIdHospital() {
         return idHospital;
     }
@@ -72,5 +130,5 @@ class Hospital {
     public void setListaTurnos(List<Turno> listaTurnos) {
         this.listaTurnos = listaTurnos;
     }
+    
 }
-
