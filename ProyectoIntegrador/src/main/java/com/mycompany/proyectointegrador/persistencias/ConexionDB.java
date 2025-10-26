@@ -52,7 +52,6 @@ public class ConexionDB {
              Statement stmt = conn.createStatement()) {
 
             stmt.execute("PRAGMA foreign_keys = ON;");
-            System.out.println("PRAGMA foreign_keys = ON;");
 
             stmt.execute("DROP TABLE IF EXISTS turnos;");
             stmt.execute("DROP TABLE IF EXISTS medicos;");

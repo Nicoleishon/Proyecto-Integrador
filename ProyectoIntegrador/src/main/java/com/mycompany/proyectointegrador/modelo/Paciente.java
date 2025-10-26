@@ -7,14 +7,6 @@ import java.time.Period;
 
 public class Paciente extends Persona {
     private int idPaciente;
-<<<<<<< Updated upstream
-    private Date fechaRegistro;
-    private ObraSocial obraSocial;
-    private List<SeguroMedico> segurosMedicos;
-    private HistorialMedico historial;
-
-    public Turno solicitarTurno(Medico medico, Date fechaHora) {
-=======
     private LocalDate fechaRegistro;
 
     public Paciente(int idPaciente, LocalDate fechaRegistro, int idPersona, String nombre, String apellido, String fechaNacimiento, String direccion, String telefono, String dni) {
@@ -39,10 +31,7 @@ public class Paciente extends Persona {
         this.fechaRegistro = fechaRegistro;
     }
     
-    
-    
     public Turno solicitarTurno(Medico medico, LocalDate fechaHora) {
->>>>>>> Stashed changes
         // implementación
         return null;
     }
@@ -52,11 +41,6 @@ public class Paciente extends Persona {
     }
 
     public HistorialMedico consultarHistorialMedico() {
-        // implementación
-        return null;
-    }
-
-    public List<Factura> verFacturas() {
         // implementación
         return null;
     }
