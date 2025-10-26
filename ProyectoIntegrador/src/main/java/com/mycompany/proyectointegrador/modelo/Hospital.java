@@ -14,6 +14,7 @@ public class Hospital {
     private List<Paciente> listaPacientes;
     private List<Turno> listaTurnos;
 
+    
     public Hospital(int idHospital, String nombre, String direccion) {
         this.idHospital = idHospital;
         this.nombre = nombre;

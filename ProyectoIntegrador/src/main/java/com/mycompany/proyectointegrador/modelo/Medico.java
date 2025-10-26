@@ -8,58 +8,59 @@ import java.util.ArrayList;
 class Medico extends PersonalHospital {
     private int idMedico;
     private String matricula;
-    private Especialidad especialidad;
     private List<Turno> agendaTurnos;
     private Turno turnoEnCurso;
+    private Especialidad especialidad;
 
-    public Medico(int idMedico, String matricula, Especialidad especialidad, List<Turno> agendaTurnos, Turno turnoEnCurso, int idPersonalHospital, Date fechaIngreso, String departamento, List<Horario> horarios) {
+    public Medico(int idMedico, String matricula, List<Turno> agendaTurnos, Turno turnoEnCurso, Especialidad especialidad, int idPersonalHospital, Date fechaIngreso, String departamento, List<Horario> horarios) {
         super(idPersonalHospital, fechaIngreso, departamento, horarios);
         this.idMedico = idMedico;
         this.matricula = matricula;
-        this.especialidad = especialidad;
-        this.agendaTurnos = (agendaTurnos != null) ? agendaTurnos : new ArrayList<>();
+        this.agendaTurnos = agendaTurnos;
         this.turnoEnCurso = turnoEnCurso;
+        this.especialidad = especialidad;
     }
-   
+
     public int getIdMedico() {
         return idMedico;
-    }
-
-    public String getMatricula() {
-        return matricula;
-    }
-
-    public Especialidad getEspecialidad() {
-        return especialidad;
-    }
-
-    public List<Turno> getAgendaTurnos() {
-        return agendaTurnos;
-    }
-
-    public Turno getTurnoEnCurso() {
-        return turnoEnCurso;
     }
 
     public void setIdMedico(int idMedico) {
         this.idMedico = idMedico;
     }
 
+    public String getMatricula() {
+        return matricula;
+    }
+
     public void setMatricula(String matricula) {
         this.matricula = matricula;
+    }
+
+    public List<Turno> getAgendaTurnos() {
+        return agendaTurnos;
+    }
+
+    public void setAgendaTurnos(List<Turno> agendaTurnos) {
+        this.agendaTurnos = agendaTurnos;
+    }
+
+    public Turno getTurnoEnCurso() {
+        return turnoEnCurso;
+    }
+
+    public void setTurnoEnCurso(Turno turnoEnCurso) {
+        this.turnoEnCurso = turnoEnCurso;
+    }
+
+    public Especialidad getEspecialidad() {
+        return especialidad;
     }
 
     public void setEspecialidad(Especialidad especialidad) {
         this.especialidad = especialidad;
     }
 
-    public void setAgendaTurnos(List<Turno> agendaTurnos) {
-        this.agendaTurnos = agendaTurnos != null ? agendaTurnos : new ArrayList<>();
-    }
-
-    public void setTurnoEnCurso(Turno turnoEnCurso) {
-        this.turnoEnCurso = turnoEnCurso;
-    }
     
     public void iniciarAtencion() {
         if (turnoEnCurso != null) {
@@ -67,25 +68,8 @@ class Medico extends PersonalHospital {
         }
     }
 
-    public void finalizarAtencion(Turno turno, String resumen) {
+    public void finalizarAtencion(Turno turno) {
         // implementación
-    }
-
-    public void registrarReceta(Paciente paciente, MedicamentoPrescrito medicamento) {
-        // implementación
-    }
-
-    public void registrarEstudio(Paciente paciente, Estudio estudio) {
-        // implementación
-    }
-
-    public HistorialMedico consultarHistorial(Paciente paciente) {
-        // implementación
-        return null;
-    }
-
-    public void actualizarHistorial(Paciente paciente, HistorialMedico historial) {
-        this.turnoEnCurso.getPaciente().consultarHistorialMedico()
     }
 
     public Boolean puedeAtender() {

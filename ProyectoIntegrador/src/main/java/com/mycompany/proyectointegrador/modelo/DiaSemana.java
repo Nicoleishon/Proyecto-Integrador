@@ -1,4 +1,3 @@
-
 package com.mycompany.proyectointegrador.modelo;
 
 public enum DiaSemana {
