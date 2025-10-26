@@ -1,15 +1,21 @@
 package com.mycompany.proyectointegrador.modelo;
 
+import com.mycompany.proyectointegrador.excepciones.InvalidCredentialsException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 abstract class Usuario {
+    private int idUsuario;
     private String nombreUsuario;
     private String hashContraseña;
-    private String rol; 
+    private Boolean sesionIniciada;
 
-    public Usuario(String nombreUsuario, String hashContraseña, String rol) {
+
+    public Usuario(int idUsuario, String nombreUsuario, String hashContraseña) {
+        this.idUsuario = idUsuario;
         this.nombreUsuario = nombreUsuario;
         this.hashContraseña = hashContraseña;
-        this.rol = rol;
+        this.sesionIniciada = false;
     }
 
     public String getNombreUsuario() {
@@ -27,15 +33,59 @@ abstract class Usuario {
     public void setHashContraseña(String hashContraseña) {
         this.hashContraseña = hashContraseña;
     }
-
-    public String getRol() {
-        return rol;
+    
+    public int getIdUsuario() {
+        return idUsuario;
     }
 
-    public void setRol(String rol) {
-        this.rol = rol;
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+    public Boolean getSesionIniciada() {
+        return sesionIniciada;
+    }
+
+    public void setSesionIniciada(Boolean sesionIniciada) {
+        this.sesionIniciada = sesionIniciada;
     }
     
     
+    public void iniciarSesion(String contraseñaIngresada) throws InvalidCredentialsException {
+        if (this.hashContraseña.equals(contraseñaIngresada)) {
+            this.sesionIniciada = true;
+        }
+    }
+
+    public void cerrarSesion() {
+        sesionIniciada = false;
+    }
+
+    public boolean estaSesionIniciada() {
+        return sesionIniciada;
+    }
+    
+    private String generarHash(String contraseña) throws NoSuchAlgorithmException {
+        // Se obtiene una instancia de SHA-256, que es un algoritmo de hashing seguro
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+
+            // Se convierte la contraseña en un arreglo de bytes y se calcula su hash
+            byte[] hashBytes = digest.digest(contraseña.getBytes());
+
+            // Se crea un StringBuilder para construir la representación en hexadecimal
+            StringBuilder sb = new StringBuilder();
+
+            // Se recorre cada byte del hash
+            for (byte b : hashBytes) {
+                // Se convierte cada byte en dos dígitos hexadecimales y se añade al StringBuilder
+                sb.append(String.format("%02x", b)); 
+                // "%02x" asegura que siempre haya dos dígitos por byte, añadiendo un 0 inicial si es necesario
+            }
+
+            // Se devuelve la cadena hexadecimal completa, que es el hash de la contraseña
+            return sb.toString();
+    }
+
+
     
 }
