@@ -3,7 +3,9 @@ package com.mycompany.proyectointegrador.modelo;
 import java.time.LocalDate;
 import java.time.Period;
 
+
 public abstract class Persona {
+
     private int idPersona;
     private String nombre;
     private String apellido;
@@ -86,6 +88,7 @@ public abstract class Persona {
     }
     
     
+
     
     public void actualizarDatos(
         String nombre,

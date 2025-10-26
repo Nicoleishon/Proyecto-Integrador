@@ -1,0 +1,144 @@
+@startuml
+title Diagrama de Clases - Sistema Médico
+
+class Hospital {
+  - idHospital: int
+  - nombre: String
+  - direccion: String
+  - listaPersonal: List<PersonalHospital>
+  - listaPacientes: List<Paciente>
+  - listaTurnos: List<Turno>
+  
+  + buscarMedicoPorEspecialidad(Especialidad especialidad): List<Medico>
+
+}
+
+abstract class Usuario {
+  - nombreUsuario: String
+  - hashContraseña: String
+  + iniciarSesion(): boolean
+  + cerrarSesion(): void
+}
+
+enum DiaSemana {
+  LUNES,
+  MARTES,
+  MIERCOLES,
+  JUEVES,
+  VIERNES,
+  SABADO,
+  DOMINGO
+}
+
+
+enum EstadoTurno {
+  PENDIENTE,
+  CONFIRMADO,
+  REALIZADO,
+  CANCELADO,
+  AUSENTE
+}
+
+enum Especialidad {
+  CARDIOLOGIA,
+  PEDIATRIA,
+  ODONTOLOGIA,
+  DERMATOLOGIA,
+  CLINICA_GENERAL
+}
+
+
+
+abstract class Persona {
+  - idPersona: int
+  - nombre: String
+  - apellido: String
+  - fechaNacimiento: Date
+  - direccion: String
+  - telefono: String
+  - dni: String
+  + obtenerNombreCompleto(): String
+  + obtenerEdad(): int
+  + actualizarDatos(): void
+}
+
+
+abstract class PersonalHospital {
+  - idPersonalHospital: int
+  - hospital: Hospital
+  - fechaIngreso: Date
+  - departamento: String
+  - horarios: List<Horario>
+}
+
+class Medico {
+  - idMedico: int
+  - matricula: String
+  - especialidad: Especialidad
+  - agendaTurnos: List<Turno>
+  - turnoEnCurso: Turno
+
+  + iniciarAtencion(Turno turno): void
+  + finalizarAtencion(Turno turno, resumen: String): void
+  + puedeAtender(): Boolean
+}
+
+
+class Horario {
+  - idHorario: int
+  - diaSemana: DiaSemana
+  - horaInicio: Time
+  - horaFin: Time
+}
+
+class Recepcionista {
+  - idRecepcionista: int
+  + registrarPaciente(Paciente datos): void
+  + crearTurno(Paciente paciente, Medico medico, Date fechaHora): Turno
+  + agendarTurno(Turno turno): void
+  + cancelarTurno(Turno turno): void
+  + reprogramarTurno(Turno turno, Date nuevaFecha): void
+}
+
+
+class Paciente {
+  - idPaciente: int
+  - fechaRegistro: Date
+  + solicitarTurno(Medico medico, Date fechaHora): Turno
+  + cancelarTurno(Turno turno): void
+}
+
+
+class Turno {
+  - idTurno: int
+  - fechaHora: Date
+  - estado: EstadoTurno
+  - motivoConsulta: String
+  - medico: Medico
+  - paciente: Paciente
+  + cambiarEstadoTurno(EstadoTurno nuevoEstado): void
+}
+
+
+' Relaciones de herencia
+Persona <|-- Usuario
+Usuario <|-- Paciente
+Usuario <|-- Recepcionista
+Persona <|-- PersonalHospital
+PersonalHospital <|-- Medico
+PersonalHospital <|-- Recepcionista
+
+
+' Relaciones de asociación
+Medico ..> Especialidad
+Turno ..> EstadoTurno
+
+PersonalHospital "1" --> "1..*" Horario
+Recepcionista "1" --> "*" Turno
+Paciente "1" --> "*" Turno
+Medico "1" --> "0..*" Turno
+Hospital "1" --> "*" PersonalHospital : listaPersonal
+Hospital "1" --> "*" Paciente : listaPacientes
+Hospital "1" --> "*" Turno : listaTurnos
+Horario ..> DiaSemana
+@enduml
