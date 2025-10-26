@@ -1,16 +1,13 @@
 package com.mycompany.proyectointegrador.modelo;
 
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDate;
 
 public class Paciente {
     private int idPaciente;
-    private Date fechaRegistro;
-    private ObraSocial obraSocial;
-    private List<SeguroMedico> segurosMedicos;
-    private HistorialMedico historial;
+    private LocalDate fechaRegistro;
 
-    public Turno solicitarTurno(Medico medico, Date fechaHora) {
+
+    public Turno solicitarTurno(Medico medico, LocalDate fechaHora) {
         // implementación
         return null;
     }
@@ -19,13 +16,4 @@ public class Paciente {
         // implementación
     }
 
-    public HistorialMedico consultarHistorialMedico() {
-        // implementación
-        return null;
-    }
-
-    public List<Factura> verFacturas() {
-        // implementación
-        return null;
-    }
 }
