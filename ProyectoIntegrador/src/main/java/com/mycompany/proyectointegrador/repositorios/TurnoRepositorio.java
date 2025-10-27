@@ -1,6 +1,5 @@
 package com.mycompany.proyectointegrador.repositorios;
 
-
 import com.mycompany.proyectointegrador.modelo.EstadoTurno;
 import com.mycompany.proyectointegrador.modelo.Medico;
 import com.mycompany.proyectointegrador.modelo.Paciente;
@@ -20,9 +19,7 @@ public class TurnoRepositorio implements IRepositorio<Turno> {
     private MedicoRepositorio medicoRepo = new MedicoRepositorio();
     private PacienteRepositorio pacienteRepo = new PacienteRepositorio();
     
-    
-
-     @Override 
+    @Override 
     public void crear(Turno turno) throws SQLException {
         String sql = "INSERT INTO turnos (idTurno, fechaHora, estado, motivoConsulta, idMedico, idPaciente) " +
                      "VALUES (?, ?, ?, ?, ?, ?)";

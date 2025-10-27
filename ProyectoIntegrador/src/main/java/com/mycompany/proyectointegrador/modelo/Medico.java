@@ -5,35 +5,33 @@ import java.util.List;
 import java.util.ArrayList;
 
 
-public class Medico extends PersonalHospital {
+class Medico extends PersonalHospital {
     private int idMedico;
     private String matricula;
-    private Especialidad especialidad;
     private List<Turno> agendaTurnos;
     private Turno turnoEnCurso;
+    private Especialidad especialidad;
 
-    public Medico(int idMedico, String matricula, Especialidad especialidad, List<Turno> agendaTurnos, Turno turnoEnCurso, int idPersonalHospital, Date fechaIngreso, String departamento, List<Horario> horarios) {
-        super(idPersonalHospital, fechaIngreso, departamento, horarios);
+    public Medico(
+            // Parámetros de Medico
+            int idMedico, String matricula, List<Turno> agendaTurnos, 
+            Turno turnoEnCurso, Especialidad especialidad, 
+            
+            // Parámetros de PersonalHospital
+            int idPersonalHospital, Date fechaIngreso, String departamento, List<Horario> horarios,
+            
+            // Parámetros de Persona (que se pasan a PersonalHospital)
+            int idPersona, String nombre, String apellido, String fechaNacimiento, 
+            String direccion, String telefono, String dni
+    ) {
+        super(idPersonalHospital, fechaIngreso, departamento, horarios, 
+              idPersona, nombre, apellido, fechaNacimiento, direccion, telefono, dni);
         this.idMedico = idMedico;
         this.matricula = matricula;
-        this.especialidad = especialidad;
-        this.agendaTurnos = agendaTurnos;
+        this.agendaTurnos = (agendaTurnos != null) ? agendaTurnos : new ArrayList<>();
         this.turnoEnCurso = turnoEnCurso;
+        this.especialidad = especialidad;
     }
-    
-    // Constructor usado por el repo
-    public Medico(int idMedico, String matricula, Especialidad especialidad, int idPersonalHospital, Date fechaIngreso, String departamento, List<Horario> horarios) {
-    // Llama al constructor del padre PersonalHospital
-    super(idPersonalHospital, fechaIngreso, departamento, horarios);
-    
-    this.idMedico = idMedico;
-    this.matricula = matricula;
-    this.especialidad = especialidad;
-    
-    // Inicializa las listas y objetos no persistentes como vacíos o nulos
-    this.agendaTurnos = new ArrayList<>(); 
-    this.turnoEnCurso = null;
-}
    
     public int getIdMedico() {
         return idMedico;
