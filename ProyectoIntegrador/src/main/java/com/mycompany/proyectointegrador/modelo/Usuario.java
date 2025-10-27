@@ -3,15 +3,23 @@ package com.mycompany.proyectointegrador.modelo;
 import com.mycompany.proyectointegrador.excepciones.InvalidCredentialsException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
 
-abstract class Usuario {
+abstract class Usuario extends Persona {
     private int idUsuario;
     private String nombreUsuario;
     private String hashContraseña;
     private Boolean sesionIniciada;
 
 
-    public Usuario(int idUsuario, String nombreUsuario, String hashContraseña) {
+    public Usuario(
+            // Parametros de Usuario
+            int idUsuario, String nombreUsuario, String hashContraseña,
+            
+            // Parametros de Persona
+            int idPersona, String nombre, String apellido, String fechaNacimiento, String direccion, String telefono, String dni
+    ) {
+        super(idPersona, nombre, apellido, fechaNacimiento, direccion, telefono, dni);
         this.idUsuario = idUsuario;
         this.nombreUsuario = nombreUsuario;
         this.hashContraseña = hashContraseña;

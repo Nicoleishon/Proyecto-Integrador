@@ -3,7 +3,9 @@ package com.mycompany.proyectointegrador.modelo;
 import java.time.LocalDate;
 import java.time.Period;
 
-abstract class Persona {
+
+public abstract class Persona {
+
     private int idPersona;
     private String nombre;
     private String apellido;
@@ -19,6 +21,7 @@ abstract class Persona {
         this.fechaNacimiento = LocalDate.parse(fechaNacimiento);
         this.direccion = direccion;
         this.telefono = telefono;
+        this.dni = dni;
     }
 
     public int getId() {
@@ -75,6 +78,14 @@ abstract class Persona {
     
     public int obtenerEdad() {
         return Period.between(fechaNacimiento, LocalDate.now()).getYears();
+    }
+
+    public String getDni() {
+        return dni;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
     }
     
     public void actualizarDatos(

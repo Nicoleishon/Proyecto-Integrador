@@ -4,23 +4,23 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-// Clase abstracta PersonalHospital
-abstract class PersonalHospital {
+
+abstract class PersonalHospital extends Persona {
     private int idPersonalHospital;
     private Hospital hospital;
     private Date fechaIngreso;
     private String departamento;
-    private List <Horario> horarios;
+    public  List<Horario> horarios;
 
-    // Constructor
-    public PersonalHospital(int idPersonalHospital, Date fechaIngreso, 
-                            String departamento, List<Horario> horarios) {
+    public PersonalHospital(int idPersonalHospital, Date fechaIngreso, String departamento, List<Horario> horarios, int idPersona, String nombre, String apellido, String fechaNacimiento, String direccion, String telefono, String dni) {
+        super(idPersona, nombre, apellido, fechaNacimiento, direccion, telefono, dni);
         this.idPersonalHospital = idPersonalHospital;
         this.fechaIngreso = fechaIngreso;
         this.departamento = departamento;
         this.horarios = horarios != null ? horarios : new ArrayList<>();
+        
     }
-
+    
     public int getIdPersonalHospital() {
         return idPersonalHospital;
     }
