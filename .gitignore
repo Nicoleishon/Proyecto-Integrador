@@ -1,0 +1,50 @@
+# =============================
+# Ignorar carpetas y archivos de NetBeans
+# =============================
+ProyectoIntegrador/nbproject/private/
+ProyectoIntegrador/build/
+ProyectoIntegrador/nbbuild/
+ProyectoIntegrador/dist/
+ProyectoIntegrador/nbdist/
+ProyectoIntegrador/.nb-gradle/
+ProyectoIntegrador/.nb-gradle-properties/
+
+# =============================
+# Ignorar compilaciones de Maven
+# =============================
+ProyectoIntegrador/target/
+
+# =============================
+# Ignorar IDEs y configuraciones locales
+# =============================
+ProyectoIntegrador/.idea/
+ProyectoIntegrador/*.iml
+ProyectoIntegrador/.vscode/
+ProyectoIntegrador/.settings/
+ProyectoIntegrador/.classpath
+ProyectoIntegrador/.project
+
+# =============================
+# Ignorar archivos temporales y del sistema
+# =============================
+*.log
+*.tmp
+*.bak
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# =============================
+# Ignorar archivos empaquetados
+# =============================
+ProyectoIntegrador/*.jar
+ProyectoIntegrador/*.war
+ProyectoIntegrador/*.ear
+
+# =============================
+# Ignorar configuraciones locales o sensibles
+# =============================
+ProyectoIntegrador/*.env
+ProyectoIntegrador/*.env.local
+ProyectoIntegrador/*.properties.local
+ProyectoIntegrador/*.config.local
