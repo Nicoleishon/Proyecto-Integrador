@@ -1,16 +1,25 @@
 package com.mycompany.proyectointegrador.modelo;
 
-
-import java.util.List;
 import java.time.LocalDate;
-import java.time.Period;
 
-public class Paciente extends Persona {
+
+
+
+public class Paciente extends Usuario {
     private int idPaciente;
     private LocalDate fechaRegistro;
 
-    public Paciente(int idPaciente, LocalDate fechaRegistro, int idPersona, String nombre, String apellido, String fechaNacimiento, String direccion, String telefono, String dni) {
-        super(idPersona, nombre, apellido, fechaNacimiento, direccion, telefono, dni);
+    public Paciente(
+            // Parametros de Paciente
+            int idPaciente, LocalDate fechaRegistro,
+            
+            // Parametros de Usuario
+            int idUsuario, String nombreUsuario, String hashContraseña,
+            
+            // Parametros de Persona
+            int idPersona, String nombre, String apellido, String fechaNacimiento, String direccion, String telefono, String dni
+    ) {
+        super(idUsuario, nombreUsuario, hashContraseña, idPersona, nombre, apellido, fechaNacimiento, direccion, telefono, dni);
         this.idPaciente = idPaciente;
         this.fechaRegistro = fechaRegistro;
     }
@@ -31,6 +40,7 @@ public class Paciente extends Persona {
         this.fechaRegistro = fechaRegistro;
     }
     
+
     public Turno solicitarTurno(Medico medico, LocalDate fechaHora) {
         // implementación
         return null;
@@ -40,8 +50,5 @@ public class Paciente extends Persona {
         // implementación
     }
 
-    public HistorialMedico consultarHistorialMedico() {
-        // implementación
-        return null;
-    }
+
 }

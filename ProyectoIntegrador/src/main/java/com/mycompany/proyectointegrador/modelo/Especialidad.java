@@ -1,9 +1,12 @@
 package com.mycompany.proyectointegrador.modelo;
 
 public enum Especialidad {
-  CARDIOLOGIA,
-  PEDIATRIA,
-  ODONTOLOGIA,
-  DERMATOLOGIA,
-  CLINICA_GENERAL
+    ODONTOLOGÍA,
+    OFTALMOLOGÍA,
+    PEDIATRÍA,
+    DERMATOLOGÍA,
+    UROLOGÍA,
+    ONCOLOGÍA,
+    CARDIOLOGÍA,
+    CLINICA_GENERAL,
 }

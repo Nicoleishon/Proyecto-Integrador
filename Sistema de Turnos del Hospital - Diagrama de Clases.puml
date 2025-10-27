@@ -9,8 +9,16 @@ class Hospital {
   - listaPacientes: List<Paciente>
   - listaTurnos: List<Turno>
   
-  + buscarMedicoPorEspecialidad(Especialidad especialidad): List<Medico>
 
+  + agregarMedico(Medico medico): void
+  + eliminarMedico(Medico medico): void
+  + agregarPaciente(Paciente paciente): void
+  + eliminarPaciente(Paciente paciente): void
+  + agregarTurno(Turno turno): void
+  + eliminarTurno(Turno turno): void
+  + buscarMedicoPorEspecialidad(Especialidad especialidad): List<Medico>
+  + obtenerTurnosPorPaciente(Paciente paciente): List<Turno>
+  + obtenerTurnosPorMedico(Medico medico): List<Turno>
 }
 
 abstract class Usuario {
@@ -137,8 +145,8 @@ PersonalHospital "1" --> "1..*" Horario
 Recepcionista "1" --> "*" Turno
 Paciente "1" --> "*" Turno
 Medico "1" --> "0..*" Turno
-Hospital "1" --> "*" PersonalHospital : listaPersonal
-Hospital "1" --> "*" Paciente : listaPacientes
-Hospital "1" --> "*" Turno : listaTurnos
+Hospital "1" --> "*" PersonalHospital
+Hospital "1" --> "*" Paciente
+Hospital "1" --> "*" Turno
 Horario ..> DiaSemana
 @enduml

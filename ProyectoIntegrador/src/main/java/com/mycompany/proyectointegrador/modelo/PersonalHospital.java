@@ -7,6 +7,7 @@ import java.util.List;
 
 abstract class PersonalHospital extends Persona {
     private int idPersonalHospital;
+    private Hospital hospital;
     private Date fechaIngreso;
     private String departamento;
     public  List<Horario> horarios;
