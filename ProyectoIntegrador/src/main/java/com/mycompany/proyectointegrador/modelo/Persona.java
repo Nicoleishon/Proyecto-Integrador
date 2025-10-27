@@ -14,11 +14,11 @@ public abstract class Persona {
     private String telefono;
     private String dni;
 
-    public Persona(int idPersona, String nombre, String apellido, String fechaNacimiento, String direccion, String telefono, String dni) {
+    public Persona(int idPersona, String nombre, String apellido, LocalDate fechaNacimiento, String direccion, String telefono, String dni) {
         this.idPersona = idPersona;
         this.nombre = nombre;
         this.apellido = apellido;
-        this.fechaNacimiento = LocalDate.parse(fechaNacimiento);
+        this.fechaNacimiento = fechaNacimiento;
         this.direccion = direccion;
         this.telefono = telefono;
         this.dni = dni;

@@ -46,13 +46,13 @@ public class ConexionDB {
         }
     }
 
-    public static void inicializarBaseDeDatos() {
-        
+    public static void inicializarBaseDeDatos() throws SQLException {
         try (Connection conn = conectar();
              Statement stmt = conn.createStatement()) {
 
             stmt.execute("PRAGMA foreign_keys = ON;");
 
+            // Eliminar tablas en orden descendente de dependencias
             stmt.execute("DROP TABLE IF EXISTS turnos;");
             stmt.execute("DROP TABLE IF EXISTS medicos;");
             stmt.execute("DROP TABLE IF EXISTS personal_hospital;");
@@ -61,17 +61,19 @@ public class ConexionDB {
             stmt.execute("DROP TABLE IF EXISTS personas;");
             System.out.println("Tablas antiguas eliminadas (si existían).");
 
+            // Tabla Personas: LocalDate (fechaNacimiento)
             stmt.execute("""
                 CREATE TABLE personas (
                     idPersona INTEGER PRIMARY KEY AUTOINCREMENT,
                     nombre TEXT NOT NULL,
                     apellido TEXT NOT NULL,
-                    fechaNacimiento TEXT,
+                    fechaNacimiento TEXT,       -- YYYY-MM-DD para LocalDate
                     direccion TEXT,
                     telefono TEXT,
                     dni TEXT NOT NULL UNIQUE
                 );""");
 
+            // Tabla Usuarios
             stmt.execute("""
                 CREATE TABLE usuarios (
                     idUsuario INTEGER PRIMARY KEY,
@@ -81,33 +83,37 @@ public class ConexionDB {
                     FOREIGN KEY (idUsuario) REFERENCES personas(idPersona)
                 );""");
 
+            // Tabla Pacientes: fechaRegistro (LocalDate)
             stmt.execute("""
                 CREATE TABLE pacientes (
                     idPaciente INTEGER PRIMARY KEY,
-                    fechaRegistro TEXT NOT NULL,
+                    fechaRegistro TEXT NOT NULL,  -- YYYY-MM-DD para LocalDate
                     FOREIGN KEY (idPaciente) REFERENCES usuarios(idUsuario)
                 );""");
 
+            // Tabla PersonalHospital: fechaIngreso (LocalDate)
             stmt.execute("""
                 CREATE TABLE personal_hospital (
-                    idPersonal INTEGER PRIMARY KEY,
-                    fechaIngreso TEXT,
+                    idPersonalHospital INTEGER PRIMARY KEY,
+                    fechaIngreso TEXT,            -- YYYY-MM-DD para LocalDate
                     departamento TEXT,
-                    FOREIGN KEY (idPersonal) REFERENCES personas(idPersona)
+                    FOREIGN KEY (idPersonalHospital) REFERENCES personas(idPersona)
                 );""");
-            
+
+            // Tabla Medicos
             stmt.execute("""
                 CREATE TABLE medicos (
                     idMedico INTEGER PRIMARY KEY,
                     matricula TEXT NOT NULL UNIQUE,
                     especialidad TEXT,
-                    FOREIGN KEY (idMedico) REFERENCES personal_hospital(idPersonal)
+                    FOREIGN KEY (idMedico) REFERENCES personal_hospital(idPersonalHospital)
                 );""");
 
+            // Tabla Turnos: fechaHora (LocalDateTime)
             stmt.execute("""
                 CREATE TABLE turnos (
                     idTurno INTEGER PRIMARY KEY AUTOINCREMENT,
-                    fechaHora TEXT NOT NULL,
+                    fechaHora TEXT NOT NULL,      -- YYYY-MM-DDTHH:MM:SS para LocalDateTime
                     estado TEXT,
                     motivoConsulta TEXT,
                     idMedico INTEGER NOT NULL,
@@ -117,9 +123,10 @@ public class ConexionDB {
                 );""");
 
             System.out.println("Base de datos inicializada. Tablas creadas con éxito.");
-
         } catch (SQLException e) {
             System.err.println("Error al inicializar la base de datos: " + e.getMessage());
+            throw e;  // Lanzar la excepción para que la capa de interfaz pueda capturarla
         }
     }
+
 }

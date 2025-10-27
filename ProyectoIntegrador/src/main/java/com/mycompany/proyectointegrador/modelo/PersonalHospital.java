@@ -1,18 +1,18 @@
 package com.mycompany.proyectointegrador.modelo;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 
 abstract class PersonalHospital extends Persona {
     private int idPersonalHospital;
     private Hospital hospital;
-    private Date fechaIngreso;
+    private LocalDate fechaIngreso;
     private String departamento;
     public  List<Horario> horarios;
 
-    public PersonalHospital(int idPersonalHospital, Date fechaIngreso, String departamento, List<Horario> horarios, int idPersona, String nombre, String apellido, String fechaNacimiento, String direccion, String telefono, String dni) {
+    public PersonalHospital(int idPersonalHospital, LocalDate fechaIngreso, String departamento, List<Horario> horarios, int idPersona, String nombre, String apellido, LocalDate fechaNacimiento, String direccion, String telefono, String dni) {
         super(idPersona, nombre, apellido, fechaNacimiento, direccion, telefono, dni);
         this.idPersonalHospital = idPersonalHospital;
         this.fechaIngreso = fechaIngreso;
@@ -25,7 +25,7 @@ abstract class PersonalHospital extends Persona {
         return idPersonalHospital;
     }
 
-    public Date getFechaIngreso() {
+    public LocalDate getFechaIngreso() {
         return fechaIngreso;
     }
 
@@ -42,7 +42,7 @@ abstract class PersonalHospital extends Persona {
         this.idPersonalHospital = idPersonalHospital;
     }
 
-    public void setFechaIngreso(Date fechaIngreso) {
+    public void setFechaIngreso(LocalDate fechaIngreso) {
         this.fechaIngreso = fechaIngreso;
     }
 

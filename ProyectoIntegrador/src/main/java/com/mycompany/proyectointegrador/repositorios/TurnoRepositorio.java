@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,21 +22,29 @@ public class TurnoRepositorio implements IRepositorio<Turno> {
     
     @Override 
     public void crear(Turno turno) throws SQLException {
-        String sql = "INSERT INTO turnos (idTurno, fechaHora, estado, motivoConsulta, idMedico, idPaciente) " +
-                     "VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO turnos (fechaHora, estado, motivoConsulta, idMedico, idPaciente) " +
+             "VALUES (?, ?, ?, ?, ?)";
         
         try (Connection conn = ConexionDB.conectar();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
-            stmt.setString(1, turno.getIdTurno()); 
-            stmt.setString(2, turno.getFechaHora().toString()); // guarda LocalDateTime como String
-            stmt.setString(3, turno.getEstado().toString());
-            stmt.setString(4, turno.getMotivoConsulta());
-            stmt.setInt(5, turno.getMedico().getIdMedico());
-            stmt.setInt(6, turno.getPaciente().getIdPaciente());
-            
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            stmt.setString(1, turno.getFechaHora().toString());
+            stmt.setString(2, turno.getEstado().toString());
+            stmt.setString(3, turno.getMotivoConsulta());
+            stmt.setInt(4, turno.getMedico().getIdMedico());
+            stmt.setInt(5, turno.getPaciente().getIdPaciente());
+
             stmt.executeUpdate();
-            
+
+            // Obtener el id generado automáticamente
+            try (ResultSet rs = stmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    int idGenerado = rs.getInt(1);
+                    // Actualizar el objeto turno con el id generado
+                    turno.setIdTurno(idGenerado);
+                }
+            }
+
         } catch (SQLException e) {
             System.err.println("Error al crear el turno: " + e.getMessage());
             throw e;
@@ -54,7 +63,7 @@ public class TurnoRepositorio implements IRepositorio<Turno> {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     
-                    String idTurno = rs.getString("idTurno");
+                    int idTurno = rs.getInt("idTurno");
                     LocalDateTime fechaHora = LocalDateTime.parse(rs.getString("fechaHora"));
                     String estadoStr = rs.getString("estado");
                     String motivo = rs.getString("motivoConsulta");
@@ -90,7 +99,7 @@ public class TurnoRepositorio implements IRepositorio<Turno> {
             
             while (rs.next()) {
                 // 1. Extraer datos
-                String idTurno = rs.getString("idTurno");
+                int idTurno = rs.getInt("idTurno");
                 LocalDateTime fechaHora = LocalDateTime.parse(rs.getString("fechaHora"));
                 String estadoStr = rs.getString("estado");
                 String motivo = rs.getString("motivoConsulta");
@@ -124,7 +133,7 @@ public class TurnoRepositorio implements IRepositorio<Turno> {
             stmt.setString(3, turno.getMotivoConsulta());
             stmt.setInt(4, turno.getMedico().getIdMedico());
             stmt.setInt(5, turno.getPaciente().getIdPaciente());
-            stmt.setString(6, turno.getIdTurno()); // WHERE
+            stmt.setInt(6, turno.getIdTurno()); // WHERE
             
             stmt.executeUpdate();
             

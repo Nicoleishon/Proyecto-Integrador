@@ -17,7 +17,7 @@ public class Paciente extends Usuario {
             int idUsuario, String nombreUsuario, String hashContraseña,
             
             // Parametros de Persona
-            int idPersona, String nombre, String apellido, String fechaNacimiento, String direccion, String telefono, String dni
+            int idPersona, String nombre, String apellido, LocalDate fechaNacimiento, String direccion, String telefono, String dni
     ) {
         super(idUsuario, nombreUsuario, hashContraseña, idPersona, nombre, apellido, fechaNacimiento, direccion, telefono, dni);
         this.idPaciente = idPaciente;

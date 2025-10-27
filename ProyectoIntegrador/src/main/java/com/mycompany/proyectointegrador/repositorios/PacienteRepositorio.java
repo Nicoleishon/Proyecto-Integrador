@@ -83,92 +83,133 @@ public class PacienteRepositorio implements IRepositorio<Paciente> {
     
     @Override
     public Paciente obtenerPorId(int id) throws SQLException {
-        String sql = "SELECT p.idPersona, p.nombre, p.apellido, p.fechaNacimiento, p.direccion, p.telefono, p.dni, pa.fechaRegistro " +
-                     "FROM personas p JOIN pacientes pa ON p.idPersona = pa.idPaciente " +
-                     "WHERE p.idPersona = ?";
-        
+        String sql = """
+            SELECT per.idPersona, per.nombre, per.apellido, per.fechaNacimiento, per.direccion, per.telefono, per.dni,
+                   u.idUsuario, u.nombreUsuario, u.hashContraseña,
+                   pa.idPaciente, pa.fechaRegistro
+            FROM personas per
+            JOIN usuarios u ON per.idPersona = u.idUsuario
+            JOIN pacientes pa ON u.idUsuario = pa.idPaciente
+            WHERE per.idPersona = ?
+        """;
+
         try (Connection conn = ConexionDB.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
-            stmt.setInt(1, id);  
-            
+
+            stmt.setInt(1, id);
+
             try (ResultSet rs = stmt.executeQuery()) {
-                
+
                 if (rs.next()) {
-                   
+                    // Datos de Persona
                     int idPersona = rs.getInt("idPersona");
                     String nombre = rs.getString("nombre");
                     String apellido = rs.getString("apellido");
                     String fechaNacimientoStr = rs.getString("fechaNacimiento");
+                    LocalDate fechaNacimiento = (fechaNacimientoStr != null) ? LocalDate.parse(fechaNacimientoStr) : null;
                     String direccion = rs.getString("direccion");
                     String telefono = rs.getString("telefono");
                     String dni = rs.getString("dni");
+
+                    // Datos de Usuario
+                    int idUsuario = rs.getInt("idUsuario");
+                    String nombreUsuario = rs.getString("nombreUsuario");
+                    String hashContraseña = rs.getString("hashContraseña");
+
+                    // Datos de Paciente
+                    int idPaciente = rs.getInt("idPaciente");
                     LocalDate fechaRegistro = LocalDate.parse(rs.getString("fechaRegistro"));
 
-                    Paciente paciente = new Paciente(
-                        idPersona,         
-                        fechaRegistro,      
-                        idPersona,          
+                    return new Paciente(
+                        idPaciente,          // Paciente
+                        fechaRegistro,       // fechaRegistro
+                        idUsuario,           // Usuario
+                        nombreUsuario,       // nombreUsuario
+                        hashContraseña,      // hashContraseña
+                        idPersona,           // Persona
                         nombre,
                         apellido,
-                        fechaNacimientoStr,
+                        fechaNacimiento,
                         direccion,
                         telefono,
                         dni
                     );
-                    
-                    return paciente;
                 }
             }
+
         } catch (SQLException e) {
             System.err.println("Error al obtener paciente por ID: " + e.getMessage());
             throw e;
         }
-        return null; 
+
+        return null;
     }
 
+    
     @Override
     public List<Paciente> obtenerTodos() throws SQLException {
-        String sql = "SELECT p.idPersona, p.nombre, p.apellido, p.fechaNacimiento, p.direccion, p.telefono, p.dni, pa.fechaRegistro " +
-                     "FROM personas p JOIN pacientes pa ON p.idPersona = pa.idPaciente";
-        
+        String sql = """
+            SELECT per.idPersona, per.nombre, per.apellido, per.fechaNacimiento, per.direccion, per.telefono, per.dni,
+                   u.idUsuario, u.nombreUsuario, u.hashContraseña,
+                   pa.idPaciente, pa.fechaRegistro
+            FROM personas per
+            JOIN usuarios u ON per.idPersona = u.idUsuario
+            JOIN pacientes pa ON u.idUsuario = pa.idPaciente
+        """;
+
         List<Paciente> pacientes = new ArrayList<>();
-        
+
         try (Connection conn = ConexionDB.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
-            
+
             while (rs.next()) {
-                
+
+                // Datos de Persona
                 int idPersona = rs.getInt("idPersona");
                 String nombre = rs.getString("nombre");
                 String apellido = rs.getString("apellido");
                 String fechaNacimientoStr = rs.getString("fechaNacimiento");
+                LocalDate fechaNacimiento = (fechaNacimientoStr != null) ? LocalDate.parse(fechaNacimientoStr) : null;
                 String direccion = rs.getString("direccion");
                 String telefono = rs.getString("telefono");
                 String dni = rs.getString("dni");
+
+                // Datos de Usuario
+                int idUsuario = rs.getInt("idUsuario");
+                String nombreUsuario = rs.getString("nombreUsuario");
+                String hashContraseña = rs.getString("hashContraseña");
+
+                // Datos de Paciente
+                int idPaciente = rs.getInt("idPaciente");
                 LocalDate fechaRegistro = LocalDate.parse(rs.getString("fechaRegistro"));
 
                 Paciente paciente = new Paciente(
-                    idPersona,          
-                    fechaRegistro,      
-                    idPersona,          
+                    idPaciente,            // Paciente
+                    fechaRegistro,         // fechaRegistro
+                    idUsuario,             // Usuario
+                    nombreUsuario,         // nombreUsuario
+                    hashContraseña,        // hashContraseña
+                    idPersona,             // Persona
                     nombre,
                     apellido,
-                    fechaNacimientoStr,
+                    fechaNacimiento,
                     direccion,
                     telefono,
                     dni
                 );
-                
+
                 pacientes.add(paciente);
             }
+
         } catch (SQLException e) {
             System.err.println("Error al obtener todos los pacientes: " + e.getMessage());
             throw e;
         }
+
         return pacientes;
     }
+
 
     @Override
     public void actualizar(Paciente paciente) throws SQLException {

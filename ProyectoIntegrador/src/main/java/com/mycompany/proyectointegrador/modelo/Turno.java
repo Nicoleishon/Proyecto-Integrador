@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import com.mycompany.proyectointegrador.servicios.ServicioTurnos;
 
 public class Turno {
-    private String idTurno;
+    private int idTurno;
     private LocalDateTime fechaHora;
     private EstadoTurno estado = EstadoTurno.PENDIENTE;
     private String motivoConsulta;
@@ -13,26 +13,22 @@ public class Turno {
     private Paciente paciente;
 
     
-    public Turno(String idTurno, LocalDateTime fechaHora, String motivoConsulta, String estado) {
+    public Turno(int idTurno, LocalDateTime fechaHora, String motivoConsulta, String estado) {
         this.idTurno = idTurno;
         this.fechaHora = fechaHora;
         this.motivoConsulta = motivoConsulta;
         this.estado = ServicioTurnos.validarEstadoTurno(estado);
     }
     
-    public Turno(String idTurno, LocalDateTime fechaHora, String motivoConsulta) {
-        this.idTurno = idTurno;
+    public Turno(LocalDateTime fechaHora, String motivoConsulta) {
+        this.idTurno = -1;
         this.fechaHora = fechaHora;
         this.motivoConsulta = motivoConsulta;
         this.estado = EstadoTurno.PENDIENTE;
     }
 
-    public String getIdTurno() {
+    public int getIdTurno() {
         return idTurno;
-    }
-
-    public void setIdTurno(String idTurno) {
-        this.idTurno = idTurno;
     }
 
     public LocalDateTime getFechaHora() {
@@ -73,6 +69,10 @@ public class Turno {
 
     public void setPaciente(Paciente paciente) {
         this.paciente = paciente;
+    }
+
+    public void setIdTurno(int idTurno) {
+        this.idTurno = idTurno;
     }
     
     

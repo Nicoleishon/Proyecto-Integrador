@@ -5,7 +5,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 
-abstract class Usuario extends Persona {
+abstract public class Usuario extends Persona {
     private int idUsuario;
     private String nombreUsuario;
     private String hashContraseña;
@@ -17,7 +17,7 @@ abstract class Usuario extends Persona {
             int idUsuario, String nombreUsuario, String hashContraseña,
             
             // Parametros de Persona
-            int idPersona, String nombre, String apellido, String fechaNacimiento, String direccion, String telefono, String dni
+            int idPersona, String nombre, String apellido, LocalDate fechaNacimiento, String direccion, String telefono, String dni
     ) {
         super(idPersona, nombre, apellido, fechaNacimiento, direccion, telefono, dni);
         this.idUsuario = idUsuario;

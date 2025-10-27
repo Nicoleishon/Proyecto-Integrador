@@ -1,6 +1,6 @@
 package com.mycompany.proyectointegrador.modelo;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -18,10 +18,10 @@ public class Medico extends PersonalHospital {
             Turno turnoEnCurso, Especialidad especialidad, 
             
             // Parámetros de PersonalHospital
-            int idPersonalHospital, Date fechaIngreso, String departamento, List<Horario> horarios,
+            int idPersonalHospital, LocalDate fechaIngreso, String departamento, List<Horario> horarios,
             
             // Parámetros de Persona (que se pasan a PersonalHospital)
-            int idPersona, String nombre, String apellido, String fechaNacimiento, 
+            int idPersona, String nombre, String apellido, LocalDate fechaNacimiento, 
             String direccion, String telefono, String dni
     ) {
         super(idPersonalHospital, fechaIngreso, departamento, horarios, 

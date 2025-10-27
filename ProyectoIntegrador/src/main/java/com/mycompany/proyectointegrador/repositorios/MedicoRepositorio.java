@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -39,10 +40,13 @@ public class MedicoRepositorio implements IRepositorio<Medico> {
             
             
             if (medico.getFechaIngreso() != null) {
-                stmtPersonal.setDate(1, new java.sql.Date(medico.getFechaIngreso().getTime()));
+                // Convierte LocalDate a java.sql.Date, que es lo que JDBC necesita
+                stmtPersonal.setDate(1, java.sql.Date.valueOf(medico.getFechaIngreso()));
             } else {
+                // Si es null, le indica a la base de datos que es NULL
                 stmtPersonal.setNull(1, Types.DATE);
-            }
+}
+
             stmtPersonal.setString(2, medico.getDepartamento());
             stmtPersonal.executeUpdate();
             
@@ -85,71 +89,135 @@ public class MedicoRepositorio implements IRepositorio<Medico> {
 
     @Override
     public Medico obtenerPorId(int id) throws SQLException {
-        String sql = "SELECT p.idPersonalHospital, p.fechaIngreso, p.departamento, " +
-                     "m.matricula, m.especialidad " +
-                     "FROM personal_hospital p JOIN medicos m ON p.idPersonalHospital = m.idMedico " +
-                     "WHERE m.idMedico = ?";
-        
+        String sql = """
+            SELECT 
+                per.idPersona, per.nombre, per.apellido, per.fechaNacimiento, per.direccion, per.telefono, per.dni,
+                ph.idPersonalHospital, ph.fechaIngreso, ph.departamento,
+                m.idMedico, m.matricula, m.especialidad
+            FROM personal_hospital ph
+            JOIN medicos m ON ph.idPersonalHospital = m.idMedico
+            JOIN personas per ON ph.idPersonalHospital = per.idPersona
+            WHERE m.idMedico = ?
+            """;
+
         try (Connection conn = ConexionDB.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
+
             stmt.setInt(1, id);
-            
+
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    
-                    int idMedico = id; // O rs.getInt("idMedico") si se selecciona
+
+                    // Datos de Persona
+                    int idPersona = rs.getInt("idPersona");
+                    String nombre = rs.getString("nombre");
+                    String apellido = rs.getString("apellido");
+                    String fechaNacimientoStr = rs.getString("fechaNacimiento");
+                    LocalDate fechaNacimiento = (fechaNacimientoStr != null) 
+                        ? LocalDate.parse(fechaNacimientoStr) 
+                        : null;
+                    String direccion = rs.getString("direccion");
+                    String telefono = rs.getString("telefono");
+                    String dni = rs.getString("dni");
+
+                    // Datos de PersonalHospital
+                    int idPersonalHospital = rs.getInt("idPersonalHospital");
+                    String fechaIngresoStr = rs.getString("fechaIngreso");
+                    LocalDate fechaIngreso = (fechaIngresoStr != null)
+                        ? LocalDate.parse(fechaIngresoStr)
+                        : null;
+                    String departamento = rs.getString("departamento");
+
+                    // Datos de Medico
+                    int idMedico = rs.getInt("idMedico");
                     String matricula = rs.getString("matricula");
                     Especialidad especialidad = Especialidad.valueOf(rs.getString("especialidad"));
-                    int idPersonalHospital = rs.getInt("idPersonalHospital");
-                    Date fechaIngreso = rs.getDate("fechaIngreso");
-                    String departamento = rs.getString("departamento");
-                    List<Horario> horarios = horarioRepo.obtenerPorIdPersonal(id);
 
-                    // Usar el constructor de persistencia
-                    return new Medico(idMedico, matricula, especialidad, idPersonalHospital, fechaIngreso, departamento, horarios);
+                    // Cargar horarios
+                    List<Horario> horarios = horarioRepo.obtenerPorIdPersonal(idPersonalHospital);
+
+                    // Crear objeto Medico usando el constructor completo
+                    return new Medico(
+                        idMedico, matricula, new ArrayList<>(), null, especialidad,  // Medico
+                        idPersonalHospital, fechaIngreso, departamento, horarios,     // PersonalHospital
+                        idPersona, nombre, apellido, fechaNacimiento, // Persona
+                        direccion, telefono, dni
+                    );
                 }
             }
         } catch (SQLException e) {
             System.err.println("Error al obtener médico por ID: " + e.getMessage());
             throw e;
         }
-        return null; 
+        return null;
     }
+
+
 
     // @Override
     public List<Medico> obtenerTodos() throws SQLException {
-        String sql = "SELECT p.idPersonalHospital, p.fechaIngreso, p.departamento, " +
-                     "m.idMedico, m.matricula, m.especialidad " + // Añadido m.idMedico
-                     "FROM personal_hospital p JOIN medicos m ON p.idPersonalHospital = m.idMedico";
-        
+        String sql = """
+            SELECT 
+                ph.idPersonalHospital, ph.fechaIngreso, ph.departamento,
+                m.idMedico, m.matricula, m.especialidad,
+                per.idPersona, per.nombre, per.apellido, per.fechaNacimiento, per.direccion, per.telefono, per.dni
+            FROM personal_hospital ph
+            JOIN medicos m ON ph.idPersonalHospital = m.idMedico
+            JOIN personas per ON ph.idPersonalHospital = per.idPersona
+            """;
+
         List<Medico> medicos = new ArrayList<>();
-        
+
         try (Connection conn = ConexionDB.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
-            
+
             while (rs.next()) {
-                // Extraer datos
+                // Datos de Medico
                 int idMedico = rs.getInt("idMedico");
-                int idPersonalHospital = rs.getInt("idPersonalHospital");
-                Date fechaIngreso = rs.getDate("fechaIngreso");
-                String departamento = rs.getString("departamento");
                 String matricula = rs.getString("matricula");
                 Especialidad especialidad = Especialidad.valueOf(rs.getString("especialidad"));
 
-                // Cargar horarios (igual que en obtenerPorId)
-                List<Horario> horarios = new ArrayList<>(); // Simplificado
+                // Datos de PersonalHospital
+                int idPersonalHospital = rs.getInt("idPersonalHospital");
+                LocalDate fechaIngreso = rs.getString("fechaIngreso") != null
+                    ? LocalDate.parse(rs.getString("fechaIngreso"))
+                    : null;
+                String departamento = rs.getString("departamento");
 
-                // Añadir a la lista
-                medicos.add(new Medico(idMedico, matricula, especialidad, idPersonalHospital, fechaIngreso, departamento, horarios));
+                // Datos de Persona
+                int idPersona = rs.getInt("idPersona");
+                String nombre = rs.getString("nombre");
+                String apellido = rs.getString("apellido");
+                LocalDate fechaNacimiento = rs.getString("fechaNacimiento") != null
+                    ? LocalDate.parse(rs.getString("fechaNacimiento"))
+                    : null;
+                String direccion = rs.getString("direccion");
+                String telefono = rs.getString("telefono");
+                String dni = rs.getString("dni");
+
+                // Horarios (si tienes un repositorio de horarios)
+                List<Horario> horarios = new ArrayList<>(); // o cargar con horarioRepo.obtenerPorIdPersonal(idPersonalHospital)
+
+                // Crear objeto Medico
+                Medico medico = new Medico(
+                    idMedico, matricula, new ArrayList<>(), null, especialidad, 
+                    idPersonalHospital, fechaIngreso, departamento, horarios, 
+                    idPersona, nombre, apellido, fechaNacimiento,
+                    direccion, telefono, dni
+                );
+
+                medicos.add(medico);
             }
+
         } catch (SQLException e) {
             System.err.println("Error al obtener todos los médicos: " + e.getMessage());
             throw e;
         }
+
         return medicos;
     }
+
 
     @Override
     public void actualizar(Medico medico) throws SQLException {
@@ -163,11 +231,16 @@ public class MedicoRepositorio implements IRepositorio<Medico> {
 
             // Actualizar PersonalHospital
             try (PreparedStatement stmtPersonal = conn.prepareStatement(sqlPersonal)) {
-                stmtPersonal.setDate(1, new java.sql.Date(medico.getFechaIngreso().getTime()));
+                if (medico.getFechaIngreso() != null) {
+                    stmtPersonal.setDate(1, java.sql.Date.valueOf(medico.getFechaIngreso()));
+                } else {
+                    stmtPersonal.setNull(1, java.sql.Types.DATE);
+                }
                 stmtPersonal.setString(2, medico.getDepartamento());
                 stmtPersonal.setInt(3, medico.getIdPersonalHospital());
                 stmtPersonal.executeUpdate();
             }
+
 
             // Actualizar Medico
             try (PreparedStatement stmtMedico = conn.prepareStatement(sqlMedico)) {
