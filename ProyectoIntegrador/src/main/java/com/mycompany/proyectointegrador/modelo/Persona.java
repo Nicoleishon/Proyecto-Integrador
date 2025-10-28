@@ -23,12 +23,22 @@ public class Persona {
         this.telefono = telefono;
         this.dni = dni;
     }
+    
+    public Persona(String nombre, String apellido, LocalDate fechaNacimiento, String direccion, String telefono, String dni) {
+        this.idPersona = -1;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.fechaNacimiento = fechaNacimiento;
+        this.direccion = direccion;
+        this.telefono = telefono;
+        this.dni = dni;
+    }
 
-    public int getId() {
+    public int getIdPersona() {
         return idPersona;
     }
 
-    public void setId(int id) {
+    public void setIdPersona(int id) {
         this.idPersona = id;
     }
 

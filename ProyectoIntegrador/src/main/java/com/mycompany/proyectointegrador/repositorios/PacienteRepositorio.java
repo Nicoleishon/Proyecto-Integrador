@@ -44,7 +44,7 @@ public class PacienteRepositorio implements IRepositorio<Paciente> {
             int idPersonaGenerado;
             if (rs.next()) {
                 idPersonaGenerado = rs.getInt(1);
-                paciente.setId(idPersonaGenerado); // Actualizamos el objeto Paciente
+                paciente.setIdPaciente(idPersonaGenerado); // Actualizamos el objeto Paciente
             } else {
                 throw new SQLException("La inserción de la persona falló, no se pudo obtener el ID.");
             }

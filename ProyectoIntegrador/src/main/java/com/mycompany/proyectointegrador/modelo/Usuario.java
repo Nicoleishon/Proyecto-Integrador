@@ -25,6 +25,14 @@ public class Usuario extends Persona {
         this.hashContraseña = hashContraseña;
         this.sesionIniciada = false;
     }
+    
+    public Usuario(int idUsuario, String nombreUsuario, String hashContraseña, Persona persona) {
+        super(persona.getIdPersona(), persona.getNombre(), persona.getApellido(), persona.getFechaNacimiento(), persona.getDireccion(), persona.getTelefono(), persona.getDni());
+        this.idUsuario = persona.getIdPersona();
+        this.nombreUsuario = nombreUsuario;
+        this.hashContraseña = hashContraseña;
+        this.sesionIniciada = false;
+    }
 
     public String getNombreUsuario() {
         return nombreUsuario;

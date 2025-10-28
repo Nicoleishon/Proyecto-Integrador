@@ -120,6 +120,16 @@ public class ConexionDB {
                     FOREIGN KEY (idMedico) REFERENCES medicos(idMedico),
                     FOREIGN KEY (idPaciente) REFERENCES pacientes(idPaciente)
                 );""");
+            
+            stmt.execute("""
+                         CREATE TABLE horarios (
+                             idHorario INTEGER PRIMARY KEY AUTOINCREMENT,
+                             diaSemana TEXT NOT NULL,
+                             horaInicio TEXT NOT NULL,  -- formato HH:MM
+                             horaFin TEXT NOT NULL,
+                             idPersonalHospital INTEGER NOT NULL,
+                             FOREIGN KEY (idPersonalHospital) REFERENCES personal_hospital(idPersonalHospital)
+                         );""");
 
             System.out.println("Base de datos inicializada. Tablas creadas con éxito.");
         } catch (SQLException e) {

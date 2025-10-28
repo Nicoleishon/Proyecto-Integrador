@@ -21,6 +21,18 @@ public class Paciente extends Usuario {
         this.idPaciente = idPaciente;
         this.fechaRegistro = fechaRegistro;
     }
+    
+    public Paciente(LocalDate fechaRegistro, Usuario usuario, Persona persona) {
+        super(usuario.getIdUsuario(), usuario.getNombreUsuario(), usuario.getHashContraseña(), persona);
+        this.idPaciente = usuario.getIdUsuario();
+        this.fechaRegistro = fechaRegistro;
+    }
+    
+    public Paciente(Usuario usuario, Persona persona) {
+        super(usuario.getIdUsuario(), usuario.getNombreUsuario(), usuario.getHashContraseña(), persona);
+        this.idPaciente = usuario.getIdUsuario();
+        this.fechaRegistro = LocalDate.now();
+    }
 
     public int getIdPaciente() {
         return idPaciente;

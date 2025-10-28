@@ -7,10 +7,17 @@ import java.time.LocalDate;
 
 
 public class Recepcionista extends Usuario {
-    private final int idRecepcionista;
+    private int idRecepcionista;
+    private Hospital hospital;
     private TurnoRepositorio turnoRepositorio;
 
     public Recepcionista(int idRecepcionista, int idUsuario, String nombreUsuario, String hashContraseña, int idPersona, String nombre, String apellido, LocalDate fechaNacimiento, String direccion, String telefono, String dni) {
+        super(idUsuario, nombreUsuario, hashContraseña, idPersona, nombre, apellido, fechaNacimiento, direccion, telefono, dni);
+        this.idRecepcionista = idRecepcionista;
+        this.turnoRepositorio = new TurnoRepositorio();
+    }
+    
+    public Recepcionista(int idRecepcionista, Usuario usuario, Persona persona) {
         super(idUsuario, nombreUsuario, hashContraseña, idPersona, nombre, apellido, fechaNacimiento, direccion, telefono, dni);
         this.idRecepcionista = idRecepcionista;
         this.turnoRepositorio = new TurnoRepositorio();

@@ -35,7 +35,7 @@ public class PersonaRepositorio {
                 try (ResultSet rs = stmt.getGeneratedKeys()) {
                     if (rs.next()) {
                         int idGenerado = rs.getInt(1);
-                        persona.setId(idGenerado);
+                        persona.setIdPersona(idGenerado);
                         conn.commit(); // todo ok, confirmamos la transacción
                         return idGenerado;
                     } else {
