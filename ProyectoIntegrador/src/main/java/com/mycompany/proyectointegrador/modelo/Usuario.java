@@ -11,22 +11,15 @@ public class Usuario extends Persona {
     private String hashContraseña;
     private Boolean sesionIniciada;
 
-
-    public Usuario(
-            // Parametros de Usuario
-            int idUsuario, String nombreUsuario, String hashContraseña,
-            
-            // Parametros de Persona
-            int idPersona, String nombre, String apellido, LocalDate fechaNacimiento, String direccion, String telefono, String dni
-    ) {
+    public Usuario(int idUsuario, String nombreUsuario, String hashContraseña, int idPersona, String nombre, String apellido, LocalDate fechaNacimiento, String direccion, String telefono, String dni) {
         super(idPersona, nombre, apellido, fechaNacimiento, direccion, telefono, dni);
         this.idUsuario = idUsuario;
         this.nombreUsuario = nombreUsuario;
         this.hashContraseña = hashContraseña;
         this.sesionIniciada = false;
     }
-    
-    public Usuario(int idUsuario, String nombreUsuario, String hashContraseña, Persona persona) {
+
+    public Usuario(String nombreUsuario, String hashContraseña, Persona persona) {
         super(persona.getIdPersona(), persona.getNombre(), persona.getApellido(), persona.getFechaNacimiento(), persona.getDireccion(), persona.getTelefono(), persona.getDni());
         this.idUsuario = persona.getIdPersona();
         this.nombreUsuario = nombreUsuario;

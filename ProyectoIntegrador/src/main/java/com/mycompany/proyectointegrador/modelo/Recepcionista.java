@@ -2,24 +2,27 @@ package com.mycompany.proyectointegrador.modelo;
 
 import com.mycompany.proyectointegrador.repositorios.TurnoRepositorio;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 public class Recepcionista extends Usuario {
     private int idRecepcionista;
-    private Hospital hospital;
+    private int idHospital;
     private TurnoRepositorio turnoRepositorio;
 
-    public Recepcionista(int idRecepcionista, int idUsuario, String nombreUsuario, String hashContraseña, int idPersona, String nombre, String apellido, LocalDate fechaNacimiento, String direccion, String telefono, String dni) {
+    public Recepcionista(int idRecepcionista, int idHospital, TurnoRepositorio turnoRepositorio, int idUsuario, String nombreUsuario, String hashContraseña, int idPersona, String nombre, String apellido, LocalDate fechaNacimiento, String direccion, String telefono, String dni) {
         super(idUsuario, nombreUsuario, hashContraseña, idPersona, nombre, apellido, fechaNacimiento, direccion, telefono, dni);
         this.idRecepcionista = idRecepcionista;
-        this.turnoRepositorio = new TurnoRepositorio();
+        this.idHospital = idHospital;
+        this.turnoRepositorio = turnoRepositorio;
     }
+
     
-    public Recepcionista(int idRecepcionista, Usuario usuario, Persona persona) {
-        super(idUsuario, nombreUsuario, hashContraseña, idPersona, nombre, apellido, fechaNacimiento, direccion, telefono, dni);
-        this.idRecepcionista = idRecepcionista;
+    public Recepcionista(int idHospital, Usuario usuario, Persona persona) {
+        super(usuario.getNombreUsuario(), usuario.getHashContraseña(), persona);
+        this.idRecepcionista = usuario.getIdUsuario();
+        this.idHospital = idHospital;
         this.turnoRepositorio = new TurnoRepositorio();
     }
     
@@ -58,7 +61,35 @@ public class Recepcionista extends Usuario {
       } catch (SQLException e){
           throw e;
       }
+      
+      
+      
+      
   }
+
+    public int getIdRecepcionista() {
+        return idRecepcionista;
+    }
+
+    public void setIdRecepcionista(int idRecepcionista) {
+        this.idRecepcionista = idRecepcionista;
+    }
+
+    public int getIdHospital() {
+        return idHospital;
+    }
+
+    public void setIdHospital(int idHospital) {
+        this.idHospital = idHospital;
+    }
+
+    public TurnoRepositorio getTurnoRepositorio() {
+        return turnoRepositorio;
+    }
+
+    public void setTurnoRepositorio(TurnoRepositorio turnoRepositorio) {
+        this.turnoRepositorio = turnoRepositorio;
+    }
     
     
     

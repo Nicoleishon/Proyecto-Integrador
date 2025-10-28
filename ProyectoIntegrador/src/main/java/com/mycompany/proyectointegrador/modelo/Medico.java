@@ -14,6 +14,19 @@ public class Medico extends Persona {
     private Turno turnoEnCurso;
     private Especialidad especialidad;
 
+    // Constructor con todos los parametros
+    public Medico(int idMedico, int idHospital, LocalDate fechaIngreso, String departamento, String matricula, Turno turnoEnCurso, Especialidad especialidad, int idPersona, String nombre, String apellido, LocalDate fechaNacimiento, String direccion, String telefono, String dni) {
+        super(idPersona, nombre, apellido, fechaNacimiento, direccion, telefono, dni);
+        this.idMedico = idMedico;
+        this.idHospital = idHospital;
+        this.fechaIngreso = fechaIngreso;
+        this.departamento = departamento;
+        this.matricula = matricula;
+        this.turnoEnCurso = turnoEnCurso;
+        this.especialidad = especialidad;
+    }
+
+    // Constructor con parametro Persona
     public Medico(int idHospital, LocalDate fechaIngreso, String departamento, String matricula, Turno turnoEnCurso, Especialidad especialidad, Persona persona) {
         super(persona.getNombre(), persona.getApellido(), persona.getFechaNacimiento(), persona.getDireccion(), persona.getTelefono(), persona.getDni());
         this.idMedico = persona.getIdPersona();

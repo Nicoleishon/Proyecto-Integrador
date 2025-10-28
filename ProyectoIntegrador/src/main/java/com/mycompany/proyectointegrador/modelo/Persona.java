@@ -25,7 +25,7 @@ public class Persona {
     }
     
     public Persona(String nombre, String apellido, LocalDate fechaNacimiento, String direccion, String telefono, String dni) {
-        this.idPersona = -1;
+        this.idPersona = -1; // Para crear un objeto persona, luego de crear la persona en el db obtener id y reasignar
         this.nombre = nombre;
         this.apellido = apellido;
         this.fechaNacimiento = fechaNacimiento;
