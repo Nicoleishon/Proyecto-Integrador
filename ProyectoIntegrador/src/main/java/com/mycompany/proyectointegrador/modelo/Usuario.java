@@ -5,7 +5,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 
-abstract public class Usuario extends Persona {
+public class Usuario extends Persona {
     private int idUsuario;
     private String nombreUsuario;
     private String hashContraseña;

@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.Period;
 
 
-public abstract class Persona {
+public class Persona {
 
     private int idPersona;
     private String nombre;

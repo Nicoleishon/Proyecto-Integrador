@@ -10,6 +10,7 @@ public class Horario {
     private int idPersonalHospital; // clave foránea para vincular al personal
     
     public Horario(DiaSemana diaSemana, LocalTime horaInicio, LocalTime horaFin, int idPersonalHospital) {
+        this.idHorario = -1;
         this.diaSemana = diaSemana;
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;

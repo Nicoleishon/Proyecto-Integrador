@@ -3,8 +3,6 @@ package com.mycompany.proyectointegrador.modelo;
 import java.time.LocalDate;
 
 
-
-
 public class Paciente extends Usuario {
     private int idPaciente;
     private LocalDate fechaRegistro;

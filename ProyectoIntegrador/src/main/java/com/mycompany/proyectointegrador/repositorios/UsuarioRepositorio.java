@@ -1,0 +1,29 @@
+package com.mycompany.proyectointegrador.repositorios;
+
+import com.mycompany.proyectointegrador.modelo.Usuario;
+import com.mycompany.proyectointegrador.persistencias.ConexionDB;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+public class UsuarioRepositorio {
+
+    public void crear(Usuario usuario, int idPersona) throws SQLException {
+        String sql = "INSERT INTO usuarios (idUsuario, nombreUsuario, hashContraseña) VALUES (?, ?, ?)";
+
+        try (Connection conn = ConexionDB.conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, idPersona); // Enlazamos con persona.idPersona
+            stmt.setString(2, usuario.getNombreUsuario());
+            stmt.setString(3, usuario.getHashContraseña());
+
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.err.println("Error al crear usuario: " + e.getMessage());
+            throw e;
+        }
+    }
+}

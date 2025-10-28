@@ -79,7 +79,6 @@ public class ConexionDB {
                     idUsuario INTEGER PRIMARY KEY,
                     nombreUsuario TEXT NOT NULL UNIQUE,
                     hashContraseña TEXT NOT NULL,
-                    rol TEXT,
                     FOREIGN KEY (idUsuario) REFERENCES personas(idPersona)
                 );""");
 
