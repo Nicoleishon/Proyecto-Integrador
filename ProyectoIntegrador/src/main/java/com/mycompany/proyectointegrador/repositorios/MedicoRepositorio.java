@@ -15,29 +15,22 @@ import java.util.List;
 
 public class MedicoRepositorio implements IRepositorio<Medico> {
 
+    
     @Override
     public void crear(Medico medico) throws SQLException {
-        
         String sqlMedico = "INSERT INTO medicos (idMedico, idHospital, matricula, especialidad) VALUES (?, ?, ?, ?)";
-        
-        
-        try (Connection conn = ConexionDB.conectar()) {
-            conn.setAutoCommit(false); // Iniciar transacción
-            
-            try (PreparedStatement stmtMedico = conn.prepareStatement(sqlMedico);) {
-                stmtMedico.setInt(1, medico.getIdPersona());
-                stmtMedico.setInt(2, medico.getIdHospital());
-                stmtMedico.setString(3, medico.getMatricula());
-                stmtMedico.setString(4, medico.getEspecialidad().toString());
-                stmtMedico.executeUpdate();
-                
-                conn.commit();
-            } catch (SQLException e) {
-                DBUtils.rollback(conn); // Revertir en caso de error
-                throw new SQLException("Error al crear médico.", e);
-            } finally {
-                DBUtils.restaurarAutoCommit(conn);
-            }
+
+        try (Connection conn = ConexionDB.conectar();
+             PreparedStatement stmtMedico = conn.prepareStatement(sqlMedico)) {
+
+            stmtMedico.setInt(1, medico.getIdPersona());
+            stmtMedico.setInt(2, medico.getIdHospital());
+            stmtMedico.setString(3, medico.getMatricula());
+            stmtMedico.setString(4, medico.getEspecialidad().toString());
+            stmtMedico.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new SQLException("Error al crear médico.", e);
         }
     }
 
