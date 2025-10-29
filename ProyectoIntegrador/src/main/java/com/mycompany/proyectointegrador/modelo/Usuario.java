@@ -10,6 +10,8 @@ public class Usuario extends Persona {
     private String nombreUsuario;
     private String hashContraseña;
     private Boolean sesionIniciada;
+    
+    public Usuario(){}
 
     public Usuario(int idUsuario, String nombreUsuario, String hashContraseña, int idPersona, String nombre, String apellido, LocalDate fechaNacimiento, String direccion, String telefono, String dni) {
         super(idPersona, nombre, apellido, fechaNacimiento, direccion, telefono, dni);
