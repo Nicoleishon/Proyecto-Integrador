@@ -2,6 +2,7 @@ package com.mycompany.proyectointegrador.repositorios;
 
 import com.mycompany.proyectointegrador.modelo.Persona;
 import com.mycompany.proyectointegrador.persistencias.ConexionDB;
+import com.mycompany.proyectointegrador.utils.DBUtils;
 
 import java.sql.*;
 
@@ -14,10 +15,9 @@ public class PersonaRepositorio {
                      "VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = ConexionDB.conectar()) {
-            conn.setAutoCommit(false); // iniciamos la transacción
+            conn.setAutoCommit(false); // iniciar transacción
 
             try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
                 stmt.setString(1, persona.getNombre());
                 stmt.setString(2, persona.getApellido());
                 stmt.setString(3, persona.getFechaNacimiento() != null ? persona.getFechaNacimiento().toString() : null);
@@ -26,9 +26,7 @@ public class PersonaRepositorio {
                 stmt.setString(6, persona.getDni());
 
                 int filasAfectadas = stmt.executeUpdate();
-
                 if (filasAfectadas == 0) {
-                    conn.rollback();
                     throw new SQLException("No se pudo insertar la persona.");
                 }
 
@@ -36,22 +34,20 @@ public class PersonaRepositorio {
                     if (rs.next()) {
                         int idGenerado = rs.getInt(1);
                         persona.setIdPersona(idGenerado);
-                        conn.commit(); // todo ok, confirmamos la transacción
+                        conn.commit();
                         return idGenerado;
                     } else {
-                        conn.rollback();
                         throw new SQLException("No se pudo obtener el ID generado para la persona.");
                     }
                 }
-
             } catch (SQLException e) {
-                conn.rollback(); // deshacer si algo falla
-                throw e;
+                DBUtils.rollback(conn);
+                throw new SQLException(e.getMessage(), e);
             } finally {
-                conn.setAutoCommit(true); // restaurar comportamiento por defecto
+                DBUtils.restaurarAutoCommit(conn);
             }
-
         }
-}
+    }
+
 
 }
