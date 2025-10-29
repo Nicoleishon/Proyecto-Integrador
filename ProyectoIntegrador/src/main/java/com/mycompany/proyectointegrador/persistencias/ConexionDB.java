@@ -13,7 +13,7 @@ public class ConexionDB {
     
     private static Connection connection = null;
 
-    private ConexionDB() {
+    private ConexionDB() throws SQLException {
         try {
             connection = DriverManager.getConnection(URL_DB);
             System.out.println("Conexión a SQLite establecida con éxito.");
@@ -25,6 +25,7 @@ public class ConexionDB {
         } catch (SQLException e) {
             System.err.println("Error al conectar con la base de datos SQLite: " + e.getMessage());
             // lanzar excepción personalizada en caso de que se requiera
+            throw e;
         }
     }
     
@@ -58,89 +59,92 @@ public class ConexionDB {
             stmt.execute("DROP TABLE IF EXISTS pacientes;");
             stmt.execute("DROP TABLE IF EXISTS usuarios;");
             stmt.execute("DROP TABLE IF EXISTS personas;");
+            stmt.execute("DROP TABLE IF EXISTS hospitales;");
+            stmt.execute("DROP TABLE IF EXISTS recepcionistas;");
+            stmt.execute("DROP TABLE IF EXISTS horarios;");
             System.out.println("Tablas antiguas eliminadas (si existían).");
             
             // Tabla Hospitales
             stmt.execute("""
-                         CREATE TABLE hospitales (
-                            idHospital INTEGER PRIMARY KEY,
-                            nombre TEXT NOT NULL,
-                            direccion TEXT NOT NULL
-                         );""");
+                CREATE TABLE hospitales (
+                idHospital INTEGER PRIMARY KEY,
+                nombre TEXT NOT NULL,
+                direccion TEXT NOT NULL
+                );""");
 
             // Tabla Personas: LocalDate (fechaNacimiento)
             stmt.execute("""
                 CREATE TABLE personas (
-                    idPersona INTEGER PRIMARY KEY AUTOINCREMENT,
-                    nombre TEXT NOT NULL,
-                    apellido TEXT NOT NULL,
-                    fechaNacimiento TEXT,       -- YYYY-MM-DD para LocalDate
-                    direccion TEXT,
-                    telefono TEXT,
-                    dni TEXT NOT NULL UNIQUE
+                idPersona INTEGER PRIMARY KEY AUTOINCREMENT,
+                nombre TEXT NOT NULL,
+                apellido TEXT NOT NULL,
+                fechaNacimiento TEXT,       -- YYYY-MM-DD para LocalDate
+                direccion TEXT,
+                telefono TEXT,
+                dni TEXT NOT NULL UNIQUE
                 );""");
 
             // Tabla Usuarios
             stmt.execute("""
                 CREATE TABLE usuarios (
-                    idUsuario INTEGER PRIMARY KEY,
-                    nombreUsuario TEXT NOT NULL UNIQUE,
-                    hashContraseña TEXT NOT NULL,
-                    FOREIGN KEY (idUsuario) REFERENCES personas(idPersona)
+                idUsuario INTEGER PRIMARY KEY,
+                nombreUsuario TEXT NOT NULL UNIQUE,
+                hashContraseña TEXT NOT NULL,
+                FOREIGN KEY (idUsuario) REFERENCES personas(idPersona)
                 );""");
 
             // Tabla Pacientes: fechaRegistro (LocalDate)
             stmt.execute("""
                 CREATE TABLE pacientes (
-                    idPaciente INTEGER PRIMARY KEY,
-                    fechaRegistro TEXT NOT NULL,  -- YYYY-MM-DD para LocalDate
-                    FOREIGN KEY (idPaciente) REFERENCES usuarios(idUsuario)
+                idPaciente INTEGER PRIMARY KEY,
+                fechaRegistro TEXT NOT NULL,  -- YYYY-MM-DD para LocalDate
+                FOREIGN KEY (idPaciente) REFERENCES usuarios(idUsuario)
                 );""");
 
 
             // Tabla Medicos
             stmt.execute("""
                 CREATE TABLE medicos (
-                    idMedico INTEGER PRIMARY KEY,
-                    idHospital INTEGER PRIMARY KEY,
-                    matricula TEXT NOT NULL UNIQUE,
-                    especialidad TEXT,
-                    FOREIGN KEY (idHospital) REFERENCES hospitales(idHospital),
-                    FOREIGN KEY (idMedico) REFERENCES personas(idPersona)
+                idMedico INTEGER PRIMARY KEY,
+                idHospital INTEGER NOT NULL,
+                matricula TEXT NOT NULL UNIQUE,
+                especialidad TEXT,
+                FOREIGN KEY (idHospital) REFERENCES hospitales(idHospital),
+                FOREIGN KEY (idMedico) REFERENCES personas(idPersona)
                 );""");
             
             // Tabla Recepcionistas
             stmt.execute("""
-                         CREATE TABLE recepcionistas (
-                            idRecepcionista INTEGER PRIMARY KEY,
-                            idHospital INTEGER PRIMARY KEY,
-                            FOREIGN KEY (idHospital) REFERENCES hospitales(idHospital),
-                            FOREIGN KEY (idRecepcionista) REFERENCES usuarios(idUsuario)
-                         );""");
+                CREATE TABLE recepcionistas (
+                idRecepcionista INTEGER PRIMARY KEY,
+                idHospital INTEGER NOT NULL,
+                FOREIGN KEY (idHospital) REFERENCES hospitales(idHospital),
+                FOREIGN KEY (idRecepcionista) REFERENCES usuarios(idUsuario)
+                );""");
 
             // Tabla Turnos: fechaHora (LocalDateTime)
             stmt.execute("""
                 CREATE TABLE turnos (
-                    idTurno INTEGER PRIMARY KEY AUTOINCREMENT,
-                    fechaHora TEXT NOT NULL,      -- YYYY-MM-DDTHH:MM:SS para LocalDateTime
-                    estado TEXT,
-                    motivoConsulta TEXT,
-                    idMedico INTEGER NOT NULL,
-                    idPaciente INTEGER NOT NULL,
-                    FOREIGN KEY (idMedico) REFERENCES medicos(idMedico),
-                    FOREIGN KEY (idPaciente) REFERENCES pacientes(idPaciente)
+                idTurno INTEGER PRIMARY KEY AUTOINCREMENT,
+                fechaHora TEXT NOT NULL,      -- YYYY-MM-DDTHH:MM:SS para LocalDateTime
+                estado TEXT,
+                motivoConsulta TEXT,
+                idMedico INTEGER NOT NULL,
+                idPaciente INTEGER NOT NULL,
+                FOREIGN KEY (idMedico) REFERENCES medicos(idMedico),
+                FOREIGN KEY (idPaciente) REFERENCES pacientes(idPaciente)
                 );""");
             
             // Tabla horarios
             stmt.execute("""
-                         CREATE TABLE horarios (
-                             idHorario INTEGER PRIMARY KEY AUTOINCREMENT,
-                             diaSemana TEXT NOT NULL,
-                             horaInicio TEXT NOT NULL,  -- formato HH:MM
-                             horaFin TEXT NOT NULL,
-                             idMedico INTEGER NOT NULL,
-                             FOREIGN KEY (idMedico) REFERENCES medicos(idMedico)
-                         );""");
+                CREATE TABLE horarios (
+                idHorario INTEGER PRIMARY KEY AUTOINCREMENT,
+                diaSemana TEXT NOT NULL,
+                horaInicio TEXT NOT NULL,  -- formato HH:MM
+                horaFin TEXT NOT NULL,
+                idMedico INTEGER NOT NULL,
+                FOREIGN KEY (idMedico) REFERENCES medicos(idMedico)
+                );""");
 
             System.out.println("Base de datos inicializada. Tablas creadas con éxito.");
         } catch (SQLException e) {
