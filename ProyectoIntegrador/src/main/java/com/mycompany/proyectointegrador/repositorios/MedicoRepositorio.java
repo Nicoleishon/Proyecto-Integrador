@@ -141,11 +141,7 @@ public class MedicoRepositorio implements IRepositorio<Medico> {
                 // --- Actualizar Persona ---
                 stmtPersona.setString(1, medico.getNombre());
                 stmtPersona.setString(2, medico.getApellido());
-                if (medico.getFechaNacimiento() != null) {
-                    stmtPersona.setDate(3, java.sql.Date.valueOf(medico.getFechaNacimiento()));
-                } else {
-                    stmtPersona.setNull(3, java.sql.Types.DATE);
-                }
+                stmtPersona.setDate(3, java.sql.Date.valueOf(medico.getFechaNacimiento()));
                 stmtPersona.setString(4, medico.getDireccion());
                 stmtPersona.setString(5, medico.getTelefono());
                 stmtPersona.setString(6, medico.getDni());
@@ -223,10 +219,7 @@ public class MedicoRepositorio implements IRepositorio<Medico> {
         medico.setIdPersona(rs.getInt("idPersona"));
         medico.setNombre(rs.getString("nombre"));
         medico.setApellido(rs.getString("apellido"));
-        String fechaNacimientoStr = rs.getString("fechaNacimiento");
-        if (fechaNacimientoStr != null) {
-            medico.setFechaNacimiento(LocalDate.parse(fechaNacimientoStr));
-        }
+        medico.setFechaNacimiento(LocalDate.parse(rs.getString("fechaNacimiento")));
         medico.setDireccion(rs.getString("direccion"));
         medico.setTelefono(rs.getString("telefono"));
         medico.setDni(rs.getString("dni"));
@@ -235,11 +228,7 @@ public class MedicoRepositorio implements IRepositorio<Medico> {
         medico.setIdMedico(rs.getInt("idMedico"));
         medico.setIdHospital(rs.getInt("idHospital"));
         medico.setMatricula(rs.getString("matricula"));
-
-        String especialidadStr = rs.getString("especialidad");
-        if (especialidadStr != null) {
-            medico.setEspecialidad(Especialidad.valueOf(especialidadStr));
-        }
+        medico.setEspecialidad(Especialidad.valueOf(rs.getString("especialidad")));
 
         return medico;
     }

@@ -17,7 +17,7 @@ public class PersonaRepositorio {
         try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, persona.getNombre());
             stmt.setString(2, persona.getApellido());
-            stmt.setString(3, persona.getFechaNacimiento() != null ? persona.getFechaNacimiento().toString() : null);
+            stmt.setString(3, persona.getFechaNacimiento().toString());
             stmt.setString(4, persona.getDireccion());
             stmt.setString(5, persona.getTelefono());
             stmt.setString(6, persona.getDni());

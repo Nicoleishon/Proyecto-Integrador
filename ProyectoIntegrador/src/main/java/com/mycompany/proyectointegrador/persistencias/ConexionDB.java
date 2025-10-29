@@ -78,7 +78,7 @@ public class ConexionDB {
                 idPersona INTEGER PRIMARY KEY AUTOINCREMENT,
                 nombre TEXT NOT NULL,
                 apellido TEXT NOT NULL,
-                fechaNacimiento TEXT,       -- YYYY-MM-DD para LocalDate
+                fechaNacimiento TEXT NOT NULL,       -- YYYY-MM-DD para LocalDate
                 direccion TEXT,
                 telefono TEXT,
                 dni TEXT NOT NULL UNIQUE
@@ -97,7 +97,9 @@ public class ConexionDB {
             stmt.execute("""
                 CREATE TABLE pacientes (
                 idPaciente INTEGER PRIMARY KEY,
+                idHospital INTEGER NOT NULL,
                 fechaRegistro TEXT NOT NULL,  -- YYYY-MM-DD para LocalDate
+                FOREIGN KEY (idHospital) REFERENCES hospitales(idHospital),
                 FOREIGN KEY (idPaciente) REFERENCES usuarios(idUsuario)
                 );""");
 
@@ -108,7 +110,7 @@ public class ConexionDB {
                 idMedico INTEGER PRIMARY KEY,
                 idHospital INTEGER NOT NULL,
                 matricula TEXT NOT NULL UNIQUE,
-                especialidad TEXT,
+                especialidad TEXT NOT NULL,
                 FOREIGN KEY (idHospital) REFERENCES hospitales(idHospital),
                 FOREIGN KEY (idMedico) REFERENCES personas(idPersona)
                 );""");
@@ -123,6 +125,7 @@ public class ConexionDB {
                 );""");
 
             // Tabla Turnos: fechaHora (LocalDateTime)
+            // Turnos también deberia de tener idHospital si se quiere escalar a un sistema de multihospitales
             stmt.execute("""
                 CREATE TABLE turnos (
                 idTurno INTEGER PRIMARY KEY AUTOINCREMENT,
