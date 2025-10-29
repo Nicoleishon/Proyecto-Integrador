@@ -7,15 +7,17 @@ public class Horario {
     private DiaSemana diaSemana;
     private LocalTime horaInicio;
     private LocalTime horaFin;
-    private int idPersonalHospital; // clave foránea para vincular al personal
+    private int idMedico;
     
     public Horario(DiaSemana diaSemana, LocalTime horaInicio, LocalTime horaFin, int idPersonalHospital) {
         this.idHorario = -1;
         this.diaSemana = diaSemana;
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
-        this.idPersonalHospital = idPersonalHospital;
+        this.idMedico = idPersonalHospital;
     }
+
+    public Horario() {}
 
     
     public int getIdHorario() {
@@ -34,10 +36,6 @@ public class Horario {
         return horaFin;
     }
 
-    public int getIdPersonalHospital() {
-        return idPersonalHospital;
-    }
-
     public void setIdHorario(int idHorario) {
         this.idHorario = idHorario;
     }
@@ -54,9 +52,6 @@ public class Horario {
         this.horaFin = horaFin;
     }
 
-    public void setIdPersonalHospital(int idPersonalHospital) {
-        this.idPersonalHospital = idPersonalHospital;
-    }
 
     @Override
     public String toString() {
@@ -65,7 +60,15 @@ public class Horario {
                 ", dia=" + diaSemana +
                 ", inicio=" + horaInicio +
                 ", fin=" + horaFin +
-                ", idPersonal=" + idPersonalHospital +
+                ", idMedico=" + idMedico +
                 '}';
+    }
+
+    public int getIdMedico() {
+        return idMedico;
+    }
+
+    public void setIdMedico(int idMedico) {
+        this.idMedico = idMedico;
     }
 }

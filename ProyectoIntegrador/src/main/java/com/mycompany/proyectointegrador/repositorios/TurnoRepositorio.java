@@ -1,30 +1,38 @@
 package com.mycompany.proyectointegrador.repositorios;
 
-import com.mycompany.proyectointegrador.modelo.EstadoTurno;
-import com.mycompany.proyectointegrador.modelo.Medico;
-import com.mycompany.proyectointegrador.modelo.Paciente;
-import com.mycompany.proyectointegrador.modelo.Turno;
+import com.mycompany.proyectointegrador.modelo.*;
 import com.mycompany.proyectointegrador.persistencias.ConexionDB;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TurnoRepositorio implements IRepositorio<Turno> {
 
-    
-    private MedicoRepositorio medicoRepo = new MedicoRepositorio();
-    private PacienteRepositorio pacienteRepo = new PacienteRepositorio();
-    
-    @Override 
+    private final MedicoRepositorio medicoRepo = new MedicoRepositorio();
+    private final PacienteRepositorio pacienteRepo = new PacienteRepositorio();
+
+    private Turno mapearTurno(ResultSet rs) throws SQLException {
+        Turno turno = new Turno();
+        turno.setIdTurno(rs.getInt("idTurno"));
+        turno.setFechaHora(LocalDateTime.parse(rs.getString("fechaHora")));
+        turno.setMotivoConsulta(rs.getString("motivoConsulta"));
+        turno.setEstado(EstadoTurno.valueOf(rs.getString("estado")));
+
+        int idMedico = rs.getInt("idMedico");
+        int idPaciente = rs.getInt("idPaciente");
+
+        turno.setMedico(medicoRepo.obtenerPorId(idMedico));
+        turno.setPaciente(pacienteRepo.obtenerPorId(idPaciente));
+
+        return turno;
+    }
+
+    @Override
     public void crear(Turno turno) throws SQLException {
-        String sql = "INSERT INTO turnos (fechaHora, estado, motivoConsulta, idMedico, idPaciente) " +
-             "VALUES (?, ?, ?, ?, ?)";
-        
+        String sql = "INSERT INTO turnos (fechaHora, estado, motivoConsulta, idMedico, idPaciente) VALUES (?, ?, ?, ?, ?)";
+
         try (Connection conn = ConexionDB.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -36,126 +44,134 @@ public class TurnoRepositorio implements IRepositorio<Turno> {
 
             stmt.executeUpdate();
 
-            // Obtener el id generado automáticamente
             try (ResultSet rs = stmt.getGeneratedKeys()) {
                 if (rs.next()) {
-                    int idGenerado = rs.getInt(1);
-                    // Actualizar el objeto turno con el id generado
-                    turno.setIdTurno(idGenerado);
+                    turno.setIdTurno(rs.getInt(1));
+                } else {
+                    throw new SQLException("No se pudo obtener el ID generado para el turno.");
                 }
             }
 
         } catch (SQLException e) {
-            System.err.println("Error al crear el turno: " + e.getMessage());
-            throw e;
+            throw new SQLException("Error al crear el turno: " + e.getMessage(), e);
         }
     }
 
     @Override
     public Turno obtenerPorId(int id) throws SQLException {
         String sql = "SELECT * FROM turnos WHERE idTurno = ?";
-        
+
         try (Connection conn = ConexionDB.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
+
             stmt.setInt(1, id);
-            
+
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    
-                    int idTurno = rs.getInt("idTurno");
-                    LocalDateTime fechaHora = LocalDateTime.parse(rs.getString("fechaHora"));
-                    String estadoStr = rs.getString("estado");
-                    String motivo = rs.getString("motivoConsulta");
-                    int idMedico = rs.getInt("idMedico");
-                    int idPaciente = rs.getInt("idPaciente");
-                   
-                    Turno turno = new Turno(idTurno, fechaHora, motivo, estadoStr);
-
-                    Medico medico = medicoRepo.obtenerPorId(idMedico);
-                    Paciente paciente = pacienteRepo.obtenerPorId(idPaciente);
-                    
-                    turno.setMedico(medico);
-                    turno.setPaciente(paciente);
-                    
-                    return turno;
+                    return mapearTurno(rs);
                 }
             }
+
         } catch (SQLException e) {
-            System.err.println("Error al obtener turno por ID: " + e.getMessage());
-            throw e;
+            throw new SQLException("Error al obtener el turno por ID: " + e.getMessage(), e);
         }
-        return null; // No encontrado
+        return null;
     }
 
     @Override
     public List<Turno> obtenerTodos() throws SQLException {
         String sql = "SELECT * FROM turnos";
         List<Turno> turnos = new ArrayList<>();
-        
+
         try (Connection conn = ConexionDB.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
-            
+
             while (rs.next()) {
-                // 1. Extraer datos
-                int idTurno = rs.getInt("idTurno");
-                LocalDateTime fechaHora = LocalDateTime.parse(rs.getString("fechaHora"));
-                String estadoStr = rs.getString("estado");
-                String motivo = rs.getString("motivoConsulta");
-                int idMedico = rs.getInt("idMedico");
-                int idPaciente = rs.getInt("idPaciente");
-
-                Turno turno = new Turno(idTurno, fechaHora, motivo, estadoStr);
-
-                turno.setMedico(medicoRepo.obtenerPorId(idMedico));
-                turno.setPaciente(pacienteRepo.obtenerPorId(idPaciente));
-                
-                turnos.add(turno);
+                turnos.add(mapearTurno(rs));
             }
+
         } catch (SQLException e) {
-            System.err.println("Error al obtener todos los turnos: " + e.getMessage());
-            throw e;
+            throw new SQLException("Error al obtener todos los turnos: " + e.getMessage(), e);
         }
         return turnos;
     }
 
-     @Override
+    @Override
     public void actualizar(Turno turno) throws SQLException {
-        String sql = "UPDATE turnos SET fechaHora = ?, estado = ?, motivoConsulta = ?, " +
-                     "idMedico = ?, idPaciente = ? WHERE idTurno = ?";
-        
+        String sql = "UPDATE turnos SET fechaHora = ?, estado = ?, motivoConsulta = ?, idMedico = ?, idPaciente = ? WHERE idTurno = ?";
+
         try (Connection conn = ConexionDB.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
+
             stmt.setString(1, turno.getFechaHora().toString());
             stmt.setString(2, turno.getEstado().toString());
             stmt.setString(3, turno.getMotivoConsulta());
             stmt.setInt(4, turno.getMedico().getIdMedico());
             stmt.setInt(5, turno.getPaciente().getIdPaciente());
-            stmt.setInt(6, turno.getIdTurno()); // WHERE
-            
+            stmt.setInt(6, turno.getIdTurno());
+
             stmt.executeUpdate();
-            
+
         } catch (SQLException e) {
-            System.err.println("Error al actualizar el turno: " + e.getMessage());
-            throw e;
+            throw new SQLException("Error al actualizar el turno: " + e.getMessage(), e);
         }
     }
 
     @Override
     public void eliminar(int id) throws SQLException {
         String sql = "DELETE FROM turnos WHERE idTurno = ?";
-        
+
         try (Connection conn = ConexionDB.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
+
             stmt.setInt(1, id);
             stmt.executeUpdate();
-            
+
         } catch (SQLException e) {
-            System.err.println("Error al eliminar el turno: " + e.getMessage());
-            throw e;
+            throw new SQLException("Error al eliminar el turno: " + e.getMessage(), e);
         }
+    }
+
+    public List<Turno> obtenerPorIdMedico(int idMedico) throws SQLException {
+        String sql = "SELECT * FROM turnos WHERE idMedico = ?";
+        List<Turno> turnos = new ArrayList<>();
+
+        try (Connection conn = ConexionDB.conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, idMedico);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    turnos.add(mapearTurno(rs));
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new SQLException("Error al obtener turnos por ID de médico: " + e.getMessage(), e);
+        }
+        return turnos;
+    }
+
+    public List<Turno> obtenerPorIdPaciente(int idPaciente) throws SQLException {
+        String sql = "SELECT * FROM turnos WHERE idPaciente = ?";
+        List<Turno> turnos = new ArrayList<>();
+
+        try (Connection conn = ConexionDB.conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, idPaciente);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    turnos.add(mapearTurno(rs));
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new SQLException("Error al obtener turnos por ID de paciente: " + e.getMessage(), e);
+        }
+        return turnos;
     }
 }

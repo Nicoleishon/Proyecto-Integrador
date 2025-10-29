@@ -27,6 +27,8 @@ public class Turno {
         this.estado = EstadoTurno.PENDIENTE;
     }
 
+    public Turno() {}
+
     public int getIdTurno() {
         return idTurno;
     }

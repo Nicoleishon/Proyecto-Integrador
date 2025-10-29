@@ -58,7 +58,7 @@ public class PacienteRepositorio implements IRepositorio<Paciente> {
     }
 
 
-    // En un futuro se tendría que pasar el idPaciente y idHospital para sistema multihospital
+    // En un futuro se tendría que pasar el Paciente para obtener idPaciente y idHospital para sistema multihospital 
     @Override
     public Paciente obtenerPorId(int id) throws SQLException {
         String sql = """

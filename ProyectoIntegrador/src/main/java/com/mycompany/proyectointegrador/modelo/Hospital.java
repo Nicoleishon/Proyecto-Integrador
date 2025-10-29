@@ -4,7 +4,7 @@ package com.mycompany.proyectointegrador.modelo;
 
 public class Hospital {
 
-    private final int idHospital;
+    private int idHospital;
     private String nombre;
     private String direccion;
 
@@ -15,11 +15,16 @@ public class Hospital {
         this.direccion = direccion;
     }
 
+    public Hospital() {}
+
     // Getters y setters
     public int getIdHospital() {
         return idHospital;
     }
-
+    
+    public void setIdHospital(int idHospital) {
+        this.idHospital = idHospital;
+    }
 
     public String getNombre() {
         return nombre;

@@ -9,13 +9,12 @@ import java.time.LocalDateTime;
 public class Recepcionista extends Usuario {
     private int idRecepcionista;
     private int idHospital;
-    private TurnoRepositorio turnoRepositorio;
+    private final TurnoRepositorio turnoRepositorio = new TurnoRepositorio();
 
-    public Recepcionista(int idRecepcionista, int idHospital, TurnoRepositorio turnoRepositorio, int idUsuario, String nombreUsuario, String hashContraseña, int idPersona, String nombre, String apellido, LocalDate fechaNacimiento, String direccion, String telefono, String dni) {
+    public Recepcionista(int idRecepcionista, int idHospital, int idUsuario, String nombreUsuario, String hashContraseña, int idPersona, String nombre, String apellido, LocalDate fechaNacimiento, String direccion, String telefono, String dni) {
         super(idUsuario, nombreUsuario, hashContraseña, idPersona, nombre, apellido, fechaNacimiento, direccion, telefono, dni);
         this.idRecepcionista = idRecepcionista;
         this.idHospital = idHospital;
-        this.turnoRepositorio = turnoRepositorio;
     }
 
     
@@ -23,8 +22,9 @@ public class Recepcionista extends Usuario {
         super(usuario.getNombreUsuario(), usuario.getHashContraseña(), persona);
         this.idRecepcionista = usuario.getIdUsuario();
         this.idHospital = idHospital;
-        this.turnoRepositorio = new TurnoRepositorio();
     }
+
+    public Recepcionista() {}
     
   public void registrarPaciente(Paciente paciente){
       return;
@@ -61,10 +61,6 @@ public class Recepcionista extends Usuario {
       } catch (SQLException e){
           throw e;
       }
-      
-      
-      
-      
   }
 
     public int getIdRecepcionista() {
@@ -87,10 +83,6 @@ public class Recepcionista extends Usuario {
         return turnoRepositorio;
     }
 
-    public void setTurnoRepositorio(TurnoRepositorio turnoRepositorio) {
-        this.turnoRepositorio = turnoRepositorio;
-    }
-    
     
     
 }
