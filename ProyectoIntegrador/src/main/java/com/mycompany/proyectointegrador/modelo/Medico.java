@@ -7,13 +7,15 @@ import java.util.List;
 
 public class Medico extends Persona {
     private int idMedico;
-    private final int idHospital;
+    private int idHospital;
     private LocalDate fechaIngreso;
     private String departamento;
     private String matricula;
     private Turno turnoEnCurso;
     private Especialidad especialidad;
 
+    public Medico(){}
+    
     // Constructor con todos los parametros
     public Medico(int idMedico, int idHospital, LocalDate fechaIngreso, String departamento, String matricula, Turno turnoEnCurso, Especialidad especialidad, int idPersona, String nombre, String apellido, LocalDate fechaNacimiento, String direccion, String telefono, String dni) {
         super(idPersona, nombre, apellido, fechaNacimiento, direccion, telefono, dni);
@@ -101,6 +103,14 @@ public class Medico extends Persona {
 
     public void setEspecialidad(Especialidad especialidad) {
         this.especialidad = especialidad;
+    }
+
+    public int getIdHospital() {
+        return idHospital;
+    }
+
+    public void setIdHospital(int idHospital) {
+        this.idHospital = idHospital;
     }
 
     
