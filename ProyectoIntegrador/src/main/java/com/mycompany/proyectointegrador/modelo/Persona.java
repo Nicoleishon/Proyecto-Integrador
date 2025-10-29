@@ -14,6 +14,8 @@ public class Persona {
     private String telefono;
     private String dni;
 
+    public Persona(){}
+    
     public Persona(int idPersona, String nombre, String apellido, LocalDate fechaNacimiento, String direccion, String telefono, String dni) {
         this.idPersona = idPersona;
         this.nombre = nombre;
