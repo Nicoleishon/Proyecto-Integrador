@@ -20,19 +20,40 @@ public class MedicoRepositorio implements IRepositorio<Medico> {
     public void crear(Medico medico) throws SQLException {
         String sqlMedico = "INSERT INTO medicos (idMedico, idHospital, matricula, especialidad) VALUES (?, ?, ?, ?)";
 
-        try (Connection conn = ConexionDB.conectar();
-             PreparedStatement stmtMedico = conn.prepareStatement(sqlMedico)) {
+        try (Connection conn = ConexionDB.conectar()) {
+            conn.setAutoCommit(false);
+            PersonaRepositorio personaRepo = new PersonaRepositorio();
 
-            stmtMedico.setInt(1, medico.getIdPersona());
-            stmtMedico.setInt(2, medico.getIdHospital());
-            stmtMedico.setString(3, medico.getMatricula());
-            stmtMedico.setString(4, medico.getEspecialidad().toString());
-            stmtMedico.executeUpdate();
+            try {
+                // Crear persona usando la misma conexión
+                int idPersona = personaRepo.crearPersona(medico, conn);
+                medico.setIdMedico(idPersona);
+
+                // Insertar médico
+                try (PreparedStatement stmtMedico = conn.prepareStatement(sqlMedico)) {
+                    stmtMedico.setInt(1, medico.getIdMedico());
+                    stmtMedico.setInt(2, medico.getIdHospital());
+                    stmtMedico.setString(3, medico.getMatricula());
+                    stmtMedico.setString(4, medico.getEspecialidad().toString());
+                    stmtMedico.executeUpdate();
+                }
+
+                // Confirmar la transacción si todo salió bien
+                conn.commit();
+
+            } catch (SQLException e) {
+                // Si falla persona o médico, se revierte todo
+                DBUtils.rollback(conn);
+                throw new SQLException("Error al crear el médico: " + e.getMessage(), e);
+            } finally {
+                DBUtils.restaurarAutoCommit(conn);
+            }
 
         } catch (SQLException e) {
-            throw new SQLException("Error al crear médico.", e);
+            throw e;
         }
     }
+
 
     
     @Override

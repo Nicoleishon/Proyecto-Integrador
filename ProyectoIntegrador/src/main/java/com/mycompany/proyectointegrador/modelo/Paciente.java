@@ -6,6 +6,8 @@ import java.time.LocalDate;
 public class Paciente extends Usuario {
     private int idPaciente;
     private LocalDate fechaRegistro;
+    
+    public Paciente(){}
 
     // Constructor para obtener paciente de db
     public Paciente(int idPaciente, LocalDate fechaRegistro, int idUsuario, String nombreUsuario, String hashContraseña, int idPersona, String nombre, String apellido, LocalDate fechaNacimiento, String direccion, String telefono, String dni) {
