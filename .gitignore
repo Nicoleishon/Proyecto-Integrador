@@ -48,3 +48,6 @@ ProyectoIntegrador/*.env
 ProyectoIntegrador/*.env.local
 ProyectoIntegrador/*.properties.local
 ProyectoIntegrador/*.config.local
+
+# Ignorar base de datos
+ProyectoIntegrador/gestor_turnos.sqlite
