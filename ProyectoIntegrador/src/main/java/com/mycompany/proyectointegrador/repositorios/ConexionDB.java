@@ -1,5 +1,5 @@
 // Lo he movido a un paquete 'persistencia' para mejor orden
-package com.mycompany.proyectointegrador.persistencias;
+package com.mycompany.proyectointegrador.repositorios;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

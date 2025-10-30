@@ -1,7 +1,6 @@
 package com.mycompany.proyectointegrador.repositorios;
 
 import com.mycompany.proyectointegrador.modelo.Persona;
-import com.mycompany.proyectointegrador.persistencias.ConexionDB;
 import com.mycompany.proyectointegrador.utils.DBUtils;
 
 import java.sql.*;

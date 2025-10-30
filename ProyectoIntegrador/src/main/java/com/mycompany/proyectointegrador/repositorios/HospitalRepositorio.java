@@ -1,7 +1,6 @@
 package com.mycompany.proyectointegrador.repositorios;
 
 import com.mycompany.proyectointegrador.modelo.Hospital;
-import com.mycompany.proyectointegrador.persistencias.ConexionDB;
 
 import java.sql.*;
 

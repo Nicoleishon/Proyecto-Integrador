@@ -2,7 +2,6 @@ package com.mycompany.proyectointegrador.repositorios;
 
 import com.mycompany.proyectointegrador.modelo.Especialidad;
 import com.mycompany.proyectointegrador.modelo.Medico;
-import com.mycompany.proyectointegrador.persistencias.ConexionDB;
 import com.mycompany.proyectointegrador.utils.DBUtils;
 
 import java.sql.Connection;

@@ -1,7 +1,6 @@
 package com.mycompany.proyectointegrador.repositorios;
 
 import com.mycompany.proyectointegrador.modelo.*;
-import com.mycompany.proyectointegrador.persistencias.ConexionDB;
 
 import java.sql.*;
 import java.time.LocalDateTime;
