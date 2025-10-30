@@ -55,13 +55,14 @@ public class ConexionDB {
 
             // Eliminar tablas en orden descendente de dependencias
             stmt.execute("DROP TABLE IF EXISTS turnos;");
+            stmt.execute("DROP TABLE IF EXISTS horarios;");
+            stmt.execute("DROP TABLE IF EXISTS recepcionistas;");
             stmt.execute("DROP TABLE IF EXISTS medicos;");
             stmt.execute("DROP TABLE IF EXISTS pacientes;");
             stmt.execute("DROP TABLE IF EXISTS usuarios;");
             stmt.execute("DROP TABLE IF EXISTS personas;");
             stmt.execute("DROP TABLE IF EXISTS hospitales;");
-            stmt.execute("DROP TABLE IF EXISTS recepcionistas;");
-            stmt.execute("DROP TABLE IF EXISTS horarios;");
+            
             System.out.println("Tablas antiguas eliminadas (si existían).");
             
             // Tabla Hospitales
@@ -123,6 +124,17 @@ public class ConexionDB {
                 FOREIGN KEY (idHospital) REFERENCES hospitales(idHospital),
                 FOREIGN KEY (idRecepcionista) REFERENCES usuarios(idUsuario)
                 );""");
+            
+            // Tabla horarios
+            stmt.execute("""
+                CREATE TABLE horarios (
+                idHorario INTEGER PRIMARY KEY AUTOINCREMENT,
+                diaSemana TEXT NOT NULL,
+                horaInicio TEXT NOT NULL,  -- formato HH:MM
+                horaFin TEXT NOT NULL,
+                idMedico INTEGER NOT NULL,
+                FOREIGN KEY (idMedico) REFERENCES medicos(idMedico)
+                );""");
 
             // Tabla Turnos: fechaHora (LocalDateTime)
             // Turnos también deberia de tener idHospital si se quiere escalar a un sistema de multihospitales
@@ -138,16 +150,7 @@ public class ConexionDB {
                 FOREIGN KEY (idPaciente) REFERENCES pacientes(idPaciente)
                 );""");
             
-            // Tabla horarios
-            stmt.execute("""
-                CREATE TABLE horarios (
-                idHorario INTEGER PRIMARY KEY AUTOINCREMENT,
-                diaSemana TEXT NOT NULL,
-                horaInicio TEXT NOT NULL,  -- formato HH:MM
-                horaFin TEXT NOT NULL,
-                idMedico INTEGER NOT NULL,
-                FOREIGN KEY (idMedico) REFERENCES medicos(idMedico)
-                );""");
+            
 
             System.out.println("Base de datos inicializada. Tablas creadas con éxito.");
         } catch (SQLException e) {

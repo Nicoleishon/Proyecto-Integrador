@@ -1,5 +1,6 @@
 package com.mycompany.proyectointegrador.vista;
 
+import com.mycompany.proyectointegrador.controlador.ControladorIniciarSesion;
 import com.mycompany.proyectointegrador.modelo.*;
 import javax.swing.*;
 import java.awt.*;
@@ -10,8 +11,11 @@ public class VentanaPrincipal extends JFrame {
     private final JPanel contenedorVistas;
 
     // Paneles base
-    private final PanelIniciarSesion panelLogin;
+    private final PanelIniciarSesion panelIniciarSesion;
     private final PanelRegistro panelRegistro;
+    private final PanelRecepcionista panelRecepcionista;
+    private final PanelPaciente panelPaciente;
+    private final ControladorIniciarSesion controladorIniciarSesion = new ControladorIniciarSesion();
 
     public VentanaPrincipal() {
         setTitle("Sistema Gestor de Turnos");
@@ -24,15 +28,19 @@ public class VentanaPrincipal extends JFrame {
         contenedorVistas = new JPanel(layout);
 
         // Crear vistas base
-        panelLogin = new PanelIniciarSesion(this);
+        panelIniciarSesion = new PanelIniciarSesion(this);
         panelRegistro = new PanelRegistro(this);
+        panelPaciente = new PanelPaciente(this);
+        panelRecepcionista = new PanelRecepcionista(this);
 
         // Agregar las vistas al contenedor
-        contenedorVistas.add(panelLogin, "login");
-        contenedorVistas.add(panelRegistro, "registro");
+        contenedorVistas.add(panelIniciarSesion, "panelIniciarSesion");
+        contenedorVistas.add(panelRegistro, "panelRegistro");
+        contenedorVistas.add(panelPaciente, "panelPaciente");
+        contenedorVistas.add(panelRecepcionista, "panelRecepcionista");
 
         add(contenedorVistas);
-        mostrarVista("login"); // vista inicial
+        mostrarVista("panelIniciarSesion"); // vista inicial
     }
 
 
@@ -40,29 +48,13 @@ public class VentanaPrincipal extends JFrame {
         layout.show(contenedorVistas, nombreVista);
 
         // Limpieza automática de campos si corresponde
-        if (nombreVista.equals("login")) {
-            panelLogin.limpiarCampos();
+        if (nombreVista.equals("panelIniciarSesion")) {
+            panelIniciarSesion.limpiarCampos();
         }
     }
 
-
-    public void mostrarPanelPorRol(Usuario usuario) {
-        JPanel panelRol = null;
-
-        if (usuario instanceof Paciente) {
-            panelRol = new PanelPaciente(this, (Paciente) usuario);
-        } else if (usuario instanceof Recepcionista) {
-            panelRol = new PanelRecepcionista(this, (Recepcionista) usuario);
-        }
-
-        if (panelRol != null) {
-            contenedorVistas.add(panelRol, "rol");
-            layout.show(contenedorVistas, "rol");
-        } else {
-            JOptionPane.showMessageDialog(this, 
-                "Error: tipo de usuario no reconocido.", 
-                "Error", JOptionPane.ERROR_MESSAGE);
-            mostrarVista("login");
-        }
+    public ControladorIniciarSesion getControladorIniciarSesion(){
+        return this.controladorIniciarSesion;
     }
+    
 }

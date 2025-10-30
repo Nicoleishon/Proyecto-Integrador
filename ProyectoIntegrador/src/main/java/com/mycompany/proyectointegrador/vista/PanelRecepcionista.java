@@ -1,5 +1,6 @@
 package com.mycompany.proyectointegrador.vista;
 
+import com.mycompany.proyectointegrador.controlador.ControladorIniciarSesion;
 import com.mycompany.proyectointegrador.modelo.Recepcionista;
 import javax.swing.*;
 import java.awt.*;
@@ -7,11 +8,9 @@ import java.awt.*;
 public class PanelRecepcionista extends JPanel {
 
     private final VentanaPrincipal ventana;
-    private final Recepcionista recepcionista;
 
-    public PanelRecepcionista(VentanaPrincipal ventana, Recepcionista recepcionista) {
+    public PanelRecepcionista(VentanaPrincipal ventana) {
         this.ventana = ventana;
-        this.recepcionista = recepcionista;
 
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);

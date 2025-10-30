@@ -1,6 +1,6 @@
 package com.mycompany.proyectointegrador.modelo;
 
-import com.mycompany.proyectointegrador.excepciones.InvalidCredentialsException;
+import com.mycompany.proyectointegrador.excepciones.CredencialesInvalidasException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
@@ -24,6 +24,13 @@ public class Usuario extends Persona {
     public Usuario(String nombreUsuario, String hashContraseña, Persona persona) {
         super(persona.getIdPersona(), persona.getNombre(), persona.getApellido(), persona.getFechaNacimiento(), persona.getDireccion(), persona.getTelefono(), persona.getDni());
         this.idUsuario = persona.getIdPersona();
+        this.nombreUsuario = nombreUsuario;
+        this.hashContraseña = hashContraseña;
+        this.sesionIniciada = false;
+    }
+    
+    public Usuario(String nombreUsuario, String hashContraseña) {
+        this.idUsuario = -1;
         this.nombreUsuario = nombreUsuario;
         this.hashContraseña = hashContraseña;
         this.sesionIniciada = false;
@@ -62,7 +69,7 @@ public class Usuario extends Persona {
     }
     
     
-    public void iniciarSesion(String contraseñaHasheada) throws InvalidCredentialsException {
+    public void iniciarSesion(String contraseñaHasheada) throws CredencialesInvalidasException {
         if (this.hashContraseña.equals(contraseñaHasheada)) {
             this.sesionIniciada = true;
         }
@@ -76,7 +83,7 @@ public class Usuario extends Persona {
         return sesionIniciada;
     }
     
-    private String generarHash(String contraseña) throws NoSuchAlgorithmException {
+    public static String generarHash(String contraseña) throws NoSuchAlgorithmException {
         // Se obtiene una instancia de SHA-256, que es un algoritmo de hashing seguro
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
 

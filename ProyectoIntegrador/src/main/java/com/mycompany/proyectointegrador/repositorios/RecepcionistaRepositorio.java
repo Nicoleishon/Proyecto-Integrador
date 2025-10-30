@@ -229,4 +229,20 @@ public class RecepcionistaRepositorio implements IRepositorio<Recepcionista> {
 
         return recepcionista;
     }
+    
+    public boolean existeRecepcionista() throws SQLException {
+        String sql = "SELECT COUNT(*) FROM recepcionistas";
+
+        try (Connection conn = ConexionDB.conectar();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            return rs.next() && rs.getInt(1) > 0;
+
+        } catch (SQLException e) {
+            throw new SQLException("Error al verificar existencia de recepcionistas: " + e.getMessage(), e);
+        }
+    }
+    
+    
 }

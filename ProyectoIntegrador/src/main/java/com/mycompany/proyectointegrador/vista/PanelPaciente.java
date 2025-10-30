@@ -7,11 +7,9 @@ import java.awt.*;
 public class PanelPaciente extends JPanel {
 
     private final VentanaPrincipal ventana;
-    private final Paciente paciente;
 
-    public PanelPaciente(VentanaPrincipal ventana, Paciente paciente) {
+    public PanelPaciente(VentanaPrincipal ventana) {
         this.ventana = ventana;
-        this.paciente = paciente;
 
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);

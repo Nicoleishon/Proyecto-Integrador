@@ -1,12 +1,12 @@
 
 package com.mycompany.proyectointegrador.excepciones;
 
-public class InvalidCredentialsException extends Exception {
-    public InvalidCredentialsException() {
+public class CredencialesInvalidasException extends Exception {
+    public CredencialesInvalidasException() {
         super("Credenciales inválidas.");
     }
 
-    public InvalidCredentialsException(String mensaje) {
+    public CredencialesInvalidasException(String mensaje) {
         super(mensaje);
     }
 }

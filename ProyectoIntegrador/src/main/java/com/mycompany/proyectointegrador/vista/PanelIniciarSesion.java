@@ -1,5 +1,6 @@
 package com.mycompany.proyectointegrador.vista;
 
+import com.mycompany.proyectointegrador.excepciones.CredencialesInvalidasException;
 import com.mycompany.proyectointegrador.modelo.Paciente;
 import com.mycompany.proyectointegrador.modelo.Recepcionista;
 import com.mycompany.proyectointegrador.modelo.Usuario;
@@ -75,16 +76,22 @@ public class PanelIniciarSesion extends JPanel {
 
     private void configurarAcciones() {
         botonIniciarSesion.addActionListener(e -> {
-
             String usuario = getUsuario();
             String contraseña = getContraseña();
 
-            if (usuario.equals("admin") && contraseña.equals("1234")) {
-                limpiarCampos();
-                JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso");
-                ventana.mostrarVista("sistema");
-            } else {
-                JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos",
+            boolean exito = false;
+            try {
+                exito = ventana.getControladorIniciarSesion().iniciarSesion(usuario, contraseña);
+
+                if (exito) {
+                    limpiarCampos();
+                    JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso.");
+                    String tipoPanel = ventana.getControladorIniciarSesion().obtenerPanelSesion();
+                    ventana.mostrarVista(tipoPanel);
+                }
+
+            } catch (CredencialesInvalidasException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(),
                                               "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
@@ -94,6 +101,7 @@ public class PanelIniciarSesion extends JPanel {
             ventana.mostrarVista("registro");
         });
     }
+
 
     public void limpiarCampos() {
         campoUsuario.setText("");
