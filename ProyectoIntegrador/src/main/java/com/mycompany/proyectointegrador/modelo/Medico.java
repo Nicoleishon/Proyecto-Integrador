@@ -113,6 +113,12 @@ public class Medico extends Persona {
         this.idHospital = idHospital;
     }
 
+    @Override
+    public String toString() {
+
+        return getApellido() + ", " + getNombre() + " (Mat: " + matricula + ")";
+    }
+
     
 }
 

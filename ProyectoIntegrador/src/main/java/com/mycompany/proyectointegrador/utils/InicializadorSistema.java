@@ -5,12 +5,16 @@ import com.mycompany.proyectointegrador.repositorios.*;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class InicializadorSistema {
 
     private static final UsuarioRepositorio usuarioRepo = new UsuarioRepositorio();
     private static final RecepcionistaRepositorio recepcionistaRepo = new RecepcionistaRepositorio();
     private static final HospitalRepositorio hospitalRepo = new HospitalRepositorio();
+    private static final MedicoRepositorio medicoRepo = new MedicoRepositorio();
+    private static final HorarioRepositorio horarioRepo = new HorarioRepositorio();
+    private static final PacienteRepositorio pacienteRepo = new PacienteRepositorio();
 
     public static void inicializarSistema() {
         try {
@@ -27,6 +31,10 @@ public class InicializadorSistema {
             Boolean existe = recepcionistaRepo.existeRecepcionista();
             if (!existe) {
                 crearRecepcionistaInicial(hospitalRepo.obtenerHospitalUnico());
+            }
+            
+            if (!existe) {
+               // crearMedicosIniciales(medicoRepo.buscarMedicoPorEspecialidad(Especialidad.PEDIATRÍA));
             }
 
         } catch (SQLException | NoSuchAlgorithmException e) {
@@ -57,4 +65,32 @@ public class InicializadorSistema {
 
         System.out.println("Recepcionista inicial creada correctamente.");
     }
+    
+    private static void crearMedicosIniciales(Hospital hospitalDefault) throws SQLException {
+    
+    // médico 1 - pediatra
+    Persona personaMedico1 = new Persona("Ana", "Gutiérrez", LocalDate.of(1985, 5, 15), "Colón 1073", "261555111", "30111222");
+    Medico medico1 = new Medico(hospitalDefault.getIdHospital(), LocalDate.now(), "Pediatría", "ANA123", null, Especialidad.PEDIATRÍA, personaMedico1);
+    
+    medicoRepo.crear(medico1);
+    
+    Horario horarioM1_Lunes = new Horario(DiaSemana.LUNES, LocalTime.of(8, 0), LocalTime.of(16, 0), medico1.getIdMedico());
+    Horario horarioM1_Mierc = new Horario(DiaSemana.MIERCOLES, LocalTime.of(8, 0), LocalTime.of(16, 0), medico1.getIdMedico());
+    horarioRepo.crear(horarioM1_Lunes);
+    horarioRepo.crear(horarioM1_Mierc);
+
+    
+    // --- Médico 2: Cardiólogo ---
+    Persona personaMedico2 = new Persona("Carlos", "Martínez", LocalDate.of(1978, 10, 20), "Av. Liberman 742", "261555222", "25333444");
+    Medico medico2 = new Medico(hospitalDefault.getIdHospital(), LocalDate.now(), "Cardiología", "CAR456", null, Especialidad.CARDIOLOGÍA, personaMedico2);
+    
+    medicoRepo.crear(medico2);
+    
+    Horario horarioM2_Martes = new Horario(DiaSemana.MARTES, LocalTime.of(15, 0), LocalTime.of(18, 0), medico2.getIdMedico());
+    Horario horarioM2_Jueves = new Horario(DiaSemana.JUEVES, LocalTime.of(15, 0), LocalTime.of(18, 0), medico2.getIdMedico());
+    horarioRepo.crear(horarioM2_Martes);
+    horarioRepo.crear(horarioM2_Jueves);
+
+    System.out.println("Médicos iniciales creados correctamente.");
+}
 }

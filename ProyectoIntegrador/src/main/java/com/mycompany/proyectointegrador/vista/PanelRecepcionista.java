@@ -1,3 +1,4 @@
+
 package com.mycompany.proyectointegrador.vista;
 
 import com.mycompany.proyectointegrador.controlador.ControladorIniciarSesion;
@@ -42,7 +43,7 @@ public class PanelRecepcionista extends JPanel {
             JOptionPane.showMessageDialog(this, "Funcionalidad pendiente: Registrar Paciente"));
 
         btnAsignarTurno.addActionListener(e -> 
-            JOptionPane.showMessageDialog(this, "Funcionalidad pendiente: Asignar Turno"));
+            ventana.mostrarVista("panelAsignarTurno"));
 
         btnCancelarTurno.addActionListener(e -> 
             JOptionPane.showMessageDialog(this, "Funcionalidad pendiente: Cancelar Turno"));
