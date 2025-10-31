@@ -11,7 +11,7 @@ public class ControladorIniciarSesion {
     private final UsuarioRepositorio usuarioRepo = new UsuarioRepositorio();
     private Usuario usuarioActual = null;
 
-    public boolean iniciarSesion(String nombreUsuario, String contraseña) throws CredencialesInvalidasException {
+    public boolean iniciarSesion(String nombreUsuario, String contraseña) throws CredencialesInvalidasException, SQLException, NoSuchAlgorithmException {
         try {
             // Buscar id del usuario por nombre
             int idUsuario = usuarioRepo.buscarIdPorNombreUsuario(nombreUsuario);
@@ -33,14 +33,16 @@ public class ControladorIniciarSesion {
             this.usuarioActual = usuario;
             return true;
 
-        } catch (SQLException | TipoUsuarioInvalidoException e) {
-            System.err.println("Error al iniciar sesión: " + e.getMessage());
-            System.err.println("Causa: " + e.getCause());
-            throw new CredencialesInvalidasException("Error en la verificación de credenciales.");
+        } catch (TipoUsuarioInvalidoException e) {
+            throw new CredencialesInvalidasException("Usuario Inválido.");
+        } catch (SQLException e) {
+            throw e;
         } catch (NoSuchAlgorithmException e) {
-            throw new CredencialesInvalidasException("Error interno en la validación de la contraseña.");
+            throw new RuntimeException("Algoritmo criptográfico no disponible.");
         }
     }
+    
+
 
     public String obtenerPanelSesion() {
         if (usuarioActual instanceof com.mycompany.proyectointegrador.modelo.Paciente)

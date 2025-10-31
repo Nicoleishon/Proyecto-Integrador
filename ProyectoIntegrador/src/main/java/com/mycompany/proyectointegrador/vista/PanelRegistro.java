@@ -2,6 +2,7 @@ package com.mycompany.proyectointegrador.vista;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ public class PanelRegistro extends JPanel {
     private final JButton botonRegistrar = new JButton("Registrar");
     private int pasoActual = 0;
     private List<JPanel> pasos; // Cada paso contiene un grupo de campos
+    
 
     // Campos de entrada
     private JTextField campoUsuario, campoNombre, campoApellido, campoDireccion, campoTelefono, campoDni, campoFechaNacimiento;
@@ -113,7 +115,7 @@ public class PanelRegistro extends JPanel {
         botonSiguiente.addActionListener(e -> avanzar());
         botonAtras.addActionListener(e -> retroceder());
         botonRegistrar.addActionListener(e -> registrar());
-        botonVolver.addActionListener(e -> ventana.mostrarVista("login"));
+        botonVolver.addActionListener(e -> ventana.mostrarVista("panelIniciarSesion"));
 
         panelBotones.add(botonAtras);
         panelBotones.add(botonSiguiente);
@@ -163,25 +165,61 @@ public class PanelRegistro extends JPanel {
     private void registrar() {
         try {
             LocalDate.parse(campoFechaNacimiento.getText().trim());
-            JOptionPane.showMessageDialog(this,
+            if (enviarDatosRegistro()){
+                JOptionPane.showMessageDialog(this,
                     "Usuario registrado correctamente: " + campoUsuario.getText(),
                     "Éxito", JOptionPane.INFORMATION_MESSAGE);
-
-            limpiarCampos();
-            pasoActual = 0;
-            cardLayout.show(panelPrincipal, "paso0");
-            botonAtras.setEnabled(false);
-            botonRegistrar.setEnabled(false);
-            botonSiguiente.setEnabled(true);
-            // Redirigir automáticamente al login
-            ventana.mostrarVista("login");
-
+                limpiarCampos();
+                pasoActual = 0;
+                cardLayout.show(panelPrincipal, "paso0");
+                botonAtras.setEnabled(false);
+                botonRegistrar.setEnabled(false);
+                botonSiguiente.setEnabled(true);
+                // Redirigir automáticamente al login
+                ventana.mostrarVista("panelIniciarSesion");
+            }
         } catch (DateTimeParseException e) {
             JOptionPane.showMessageDialog(this,
                     "Formato de fecha incorrecto. Use yyyy-MM-dd",
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+    
+    private boolean enviarDatosRegistro() {
+        try {
+            ventana.getControladorRegistrar().registrarPaciente(
+                campoNombre.getText().trim(),
+                campoApellido.getText().trim(),
+                campoFechaNacimiento.getText().trim(),
+                campoDireccion.getText().trim(),
+                campoTelefono.getText().trim(),
+                campoDni.getText().trim(),
+                campoUsuario.getText().trim(),
+                new String(campoContraseña.getPassword()).trim(),
+                new String(campoConfirmar.getPassword()).trim()
+            );
+            return true;
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this,
+                    e.getMessage(),
+                    "Datos inválidos",
+                    JOptionPane.WARNING_MESSAGE);
+            return false;
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al registrar el usuario en la base de datos:\n" + e.getMessage(),
+                    "Error de base de datos",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error inesperado: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
+
 
     private void limpiarCampos() {
         for (JTextField campo : new JTextField[]{

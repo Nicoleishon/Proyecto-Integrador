@@ -1,6 +1,7 @@
 package com.mycompany.proyectointegrador.vista;
 
 import com.mycompany.proyectointegrador.controlador.ControladorIniciarSesion;
+import com.mycompany.proyectointegrador.controlador.ControladorRegistrarPaciente;
 import com.mycompany.proyectointegrador.modelo.*;
 import javax.swing.*;
 import java.awt.*;
@@ -16,6 +17,7 @@ public class VentanaPrincipal extends JFrame {
     private final PanelRecepcionista panelRecepcionista;
     private final PanelPaciente panelPaciente;
     private final ControladorIniciarSesion controladorIniciarSesion = new ControladorIniciarSesion();
+    private final ControladorRegistrarPaciente controladorRegistrar = new ControladorRegistrarPaciente();
 
     public VentanaPrincipal() {
         setTitle("Sistema Gestor de Turnos");
@@ -56,5 +58,11 @@ public class VentanaPrincipal extends JFrame {
     public ControladorIniciarSesion getControladorIniciarSesion(){
         return this.controladorIniciarSesion;
     }
+
+    public ControladorRegistrarPaciente getControladorRegistrar() {
+        return controladorRegistrar;
+    }
+    
+    
     
 }

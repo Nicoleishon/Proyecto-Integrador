@@ -7,6 +7,7 @@ import com.mycompany.proyectointegrador.modelo.Usuario;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.SQLException;
 
 public class PanelIniciarSesion extends JPanel {
 
@@ -74,14 +75,14 @@ public class PanelIniciarSesion extends JPanel {
         configurarAcciones();
     }
 
+    
     private void configurarAcciones() {
         botonIniciarSesion.addActionListener(e -> {
             String usuario = getUsuario();
             String contraseña = getContraseña();
 
-            boolean exito = false;
             try {
-                exito = ventana.getControladorIniciarSesion().iniciarSesion(usuario, contraseña);
+                boolean exito = ventana.getControladorIniciarSesion().iniciarSesion(usuario, contraseña);
 
                 if (exito) {
                     limpiarCampos();
@@ -89,18 +90,30 @@ public class PanelIniciarSesion extends JPanel {
                     String tipoPanel = ventana.getControladorIniciarSesion().obtenerPanelSesion();
                     ventana.mostrarVista(tipoPanel);
                 }
-
             } catch (CredencialesInvalidasException ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage(),
-                                              "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this,
+                        ex.getMessage(),
+                        "Credenciales inválidas",
+                        JOptionPane.WARNING_MESSAGE);
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this,
+                        "Error de base de datos:\n" + ex.getMessage(),
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this,
+                        "Error inesperado:\n" + ex.getMessage(),
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         });
 
         botonRegistrarse.addActionListener(e -> {
             limpiarCampos();
-            ventana.mostrarVista("registro");
+            ventana.mostrarVista("panelRegistro");
         });
     }
+
 
 
     public void limpiarCampos() {
