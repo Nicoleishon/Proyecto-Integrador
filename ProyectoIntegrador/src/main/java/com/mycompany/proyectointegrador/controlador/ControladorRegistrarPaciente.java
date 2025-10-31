@@ -19,7 +19,10 @@ public class ControladorRegistrarPaciente {
     private final UsuarioRepositorio usuarioRepo;
     private final PersonaRepositorio personaRepo;
     private final HospitalRepositorio hospitalRepo;
+    private final ControladorIniciarSesion controladorSesion = new ControladorIniciarSesion();
 
+     
+    
     public ControladorRegistrarPaciente() {
         this.pacienteRepo = new PacienteRepositorio();
         this.usuarioRepo = new UsuarioRepositorio();
@@ -46,15 +49,20 @@ public class ControladorRegistrarPaciente {
             throw new IllegalArgumentException("La fecha de nacimiento debe tener el formato YYYY-MM-DD.");
         }
 
-        // Validar formato de DNI: solo números positivos
+        
         if (!dni.matches("\\d+")) {
-            throw new IllegalArgumentException("El DNI debe contener solo números enteros positivos.");
+                    throw new IllegalArgumentException("El DNI debe contener solo números enteros positivos.");
+        }
+        // Validar formato de nombre de usuario si no es por recepcionista, usuarios registrados por recepcionista tienen nombre usuario como dni
+        if (controladorSesion.getUsuarioActual() != null && !controladorSesion.esRecepcionista()) {
+            // Validar nombre de usuario: al menos una letra
+            if (!nombreUsuario.matches(".*[a-zA-Z].*")) {
+                throw new IllegalArgumentException("El nombre de usuario debe contener al menos una letra.");
+            }    
         }
 
-        // Validar nombre de usuario: al menos una letra
-        if (!nombreUsuario.matches(".*[a-zA-Z].*")) {
-            throw new IllegalArgumentException("El nombre de usuario debe contener al menos una letra.");
-        }
+
+        
 
         // Validar nombre de usuario ocupado
         if (usuarioRepo.existeNombreUsuario(nombreUsuario)) {
@@ -79,6 +87,10 @@ public class ControladorRegistrarPaciente {
         // Crear paciente asociado
         Paciente paciente = new Paciente(hospital.getIdHospital(), usuario, persona);
         pacienteRepo.crear(paciente);
+    }
+
+    private ControladorIniciarSesion ControladorIniciarSesion() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     
