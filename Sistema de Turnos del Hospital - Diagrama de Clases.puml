@@ -5,20 +5,6 @@ class Hospital {
   - idHospital: int
   - nombre: String
   - direccion: String
-  - listaPersonal: List<PersonalHospital>
-  - listaPacientes: List<Paciente>
-  - listaTurnos: List<Turno>
-  
-
-  + agregarMedico(Medico medico): void
-  + eliminarMedico(Medico medico): void
-  + agregarPaciente(Paciente paciente): void
-  + eliminarPaciente(Paciente paciente): void
-  + agregarTurno(Turno turno): void
-  + eliminarTurno(Turno turno): void
-  + buscarMedicoPorEspecialidad(Especialidad especialidad): List<Medico>
-  + obtenerTurnosPorPaciente(Paciente paciente): List<Turno>
-  + obtenerTurnosPorMedico(Medico medico): List<Turno>
 }
 
 abstract class Usuario {
@@ -71,16 +57,9 @@ abstract class Persona {
 }
 
 
-abstract class PersonalHospital {
-  - idPersonalHospital: int
-  - hospital: Hospital
-  - fechaIngreso: Date
-  - departamento: String
-  - horarios: List<Horario>
-}
-
 class Medico {
   - idMedico: int
+  - idHospital: int
   - matricula: String
   - especialidad: Especialidad
   - agendaTurnos: List<Turno>
@@ -101,6 +80,7 @@ class Horario {
 
 class Recepcionista {
   - idRecepcionista: int
+  - idHospital: int
   + registrarPaciente(Paciente datos): void
   + crearTurno(Paciente paciente, Medico medico, Date fechaHora): Turno
   + agendarTurno(Turno turno): void
@@ -132,21 +112,21 @@ class Turno {
 Persona <|-- Usuario
 Usuario <|-- Paciente
 Usuario <|-- Recepcionista
-Persona <|-- PersonalHospital
-PersonalHospital <|-- Medico
-PersonalHospital <|-- Recepcionista
+
+Persona <|-- Medico
+
 
 
 ' Relaciones de asociación
 Medico ..> Especialidad
 Turno ..> EstadoTurno
 
-PersonalHospital "1" --> "1..*" Horario
+Medico "1" --> "1..*" Horario
 Recepcionista "1" --> "*" Turno
 Paciente "1" --> "*" Turno
 Medico "1" --> "0..*" Turno
-Hospital "1" --> "*" PersonalHospital
 Hospital "1" --> "*" Paciente
-Hospital "1" --> "*" Turno
+Hospital "1" --> "*" Medico
+Hospital "1" --> "*" Recepcionista
 Horario ..> DiaSemana
 @enduml
