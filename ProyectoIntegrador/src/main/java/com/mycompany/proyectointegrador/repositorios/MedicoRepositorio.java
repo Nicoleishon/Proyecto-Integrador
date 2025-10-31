@@ -208,13 +208,35 @@ public class MedicoRepositorio implements IRepositorio<Medico> {
 
         }
     }
+    
+    public List<Medico> buscarMedicoPorEspecialidad(Especialidad especialidad) throws SQLException{
+        String sql = """
+            SELECT p.idPersona, p.nombre, p.apellido, p.fechaNacimiento, p.direccion, p.telefono, p.dni, m.idMedico, m.idHospital, m.matricula, m.especialidad
+            FROM personas p
+            JOIN medicos m ON p.idPersona = m.idMedico WHERE m.especialidad = ?
+            """;
+        List<Medico> medicos = new ArrayList<>();
+        
+        try (Connection conn = ConexionDB.conectar();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, especialidad.toString());
+            try (ResultSet rs = stmt.executeQuery()) {
+            
+            while (rs.next()) {
+                
+                medicos.add(mapearMedico(rs));
+            }
+        }
+    } catch (SQLException e) {
+            throw new SQLException ("Error al obtener todos los médicos.", e);
+        }
+        return medicos;
+    }
 
-    
-    
     private Medico mapearMedico(ResultSet rs) throws SQLException {
         Medico medico = new Medico();
 
-        // --- Datos de Persona ---
+        // datos de persona
         medico.setIdPersona(rs.getInt("idPersona"));
         medico.setNombre(rs.getString("nombre"));
         medico.setApellido(rs.getString("apellido"));
@@ -223,7 +245,7 @@ public class MedicoRepositorio implements IRepositorio<Medico> {
         medico.setTelefono(rs.getString("telefono"));
         medico.setDni(rs.getString("dni"));
 
-        // --- Datos de Médico ---
+        // datos de médico
         medico.setIdMedico(rs.getInt("idMedico"));
         medico.setIdHospital(rs.getInt("idHospital"));
         medico.setMatricula(rs.getString("matricula"));

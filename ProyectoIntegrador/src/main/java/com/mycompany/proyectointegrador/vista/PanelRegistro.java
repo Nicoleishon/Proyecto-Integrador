@@ -135,7 +135,14 @@ public class PanelRegistro extends JPanel {
         botonSiguiente.addActionListener(e -> avanzar());
         botonAtras.addActionListener(e -> retroceder());
         botonRegistrar.addActionListener(e -> registrar());
-        botonVolver.addActionListener(e -> ventana.mostrarVista("panelIniciarSesion"));
+        botonVolver.addActionListener(e -> {
+            if (esRegistroPorRecepcionista) {
+                ventana.mostrarVista("panelRecepcionista");
+            } else {
+                ventana.mostrarVista("panelIniciarSesion");
+            }
+        });
+
 
         panelBotones.add(botonAtras);
         panelBotones.add(botonSiguiente);
