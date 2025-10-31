@@ -1,5 +1,6 @@
 package com.mycompany.proyectointegrador.repositorios;
 
+import com.mycompany.proyectointegrador.modelo.DiaSemana;
 import com.mycompany.proyectointegrador.modelo.Especialidad;
 import com.mycompany.proyectointegrador.modelo.Medico;
 import com.mycompany.proyectointegrador.utils.DBUtils;
@@ -10,7 +11,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class MedicoRepositorio implements IRepositorio<Medico> {
 
@@ -253,6 +256,28 @@ public class MedicoRepositorio implements IRepositorio<Medico> {
 
         return medico;
     }
+    
+        public List<DiaSemana> obtenerDiasLaborales(int idMedico) throws SQLException {
+            Set<DiaSemana> diasLaboralesSet  = new HashSet<>();
+
+            String sql = "SELECT diaSemana FROM horarios WHERE idMedico = ?";
+            try (Connection conn = ConexionDB.conectar();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setInt(1, idMedico);
+                ResultSet rs = stmt.executeQuery();
+
+                while (rs.next()) {
+                    String dia = rs.getString("diaSemana").toUpperCase();
+                    try {
+                        diasLaboralesSet .add(DiaSemana.valueOf(dia));
+                    } catch (IllegalArgumentException e) {
+                        // ignorar valores inválidos
+                    }
+                }
+            }
+
+            return new ArrayList<>(diasLaboralesSet);
+        }
 
     
 }

@@ -12,6 +12,7 @@ public class ControladorTurno {
 
     private final TurnoRepositorio turnoRepo;
     private final HorarioRepositorio horarioRepo;
+    private final MedicoRepositorio medicoRepo;
 
     // duración fija de un turno (ej. 30 minutos)
     private static final int DURACION_TURNO_MINUTOS = 30;
@@ -19,6 +20,7 @@ public class ControladorTurno {
     public ControladorTurno() {
         this.turnoRepo = new TurnoRepositorio();
         this.horarioRepo = new HorarioRepositorio();
+        this.medicoRepo = new MedicoRepositorio();
     }
 
     // Devuelve una lista de horarios disponibles para un médico en una fecha determinada.
@@ -55,6 +57,45 @@ public class ControladorTurno {
         
         return disponibles;
     }
+    
+    // Devuelve los días laborales disponibles de un médico (por ejemplo, próximos 3 semanas)
+    public List<LocalDate> obtenerDiasLaboralesDisponibles(int idMedico) {
+        List<LocalDate> diasDisponibles = new ArrayList<>();
+        try {
+            List<DiaSemana> diasLaborales = medicoRepo.obtenerDiasLaborales(idMedico);
+            LocalDate hoy = LocalDate.now();
+
+            for (int i = 0; i < 21; i++) {
+                LocalDate fecha = hoy.plusDays(i);
+                if (diasLaborales.contains(convertirADiaSemana(fecha))) {
+                    diasDisponibles.add(fecha);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return diasDisponibles;
+    }
+
+    
+
+    // Reprograma un turno a una nueva fecha y hora
+    public void reprogramarTurno(Turno turno, LocalDateTime nuevaFechaHora) throws Exception {
+        try {
+            // Validar que la nueva fecha y hora esté disponible
+            List<LocalTime> horariosDisponibles = obtenerHorariosDisponibles(turno.getIdMedico(), nuevaFechaHora.toLocalDate());
+            if (!horariosDisponibles.contains(nuevaFechaHora.toLocalTime())) {
+                throw new Exception("El horario seleccionado no está disponible.");
+            }
+
+            // Actualizar turno
+            turno.setFechaHora(nuevaFechaHora);
+            turnoRepo.actualizar(turno); // actualizar en la base de datos
+        } catch (SQLException e) {
+            throw new Exception("Error al reprogramar turno: " + e.getMessage(), e);
+        }
+    }
+
 
 
     // Crea un nuevo turno si el horario sigue disponible.

@@ -62,8 +62,6 @@ public class ControladorRegistrarPaciente {
         }
 
 
-        
-
         // Validar nombre de usuario ocupado
         if (usuarioRepo.existeNombreUsuario(nombreUsuario)) {
             throw new NombreUsuarioOcupadoException("El nombre de usuario '" + nombreUsuario + "' ya está en uso.");
