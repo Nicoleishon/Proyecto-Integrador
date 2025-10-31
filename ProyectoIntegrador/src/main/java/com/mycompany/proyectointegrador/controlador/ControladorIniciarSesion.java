@@ -2,6 +2,7 @@ package com.mycompany.proyectointegrador.controlador;
 
 import com.mycompany.proyectointegrador.excepciones.CredencialesInvalidasException;
 import com.mycompany.proyectointegrador.excepciones.TipoUsuarioInvalidoException;
+import com.mycompany.proyectointegrador.modelo.Recepcionista;
 import com.mycompany.proyectointegrador.modelo.Usuario;
 import com.mycompany.proyectointegrador.repositorios.UsuarioRepositorio;
 import java.security.NoSuchAlgorithmException;
@@ -49,9 +50,12 @@ public class ControladorIniciarSesion {
         }
     }
 
-    
-
     public Usuario getUsuarioActual() {
         return usuarioActual;
     }
+    
+    public Boolean esRecepcionista() {
+        return (usuarioActual instanceof Recepcionista && usuarioActual.estaSesionIniciada());
+    }
+    
 }

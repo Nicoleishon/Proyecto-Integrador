@@ -13,7 +13,7 @@ public class VentanaPrincipal extends JFrame {
 
     // Paneles base
     private final PanelIniciarSesion panelIniciarSesion;
-    private final PanelRegistro panelRegistro;
+    private PanelRegistro panelRegistro;
     private final PanelRecepcionista panelRecepcionista;
     private final PanelPaciente panelPaciente;
     private final ControladorIniciarSesion controladorIniciarSesion = new ControladorIniciarSesion();
@@ -47,6 +47,14 @@ public class VentanaPrincipal extends JFrame {
 
 
     public void mostrarVista(String nombreVista) {
+        
+        if (nombreVista.equals("panelRegistro")) {
+            // Eliminar el panel anterior y crear uno nuevo
+            contenedorVistas.remove(panelRegistro);
+            panelRegistro = new PanelRegistro(this);
+            contenedorVistas.add(panelRegistro, "panelRegistro");
+        }
+        
         layout.show(contenedorVistas, nombreVista);
 
         // Limpieza automática de campos si corresponde

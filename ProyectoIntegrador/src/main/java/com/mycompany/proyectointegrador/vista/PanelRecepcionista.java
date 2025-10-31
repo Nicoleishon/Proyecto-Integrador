@@ -38,8 +38,9 @@ public class PanelRecepcionista extends JPanel {
         add(panelOpciones, BorderLayout.CENTER);
 
         // Acciones
-        btnRegistrarPaciente.addActionListener(e -> 
-            JOptionPane.showMessageDialog(this, "Funcionalidad pendiente: Registrar Paciente"));
+        btnRegistrarPaciente.addActionListener(e -> {
+            ventana.mostrarVista("panelRegistro");
+        });
 
         btnAsignarTurno.addActionListener(e -> 
             JOptionPane.showMessageDialog(this, "Funcionalidad pendiente: Asignar Turno"));

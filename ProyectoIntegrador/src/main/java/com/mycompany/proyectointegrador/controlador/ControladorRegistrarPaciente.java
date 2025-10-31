@@ -1,5 +1,6 @@
 package com.mycompany.proyectointegrador.controlador;
 
+import com.mycompany.proyectointegrador.excepciones.SesionInvalidaException;
 import com.mycompany.proyectointegrador.modelo.*;
 import com.mycompany.proyectointegrador.repositorios.HospitalRepositorio;
 import com.mycompany.proyectointegrador.repositorios.PacienteRepositorio;
@@ -61,4 +62,7 @@ public class ControladorRegistrarPaciente {
         Paciente paciente = new Paciente(hospital.getIdHospital(), usuario, persona);
         pacienteRepo.crear(paciente);
     }
+    
+
+    
 }
