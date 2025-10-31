@@ -20,8 +20,8 @@ public class TurnoRepositorio implements IRepositorio<Turno> {
         turno.setMotivoConsulta(rs.getString("motivoConsulta"));
         turno.setEstado(EstadoTurno.valueOf(rs.getString("estado")));
 
-        turno.idMedicoTemp = rs.getInt("idMedico");
-        turno.idPacienteTemp = rs.getInt("idPaciente");
+        turno.setIdMedico(rs.getInt("idMedico"));
+        turno.setIdPaciente(rs.getInt("idPaciente"));
 
         return turno;
     }
@@ -36,8 +36,8 @@ public class TurnoRepositorio implements IRepositorio<Turno> {
             stmt.setString(1, turno.getFechaHora().toString());
             stmt.setString(2, turno.getEstado().toString());
             stmt.setString(3, turno.getMotivoConsulta());
-            stmt.setInt(4, turno.getMedico().getIdMedico());
-            stmt.setInt(5, turno.getPaciente().getIdPaciente());
+            stmt.setInt(4, turno.getIdMedico());
+            stmt.setInt(5, turno.getIdPaciente());
 
             stmt.executeUpdate();
 
@@ -104,8 +104,8 @@ public class TurnoRepositorio implements IRepositorio<Turno> {
             stmt.setString(1, turno.getFechaHora().toString());
             stmt.setString(2, turno.getEstado().toString());
             stmt.setString(3, turno.getMotivoConsulta());
-            stmt.setInt(4, turno.getMedico().getIdMedico());
-            stmt.setInt(5, turno.getPaciente().getIdPaciente());
+            stmt.setInt(4, turno.getIdMedico());
+            stmt.setInt(5, turno.getIdPaciente());
             stmt.setInt(6, turno.getIdTurno());
 
             stmt.executeUpdate();
@@ -189,12 +189,6 @@ public class TurnoRepositorio implements IRepositorio<Turno> {
                 }
             }
             
-        for (Turno t : turnos) {
-            t.setMedico(medicoRepo.obtenerPorId(t.idMedicoTemp));
-            t.setPaciente(pacienteRepo.obtenerPorId(t.idPacienteTemp));
-        }
-
-
         } catch (SQLException e) {
             throw new SQLException("Error al obtener turnos por médico y fecha: " + e.getMessage(), e);
         }

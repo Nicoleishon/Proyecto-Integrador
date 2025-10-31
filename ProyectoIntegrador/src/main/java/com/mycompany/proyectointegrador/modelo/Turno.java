@@ -9,10 +9,8 @@ public class Turno {
     private LocalDateTime fechaHora;
     private EstadoTurno estado = EstadoTurno.PENDIENTE;
     private String motivoConsulta;
-    private Medico medico;
-    private Paciente paciente;
-    public int idMedicoTemp;
-    public int idPacienteTemp;
+    private int idMedico;
+    private int idPaciente;
 
 
     
@@ -60,22 +58,6 @@ public class Turno {
         this.motivoConsulta = motivoConsulta;
     }
 
-    public Medico getMedico() {
-        return medico;
-    }
-
-    public void setMedico(Medico medico) {
-        this.medico = medico;
-    }
-
-    public Paciente getPaciente() {
-        return paciente;
-    }
-
-    public void setPaciente(Paciente paciente) {
-        this.paciente = paciente;
-    }
-
     public void setIdTurno(int idTurno) {
         this.idTurno = idTurno;
     }
@@ -88,6 +70,22 @@ public class Turno {
             System.out.println("Estado inválido, asignando PENDIENTE por defecto.");
             return EstadoTurno.PENDIENTE;
         }
+    }
+
+    public int getIdMedico() {
+        return idMedico;
+    }
+
+    public void setIdMedico(int idMedico) {
+        this.idMedico = idMedico;
+    }
+
+    public int getIdPaciente() {
+        return idPaciente;
+    }
+
+    public void setIdPaciente(int idPaciente) {
+        this.idPaciente = idPaciente;
     }
     
     

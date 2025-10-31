@@ -80,8 +80,8 @@ public class ControladorTurno {
         }
 
         Turno nuevo = new Turno(fechaHora, motivo);
-        nuevo.setPaciente(paciente);
-        nuevo.setMedico(medico);
+        nuevo.setIdPaciente(paciente.getIdPaciente());
+        nuevo.setIdMedico(medico.getIdMedico());
         turnoRepo.crear(nuevo);
     }
 

@@ -32,8 +32,8 @@ public class Recepcionista extends Usuario {
   
   public Turno crearTurno(Paciente paciente, Medico medico, LocalDateTime fechaHora, String motivoConsulta){
       Turno nuevoTurno = new Turno(fechaHora, motivoConsulta);
-      nuevoTurno.setMedico(medico);
-      nuevoTurno.setPaciente(paciente);
+      nuevoTurno.setIdMedico(medico.getIdMedico());
+      nuevoTurno.setIdPaciente(paciente.getIdPaciente());
       return nuevoTurno;
   }
   
