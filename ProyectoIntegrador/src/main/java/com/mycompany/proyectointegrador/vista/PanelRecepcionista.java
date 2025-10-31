@@ -80,74 +80,27 @@ public class PanelRecepcionista extends JPanel {
 
 
         btnReprogramarTurno.addActionListener(e -> {
-           int filaSeleccionada = tablaTurnos.getSelectedRow();
-           if (filaSeleccionada == -1) {
-               JOptionPane.showMessageDialog(this, "Seleccione un turno para reprogramar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-               return;
-           }
+            int filaSeleccionada = tablaTurnos.getSelectedRow();
+            if (filaSeleccionada == -1) {
+                JOptionPane.showMessageDialog(this, "Seleccione un turno para reprogramar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
 
-           try {
-               int idTurno = (int) modeloTabla.getValueAt(filaSeleccionada, 0);
-               Turno turno = turnoRepo.obtenerPorId(idTurno);
-               if (turno == null) {
-                   JOptionPane.showMessageDialog(this, "No se encontró el turno seleccionado.", "Error", JOptionPane.ERROR_MESSAGE);
-                   return;
-               }
+            try {
+                int idTurno = (int) modeloTabla.getValueAt(filaSeleccionada, 0);
+                Turno turno = turnoRepo.obtenerPorId(idTurno);
+                if (turno == null) return;
 
-               Medico medico = medicoRepo.obtenerPorId(turno.getIdMedico());
-               if (medico == null) {
-                   JOptionPane.showMessageDialog(this, "No se encontró el médico asociado al turno.", "Error", JOptionPane.ERROR_MESSAGE);
-                   return;
-               }
+                PanelReprogramarTurno panel = new PanelReprogramarTurno(ventana, turno, ventana.getControladorTurno());
+                ventana.getContenedorVistas().add(panel, "panelReprogramarTurno");
+                CardLayout cl = (CardLayout) ventana.getContenedorVistas().getLayout();
+                cl.show(ventana.getContenedorVistas(), "panelReprogramarTurno");
 
-               List<LocalDate> fechasDisponibles = ventana.getControladorTurno().obtenerDiasLaboralesDisponibles(medico.getIdMedico());
-               if (fechasDisponibles.isEmpty()) {
-                   JOptionPane.showMessageDialog(this, "El médico no tiene días laborales disponibles.", "Error", JOptionPane.ERROR_MESSAGE);
-                   return;
-               }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Error de base de datos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
 
-               LocalDate nuevaFecha = (LocalDate) JOptionPane.showInputDialog(
-                       this,
-                       "Seleccione nueva fecha:",
-                       "Reprogramar Turno",
-                       JOptionPane.QUESTION_MESSAGE,
-                       null,
-                       fechasDisponibles.toArray(),
-                       turno.getFechaHora().toLocalDate()
-               );
-
-               if (nuevaFecha == null) return;
-
-               List<LocalTime> horariosDisponibles = ventana.getControladorTurno().obtenerHorariosDisponibles(medico.getIdMedico(), nuevaFecha);
-               horariosDisponibles.remove(turno.getFechaHora().toLocalTime()); // evitar mismo horario
-
-               if (horariosDisponibles.isEmpty()) {
-                   JOptionPane.showMessageDialog(this, "No hay horarios disponibles en esa fecha.", "Error", JOptionPane.ERROR_MESSAGE);
-                   return;
-               }
-
-               LocalTime nuevaHora = (LocalTime) JOptionPane.showInputDialog(
-                       this,
-                       "Seleccione nueva hora:",
-                       "Reprogramar Turno",
-                       JOptionPane.QUESTION_MESSAGE,
-                       null,
-                       horariosDisponibles.toArray(),
-                       turno.getFechaHora().toLocalTime()
-               );
-
-               if (nuevaHora == null) return;
-
-               ventana.getControladorTurno().reprogramarTurno(turno, LocalDateTime.of(nuevaFecha, nuevaHora));
-               JOptionPane.showMessageDialog(this, "Turno reprogramado correctamente.");
-               cargarTurnos();
-
-           } catch (SQLException ex) {
-               JOptionPane.showMessageDialog(this, "Error de base de datos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-           } catch (Exception ex) {
-               JOptionPane.showMessageDialog(this, "Error al reprogramar turno: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-           }
-       });
 
         
         btnVerListados.addActionListener(e -> 

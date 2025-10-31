@@ -112,5 +112,14 @@ public class VentanaPrincipal extends JFrame {
         else
             return "panelIniciarSesion";
     }
+    
+    public JPanel getContenedorVistas() {
+        return contenedorVistas;
+    }
+
+    public PanelRecepcionista getPanelRecepcionista() {
+        return panelRecepcionista;
+    }
+
 
 }
