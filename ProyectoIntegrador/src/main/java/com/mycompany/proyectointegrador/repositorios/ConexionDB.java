@@ -1,4 +1,3 @@
-// Lo he movido a un paquete 'persistencia' para mejor orden
 package com.mycompany.proyectointegrador.repositorios;
 
 import java.sql.Connection;
@@ -8,52 +7,39 @@ import java.sql.Statement;
 
 public class ConexionDB {
 
-    
     private static final String URL_DB = "jdbc:sqlite:gestor_turnos.sqlite";
-    
-    private static Connection connection = null;
 
-    private ConexionDB() throws SQLException {
+    public static Connection conectar() throws SQLException {
+        
+        Connection connection; 
         try {
+           
             connection = DriverManager.getConnection(URL_DB);
-            System.out.println("Conexión a SQLite establecida con éxito.");
             
+          
             try (Statement stmt = connection.createStatement()) {
                 stmt.execute("PRAGMA foreign_keys = ON;");
             }
             
+          
+            return connection; 
+            
         } catch (SQLException e) {
             System.err.println("Error al conectar con la base de datos SQLite: " + e.getMessage());
-            // lanzar excepción personalizada en caso de que se requiera
-            throw e;
+            throw e; 
         }
     }
     
-    public static Connection conectar() throws SQLException {
-        if (connection == null || connection.isClosed()) {
-            new ConexionDB(); 
-        }
-        return connection;
-    }
-
     public static void cerrar() {
-        try {
-            if (connection != null && !connection.isClosed()) {
-                connection.close();
-                System.out.println("Conexión a SQLite cerrada.");
-            }
-        } catch (SQLException e) {
-            System.err.println("Error al cerrar la conexión: " + e.getMessage());
-        }
     }
 
     public static void inicializarBaseDeDatos() throws SQLException {
+        
         try (Connection conn = conectar();
              Statement stmt = conn.createStatement()) {
 
             stmt.execute("PRAGMA foreign_keys = ON;");
 
-            // Eliminar tablas en orden descendente de dependencias
             stmt.execute("DROP TABLE IF EXISTS turnos;");
             stmt.execute("DROP TABLE IF EXISTS horarios;");
             stmt.execute("DROP TABLE IF EXISTS recepcionistas;");
@@ -137,7 +123,6 @@ public class ConexionDB {
                 );""");
 
             // Tabla Turnos: fechaHora (LocalDateTime)
-            // Turnos también deberia de tener idHospital si se quiere escalar a un sistema de multihospitales
             stmt.execute("""
                 CREATE TABLE turnos (
                 idTurno INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -150,13 +135,11 @@ public class ConexionDB {
                 FOREIGN KEY (idPaciente) REFERENCES pacientes(idPaciente)
                 );""");
             
-            
-
             System.out.println("Base de datos inicializada. Tablas creadas con éxito.");
+            
         } catch (SQLException e) {
             System.err.println("Error al inicializar la base de datos: " + e.getMessage());
-            throw e;  // Lanzar la excepción para que la capa de interfaz pueda capturarla
+            throw e;
         }
     }
-
 }
