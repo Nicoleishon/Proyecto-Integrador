@@ -71,6 +71,26 @@ public class UsuarioRepositorio {
             throw new SQLException("Error al buscar usuario por ID.", e);
         }
     }
+    
+    public boolean existeNombreUsuario(String nombreUsuario) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM usuarios WHERE nombreUsuario = ?";
+
+        try (Connection conn = ConexionDB.conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, nombreUsuario);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error al verificar existencia de nombre de usuario: " + e.getMessage(), e);
+        }
+        return false;
+    }
+
 
 
 }
