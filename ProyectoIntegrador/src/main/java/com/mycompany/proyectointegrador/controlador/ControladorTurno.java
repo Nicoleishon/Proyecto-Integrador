@@ -92,7 +92,7 @@ public class ControladorTurno {
              .noneMatch(t -> t.getFechaHora().equals(fechaHora));
     }
     
-    private DiaSemana convertirADiaSemana(LocalDate fecha) {
+    public DiaSemana convertirADiaSemana(LocalDate fecha) {
         switch (fecha.getDayOfWeek()) {
             case MONDAY: return DiaSemana.LUNES;
             case TUESDAY: return DiaSemana.MARTES;
@@ -104,6 +104,20 @@ public class ControladorTurno {
             default: throw new IllegalArgumentException("Día inválido");
         }
     }
+    
+    public List<DiaSemana> obtenerDiasLaboralesMedico(int idMedico) throws SQLException {
+        List<Horario> horarios = horarioRepo.obtenerPorIdMedico(idMedico);
+        // Usar un Set para eliminar duplicados
+        Set<DiaSemana> diasUnicos = new HashSet<>();
+        for (Horario h : horarios) {
+            diasUnicos.add(h.getDiaSemana());
+        }
+        // Convertir a lista y ordenar por el enum
+        List<DiaSemana> dias = new ArrayList<>(diasUnicos);
+        dias.sort(Comparator.comparing(Enum::ordinal));
+        return dias;
+    }
+
 
     
 }

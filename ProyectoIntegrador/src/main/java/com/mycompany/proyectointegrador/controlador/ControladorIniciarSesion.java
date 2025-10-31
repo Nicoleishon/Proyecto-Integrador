@@ -2,6 +2,7 @@ package com.mycompany.proyectointegrador.controlador;
 
 import com.mycompany.proyectointegrador.excepciones.CredencialesInvalidasException;
 import com.mycompany.proyectointegrador.excepciones.TipoUsuarioInvalidoException;
+import com.mycompany.proyectointegrador.modelo.Paciente;
 import com.mycompany.proyectointegrador.modelo.Recepcionista;
 import com.mycompany.proyectointegrador.modelo.Usuario;
 import com.mycompany.proyectointegrador.repositorios.UsuarioRepositorio;
@@ -56,6 +57,10 @@ public class ControladorIniciarSesion {
     
     public Boolean esRecepcionista() {
         return (usuarioActual instanceof Recepcionista && usuarioActual.estaSesionIniciada());
+    }
+    
+    public Boolean esPaciente() {
+        return (usuarioActual instanceof Paciente && usuarioActual.estaSesionIniciada());
     }
     
 }

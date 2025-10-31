@@ -20,11 +20,8 @@ public class TurnoRepositorio implements IRepositorio<Turno> {
         turno.setMotivoConsulta(rs.getString("motivoConsulta"));
         turno.setEstado(EstadoTurno.valueOf(rs.getString("estado")));
 
-        int idMedico = rs.getInt("idMedico");
-        int idPaciente = rs.getInt("idPaciente");
-
-        turno.setMedico(medicoRepo.obtenerPorId(idMedico));
-        turno.setPaciente(pacienteRepo.obtenerPorId(idPaciente));
+        turno.idMedicoTemp = rs.getInt("idMedico");
+        turno.idPacienteTemp = rs.getInt("idPaciente");
 
         return turno;
     }
@@ -191,6 +188,12 @@ public class TurnoRepositorio implements IRepositorio<Turno> {
                     turnos.add(mapearTurno(rs));
                 }
             }
+            
+        for (Turno t : turnos) {
+            t.setMedico(medicoRepo.obtenerPorId(t.idMedicoTemp));
+            t.setPaciente(pacienteRepo.obtenerPorId(t.idPacienteTemp));
+        }
+
 
         } catch (SQLException e) {
             throw new SQLException("Error al obtener turnos por médico y fecha: " + e.getMessage(), e);
@@ -201,3 +204,4 @@ public class TurnoRepositorio implements IRepositorio<Turno> {
 
     
 }
+        

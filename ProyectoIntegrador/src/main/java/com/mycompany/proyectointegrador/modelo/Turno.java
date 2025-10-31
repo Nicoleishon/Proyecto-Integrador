@@ -11,6 +11,9 @@ public class Turno {
     private String motivoConsulta;
     private Medico medico;
     private Paciente paciente;
+    public int idMedicoTemp;
+    public int idPacienteTemp;
+
 
     
     public Turno(int idTurno, LocalDateTime fechaHora, String motivoConsulta, String estado) {
