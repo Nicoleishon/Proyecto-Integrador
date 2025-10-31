@@ -75,26 +75,26 @@ public class InicializadorSistema {
     private static void crearPacientesIniciales(Hospital hospitalDefault) throws SQLException, NoSuchAlgorithmException {
     
     // paciente inicial 1
-    Persona p1 = new Persona("Juan", "Perez", LocalDate.of(1990, 1, 1), "San Martín 123", "261444111", "35111222");
+    Persona p1 = new Persona("Juan", "Perez", LocalDate.of(1990, 1, 1), "San Martín 123", "261442711", "35111222");
     Usuario u1 = new Usuario("jperez", Usuario.generarHash("1234"));
     
     Paciente pac1 = new Paciente(hospitalDefault.getIdHospital(), u1, p1);
     pacienteRepo.crear(pac1); 
 
     // paciente inicial 2
-    Persona p2 = new Persona("Maria", "Lopez", LocalDate.of(1985, 6, 15), "Las Heras 456", "261444222", "30222333");
+    Persona p2 = new Persona("Maria", "Lopez", LocalDate.of(1985, 6, 15), "Las Heras 456", "261444262", "30222333");
     Usuario u2 = new Usuario("mlopez", Usuario.generarHash("1234"));
     Paciente pac2 = new Paciente(hospitalDefault.getIdHospital(), u2, p2);
     pacienteRepo.crear(pac2);
 
     // paciente inicial 3
-    Persona p3 = new Persona("Roberto", "Sanchez", LocalDate.of(2005, 11, 30), "Belgrano 789", "261444333", "45333444");
+    Persona p3 = new Persona("Roberto", "Sanchez", LocalDate.of(2005, 11, 30), "Belgrano 789", "261646693", "45333444");
     Usuario u3 = new Usuario("rsanchez", Usuario.generarHash("1234"));
     Paciente pac3 = new Paciente(hospitalDefault.getIdHospital(), u3, p3);
     pacienteRepo.crear(pac3);
 
     // paciente inicial 4
-    Persona p4 = new Persona("Lucia", "Gomez", LocalDate.of(1998, 3, 22), "Patricias 101", "261444555", "40444555");
+    Persona p4 = new Persona("Lucia", "Gomez", LocalDate.of(1998, 3, 22), "Patricias 101", "261964855", "40444555");
     Usuario u4 = new Usuario("lgomez", Usuario.generarHash("1234"));
     Paciente pac4 = new Paciente(hospitalDefault.getIdHospital(), u4, p4);
     pacienteRepo.crear(pac4);
@@ -105,7 +105,7 @@ public class InicializadorSistema {
     private static void crearMedicosIniciales(Hospital hospitalDefault) throws SQLException {
     
     
-    Persona personaMedico1 = new Persona("Ana", "Gutiérrez", LocalDate.of(1985, 5, 15), "Colón 1073", "261555111", "30111222");
+    Persona personaMedico1 = new Persona("Ana", "Gutiérrez", LocalDate.of(1985, 5, 15), "Colón 1073", "261558951", "30111222");
     Medico medico1 = new Medico(hospitalDefault.getIdHospital(), LocalDate.now(), "Pediatría", "ANA123", null, Especialidad.PEDIATRÍA, personaMedico1);
     
     medicoRepo.crear(medico1);
@@ -117,7 +117,7 @@ public class InicializadorSistema {
 
     
     // CARDIOLOGÍA - Médico 1
-    Persona personaMedico2 = new Persona("Carlos", "Martínez", LocalDate.of(1978, 10, 20), "Av. Liberman 742", "261555222", "25333444");
+    Persona personaMedico2 = new Persona("Carlos", "Martínez", LocalDate.of(1978, 10, 20), "Av. Liberman 742", "261575329", "25333444");
     Medico medico2 = new Medico(hospitalDefault.getIdHospital(), LocalDate.now(), "Cardiología", "CAR456", null, Especialidad.CARDIOLOGÍA, personaMedico2);
     
     medicoRepo.crear(medico2);
@@ -128,7 +128,7 @@ public class InicializadorSistema {
     horarioRepo.crear(horarioM2_Jueves);
     
     // ODONTOLOGÍA - Médico 1
-    Persona personaMedico3 = new Persona("Laura", "Pérez", LocalDate.of(1980, 3, 10), "San Martín 456", "261555333", "30444555");
+    Persona personaMedico3 = new Persona("Laura", "Pérez", LocalDate.of(1980, 3, 10), "San Martín 456", "261510336", "30444555");
     Medico medico3 = new Medico(hospitalDefault.getIdHospital(), LocalDate.now(), "Odontología", "LAU789", null, Especialidad.ODONTOLOGÍA, personaMedico3);
     medicoRepo.crear(medico3);
 
@@ -148,7 +148,7 @@ public class InicializadorSistema {
     horarioRepo.crear(horarioM4_Viernes);
 
     // OFTALMOLOGÍA - Médico 1
-    Persona personaMedico5 = new Persona("María", "López", LocalDate.of(1975, 12, 5), "Av. San Juan 321", "261555555", "28666777");
+    Persona personaMedico5 = new Persona("María", "López", LocalDate.of(1975, 12, 5), "Av. San Juan 321", "261555999", "28666777");
     Medico medico5 = new Medico(hospitalDefault.getIdHospital(), LocalDate.now(), "Oftalmología", "MAR345", null, Especialidad.OFTALMOLOGÍA, personaMedico5);
     medicoRepo.crear(medico5);
 
@@ -158,7 +158,7 @@ public class InicializadorSistema {
     horarioRepo.crear(horarioM5_Mierc);
 
     // OFTALMOLOGÍA - Médico 2
-    Persona personaMedico6 = new Persona("Javier", "Gómez", LocalDate.of(1983, 9, 18), "Pueyrredón 654", "261555666", "31888999");
+    Persona personaMedico6 = new Persona("Javier", "Gómez", LocalDate.of(1983, 9, 18), "Pueyrredón 654", "261553466", "31888999");
     Medico medico6 = new Medico(hospitalDefault.getIdHospital(), LocalDate.now(), "Oftalmología", "JAV678", null, Especialidad.OFTALMOLOGÍA, personaMedico6);
     medicoRepo.crear(medico6);
 
@@ -168,7 +168,7 @@ public class InicializadorSistema {
     horarioRepo.crear(horarioM6_Jueves);
 
     // PEDIATRÍA - Médico 2 (complementando el que ya tienes)
-    Persona personaMedico7 = new Persona("Lucía", "Fernández", LocalDate.of(1988, 4, 12), "Av. Las Heras 987", "261555777", "32111000");
+    Persona personaMedico7 = new Persona("Lucía", "Fernández", LocalDate.of(1988, 4, 12), "Av. Las Heras 987", "261555457", "32111000");
     Medico medico7 = new Medico(hospitalDefault.getIdHospital(), LocalDate.now(), "Pediatría", "LUC901", null, Especialidad.PEDIATRÍA, personaMedico7);
     medicoRepo.crear(medico7);
 
@@ -178,7 +178,7 @@ public class InicializadorSistema {
     horarioRepo.crear(horarioM7_Viernes);
 
     // DERMATOLOGÍA - Médico 1
-    Persona personaMedico8 = new Persona("Sofía", "Ramírez", LocalDate.of(1981, 6, 30), "Av. Godoy Cruz 234", "261555888", "33222111");
+    Persona personaMedico8 = new Persona("Sofía", "Ramírez", LocalDate.of(1981, 6, 30), "Av. Godoy Cruz 234", "261585858", "33222111");
     Medico medico8 = new Medico(hospitalDefault.getIdHospital(), LocalDate.now(), "Dermatología", "SOF234", null, Especialidad.DERMATOLOGÍA, personaMedico8);
     medicoRepo.crear(medico8);
 

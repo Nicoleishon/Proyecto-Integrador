@@ -33,7 +33,7 @@ public class PanelRecepcionista extends JPanel {
         titulo.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         add(titulo, BorderLayout.NORTH);
 
-        JPanel panelOpciones = new JPanel(new GridLayout(5, 1, 10, 10));
+        JPanel panelOpciones = new JPanel(new GridLayout(6, 1, 10, 10));
         panelOpciones.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20)); // Padding
         panelOpciones.setBackground(Color.WHITE);
 
@@ -41,12 +41,14 @@ public class PanelRecepcionista extends JPanel {
         JButton btnAsignarTurno = new JButton("Asignar Turno");
         JButton btnCancelarTurno = new JButton("Cancelar Turno");
         JButton btnReprogramarTurno = new JButton("Reprogramar Turno");
+        JButton btnVerListados = new JButton("Ver Directorio");
         JButton btnCerrarSesion = new JButton("Cerrar Sesión");
 
         panelOpciones.add(btnRegistrarPaciente);
         panelOpciones.add(btnAsignarTurno);
         panelOpciones.add(btnCancelarTurno);
         panelOpciones.add(btnReprogramarTurno);
+        panelOpciones.add(btnVerListados);
         panelOpciones.add(btnCerrarSesion);
 
         add(panelOpciones, BorderLayout.EAST); 
@@ -76,6 +78,9 @@ public class PanelRecepcionista extends JPanel {
 
         btnReprogramarTurno.addActionListener(e -> 
             JOptionPane.showMessageDialog(this, "Funcionalidad pendiente: Reprogramar Turno"));
+        
+        btnVerListados.addActionListener(e -> 
+            ventana.mostrarVista("panelListados"));
 
         btnCerrarSesion.addActionListener(e -> {
             int opcion = JOptionPane.showConfirmDialog(
