@@ -1,7 +1,9 @@
 package com.mycompany.proyectointegrador.vista;
 
+import com.mycompany.proyectointegrador.excepciones.SesionInvalidaException;
 import javax.swing.*;
 import java.awt.*;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -17,6 +19,8 @@ public class PanelRegistro extends JPanel {
     private final JButton botonRegistrar = new JButton("Registrar");
     private int pasoActual = 0;
     private List<JPanel> pasos; // Cada paso contiene un grupo de campos
+    private final boolean esRegistroPorRecepcionista;
+    
 
     // Campos de entrada
     private JTextField campoUsuario, campoNombre, campoApellido, campoDireccion, campoTelefono, campoDni, campoFechaNacimiento;
@@ -24,10 +28,11 @@ public class PanelRegistro extends JPanel {
 
     public PanelRegistro(VentanaPrincipal ventana) {
         this.ventana = ventana;
+        this.esRegistroPorRecepcionista = ventana.getControladorIniciarSesion().esRecepcionista();
         setLayout(new BorderLayout());
         setBackground(new Color(245, 245, 245));
 
-        JLabel titulo = new JLabel("Registro de Usuario", SwingConstants.CENTER);
+        JLabel titulo = new JLabel("Registro de Paciente", SwingConstants.CENTER);
         titulo.setFont(new Font("Segoe UI", Font.BOLD, 28));
         titulo.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
         add(titulo, BorderLayout.NORTH);
@@ -58,23 +63,38 @@ public class PanelRegistro extends JPanel {
     private void generarPasosDinamicos() {
         pasos = new ArrayList<>();
 
-        // Lista completa de etiquetas y campos
-        String[] etiquetas = {
-                "Usuario:", "Contraseña:", "Confirmar Contraseña:",
-                "Nombre:", "Apellido:", "Fecha Nacimiento (yyyy-MM-dd):",
-                "Dirección:", "Teléfono:", "DNI:"
-        };
+        // Etiquetas y campos base
+        List<String> etiquetasList = new ArrayList<>();
+        List<JComponent> camposList = new ArrayList<>();
 
-        JComponent[] campos = {
-                campoUsuario, campoContraseña, campoConfirmar,
-                campoNombre, campoApellido, campoFechaNacimiento,
-                campoDireccion, campoTelefono, campoDni
-        };
+        if (!esRegistroPorRecepcionista) {
+            // Registro normal: usuario y contraseña visibles
+            etiquetasList.add("Usuario:");
+            etiquetasList.add("Contraseña:");
+            etiquetasList.add("Confirmar Contraseña:");
+            camposList.add(campoUsuario);
+            camposList.add(campoContraseña);
+            camposList.add(campoConfirmar);
+        }
 
-        // Determinar cantidad de campos por paso según tamaño disponible
+        // Campos personales (siempre visibles)
+        etiquetasList.add("Nombre:");
+        etiquetasList.add("Apellido:");
+        etiquetasList.add("Fecha Nacimiento (yyyy-MM-dd):");
+        etiquetasList.add("Dirección:");
+        etiquetasList.add("Teléfono:");
+        etiquetasList.add("DNI:");
+
+        camposList.add(campoNombre);
+        camposList.add(campoApellido);
+        camposList.add(campoFechaNacimiento);
+        camposList.add(campoDireccion);
+        camposList.add(campoTelefono);
+        camposList.add(campoDni);
+
+        // Generar paneles con CardLayout
         int camposPorPaso = (getToolkit().getScreenSize().height < 700) ? 3 : 5;
-
-        for (int i = 0; i < etiquetas.length; i += camposPorPaso) {
+        for (int i = 0; i < etiquetasList.size(); i += camposPorPaso) {
             JPanel panel = new JPanel(new GridBagLayout());
             panel.setBackground(Color.WHITE);
             GridBagConstraints gbc = new GridBagConstraints();
@@ -82,18 +102,20 @@ public class PanelRegistro extends JPanel {
             gbc.fill = GridBagConstraints.HORIZONTAL;
             gbc.weightx = 1.0;
 
-            for (int j = 0; j < camposPorPaso && (i + j) < etiquetas.length; j++) {
+            for (int j = 0; j < camposPorPaso && (i + j) < etiquetasList.size(); j++) {
                 gbc.gridx = 0;
                 gbc.gridy = j;
-                panel.add(new JLabel(etiquetas[i + j]), gbc);
+                panel.add(new JLabel(etiquetasList.get(i + j)), gbc);
                 gbc.gridx = 1;
-                panel.add(campos[i + j], gbc);
+                panel.add(camposList.get(i + j), gbc);
             }
 
             pasos.add(panel);
             panelPrincipal.add(panel, "paso" + (pasos.size() - 1));
         }
+
     }
+
 
     private void configurarBotonera() {
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
@@ -113,7 +135,14 @@ public class PanelRegistro extends JPanel {
         botonSiguiente.addActionListener(e -> avanzar());
         botonAtras.addActionListener(e -> retroceder());
         botonRegistrar.addActionListener(e -> registrar());
-        botonVolver.addActionListener(e -> ventana.mostrarVista("login"));
+        botonVolver.addActionListener(e -> {
+            if (esRegistroPorRecepcionista) {
+                ventana.mostrarVista("panelRecepcionista");
+            } else {
+                ventana.mostrarVista("panelIniciarSesion");
+            }
+        });
+
 
         panelBotones.add(botonAtras);
         panelBotones.add(botonSiguiente);
@@ -159,22 +188,45 @@ public class PanelRegistro extends JPanel {
         }
         return true;
     }
-
+    
+    
     private void registrar() {
         try {
             LocalDate.parse(campoFechaNacimiento.getText().trim());
-            JOptionPane.showMessageDialog(this,
-                    "Usuario registrado correctamente: " + campoUsuario.getText(),
+
+            String usuario, contraseña, confirmar;
+
+            if (esRegistroPorRecepcionista) {
+                // La recepcionista usa el DNI como nombre de usuario y contraseña
+                String dni = campoDni.getText().trim();
+                usuario = dni;
+                contraseña = dni;
+                confirmar = dni;
+            } else {
+                usuario = campoUsuario.getText().trim();
+                contraseña = new String(campoContraseña.getPassword()).trim();
+                confirmar = new String(campoConfirmar.getPassword()).trim();
+            }
+
+            if (enviarDatosRegistro(usuario, contraseña, confirmar)) {
+                JOptionPane.showMessageDialog(this,
+                    "Paciente registrado correctamente: " + campoNombre.getText() + " " + campoApellido.getText(),
                     "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
-            limpiarCampos();
-            pasoActual = 0;
-            cardLayout.show(panelPrincipal, "paso0");
-            botonAtras.setEnabled(false);
-            botonRegistrar.setEnabled(false);
-            botonSiguiente.setEnabled(true);
-            // Redirigir automáticamente al login
-            ventana.mostrarVista("login");
+                limpiarCampos();
+                pasoActual = 0;
+                cardLayout.show(panelPrincipal, "paso0");
+                botonAtras.setEnabled(false);
+                botonRegistrar.setEnabled(false);
+                botonSiguiente.setEnabled(true);
+
+                // Si es recepcionista, no redirige al login
+                if (!esRegistroPorRecepcionista) {
+                    ventana.mostrarVista("panelIniciarSesion");
+                } else {
+                    ventana.mostrarVista("panelRecepcionista");
+                }
+            }
 
         } catch (DateTimeParseException e) {
             JOptionPane.showMessageDialog(this,
@@ -182,6 +234,38 @@ public class PanelRegistro extends JPanel {
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
+   
+    
+    
+    private Boolean enviarDatosRegistro(String usuario, String contraseña, String confirmar) {
+        try {
+            ventana.getControladorRegistrar().registrarPaciente(
+                campoNombre.getText().trim(),
+                campoApellido.getText().trim(),
+                campoFechaNacimiento.getText().trim(),
+                campoDireccion.getText().trim(),
+                campoTelefono.getText().trim(),
+                campoDni.getText().trim(),
+                usuario,
+                contraseña,
+                confirmar
+            );
+            return true;
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Datos inválidos", JOptionPane.WARNING_MESSAGE);
+            return false;
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al registrar el usuario en la base de datos:\n" + e.getMessage(),
+                    "Error de base de datos", JOptionPane.ERROR_MESSAGE);
+            return false;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error inesperado: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
+
+
 
     private void limpiarCampos() {
         for (JTextField campo : new JTextField[]{

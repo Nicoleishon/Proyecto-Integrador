@@ -1,6 +1,7 @@
 package com.mycompany.proyectointegrador.vista;
 
 import com.mycompany.proyectointegrador.controlador.ControladorIniciarSesion;
+import com.mycompany.proyectointegrador.controlador.ControladorRegistrarPaciente;
 import com.mycompany.proyectointegrador.modelo.*;
 import javax.swing.*;
 import java.awt.*;
@@ -12,10 +13,11 @@ public class VentanaPrincipal extends JFrame {
 
     // Paneles base
     private final PanelIniciarSesion panelIniciarSesion;
-    private final PanelRegistro panelRegistro;
+    private PanelRegistro panelRegistro;
     private final PanelRecepcionista panelRecepcionista;
     private final PanelPaciente panelPaciente;
     private final ControladorIniciarSesion controladorIniciarSesion = new ControladorIniciarSesion();
+    private final ControladorRegistrarPaciente controladorRegistrar = new ControladorRegistrarPaciente();
     private final PanelAsignarTurno panelAsignarTurno;
 
     public VentanaPrincipal() {
@@ -48,6 +50,14 @@ public class VentanaPrincipal extends JFrame {
 
 
     public void mostrarVista(String nombreVista) {
+        
+        if (nombreVista.equals("panelRegistro")) {
+            // Eliminar el panel anterior y crear uno nuevo
+            contenedorVistas.remove(panelRegistro);
+            panelRegistro = new PanelRegistro(this);
+            contenedorVistas.add(panelRegistro, "panelRegistro");
+        }
+        
         layout.show(contenedorVistas, nombreVista);
 
         // Limpieza automática de campos si corresponde
@@ -59,5 +69,20 @@ public class VentanaPrincipal extends JFrame {
     public ControladorIniciarSesion getControladorIniciarSesion(){
         return this.controladorIniciarSesion;
     }
+
+    public ControladorRegistrarPaciente getControladorRegistrar() {
+        return controladorRegistrar;
+    }
     
+    
+    public String obtenerPanelSesion() {
+        Usuario usuarioActual = controladorIniciarSesion.getUsuarioActual();
+        if (usuarioActual instanceof Paciente)
+            return "panelPaciente";
+        else if (usuarioActual instanceof Recepcionista)
+            return "panelRecepcionista";
+        else
+            return "panelIniciarSesion";
+    }
+
 }

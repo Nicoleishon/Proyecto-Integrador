@@ -39,8 +39,9 @@ public class PanelRecepcionista extends JPanel {
         add(panelOpciones, BorderLayout.CENTER);
 
         // Acciones
-        btnRegistrarPaciente.addActionListener(e -> 
-            JOptionPane.showMessageDialog(this, "Funcionalidad pendiente: Registrar Paciente"));
+        btnRegistrarPaciente.addActionListener(e -> {
+            ventana.mostrarVista("panelRegistro");
+        });
 
         btnAsignarTurno.addActionListener(e -> 
             ventana.mostrarVista("panelAsignarTurno"));
@@ -51,6 +52,21 @@ public class PanelRecepcionista extends JPanel {
         btnReprogramarTurno.addActionListener(e -> 
             JOptionPane.showMessageDialog(this, "Funcionalidad pendiente: Reprogramar Turno"));
 
-        btnCerrarSesion.addActionListener(e -> ventana.mostrarVista("login"));
+        btnCerrarSesion.addActionListener(e -> {
+            int opcion = JOptionPane.showConfirmDialog(
+                    ventana,
+                    "¿Está seguro que desea cerrar sesión?",
+                    "Confirmar cierre de sesión",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE
+            );
+
+            if (opcion == JOptionPane.YES_OPTION) {
+                ventana.getControladorIniciarSesion().cerrarSesion();
+                ventana.mostrarVista("panelIniciarSesion");
+            }
+        });
+
+
     }
 }

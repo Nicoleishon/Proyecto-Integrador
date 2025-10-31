@@ -2,7 +2,7 @@
 
 package com.mycompany.proyectointegrador.modelo;
 import java.time.LocalDateTime;
-import com.mycompany.proyectointegrador.servicios.ServicioTurnos;
+
 
 public class Turno {
     private int idTurno;
@@ -17,7 +17,7 @@ public class Turno {
         this.idTurno = idTurno;
         this.fechaHora = fechaHora;
         this.motivoConsulta = motivoConsulta;
-        this.estado = ServicioTurnos.validarEstadoTurno(estado);
+        this.estado = validarEstadoTurno(estado);
     }
     
     public Turno(LocalDateTime fechaHora, String motivoConsulta) {
@@ -77,6 +77,15 @@ public class Turno {
         this.idTurno = idTurno;
     }
     
+    public static EstadoTurno validarEstadoTurno(String estado) {
+        try {
+            return EstadoTurno.valueOf(estado.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            // Manejar el error, por ejemplo, asignar un valor por defecto
+            System.out.println("Estado inválido, asignando PENDIENTE por defecto.");
+            return EstadoTurno.PENDIENTE;
+        }
+    }
     
     
 }
