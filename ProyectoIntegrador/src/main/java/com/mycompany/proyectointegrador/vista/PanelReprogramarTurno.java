@@ -2,6 +2,7 @@ package com.mycompany.proyectointegrador.vista;
 
 import com.mycompany.proyectointegrador.controlador.ControladorTurno;
 import com.mycompany.proyectointegrador.modelo.Turno;
+
 import javax.swing.*;
 import java.awt.*;
 import java.sql.SQLException;
@@ -26,17 +27,28 @@ public class PanelReprogramarTurno extends JPanel {
         this.controlador = controlador;
 
         setLayout(new BorderLayout(20, 20));
-        setBackground(Color.WHITE);
+        setBackground(new Color(245, 245, 245));
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
+        // Título
         JLabel titulo = new JLabel("Reprogramar Turno", SwingConstants.CENTER);
-        titulo.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        titulo.setFont(new Font("Segoe UI", Font.BOLD, 26));
+        titulo.setBorder(BorderFactory.createEmptyBorder(10, 0, 20, 0));
         add(titulo, BorderLayout.NORTH);
 
-        // Panel central de selección
-        JPanel panelCentro = new JPanel(new GridLayout(2, 2, 15, 15));
+        // Panel central
+        JPanel panelCentro = new JPanel(new GridBagLayout());
         panelCentro.setBackground(Color.WHITE);
+        panelCentro.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1, true),
+                BorderFactory.createEmptyBorder(20, 30, 20, 30)
+        ));
 
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        // Etiquetas y combos
         JLabel lblFecha = new JLabel("Nueva fecha:");
         JLabel lblHora = new JLabel("Nueva hora:");
 
@@ -49,18 +61,29 @@ public class PanelReprogramarTurno extends JPanel {
 
         comboFechas.addActionListener(e -> actualizarHoras());
 
-        panelCentro.add(lblFecha);
-        panelCentro.add(comboFechas);
-        panelCentro.add(lblHora);
-        panelCentro.add(comboHoras);
+        gbc.gridx = 0; gbc.gridy = 0;
+        panelCentro.add(lblFecha, gbc);
+        gbc.gridx = 1;
+        panelCentro.add(comboFechas, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 1;
+        panelCentro.add(lblHora, gbc);
+        gbc.gridx = 1;
+        panelCentro.add(comboHoras, gbc);
 
         add(panelCentro, BorderLayout.CENTER);
 
         // Panel de botones
-        JPanel panelBotones = new JPanel();
-        panelBotones.setBackground(Color.WHITE);
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        panelBotones.setBackground(new Color(245, 245, 245));
+
         btnReprogramar = new JButton("Reprogramar");
+        btnReprogramar.setBackground(new Color(33, 150, 243));
+        btnReprogramar.setForeground(Color.WHITE);
+
         btnVolver = new JButton("Volver");
+        btnVolver.setBackground(new Color(158, 158, 158));
+        btnVolver.setForeground(Color.WHITE);
 
         btnReprogramar.addActionListener(e -> reprogramarTurno());
         btnVolver.addActionListener(e -> volverPanelRecepcionista());
@@ -104,6 +127,6 @@ public class PanelReprogramarTurno extends JPanel {
     private void volverPanelRecepcionista() {
         CardLayout cl = (CardLayout) ventana.getContenedorVistas().getLayout();
         cl.show(ventana.getContenedorVistas(), "panelRecepcionista");
-        ventana.getContenedorVistas().remove(this); // elimina este panel para limpieza
+        ventana.getContenedorVistas().remove(this); // limpiar panel dinámico
     }
 }
