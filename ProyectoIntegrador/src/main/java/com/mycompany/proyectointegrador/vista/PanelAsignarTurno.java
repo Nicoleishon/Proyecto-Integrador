@@ -1,4 +1,3 @@
-// Archivo: src/main/java/com/mycompany/proyectointegrador/vista/PanelAsignarTurno.java
 package com.mycompany.proyectointegrador.vista;
 
 import com.mycompany.proyectointegrador.modelo.*;
@@ -6,6 +5,7 @@ import com.mycompany.proyectointegrador.repositorios.*;
 import com.mycompany.proyectointegrador.repositorios.MedicoRepositorio;
 import javax.swing.*;
 import java.awt.*;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -116,27 +116,44 @@ public class PanelAsignarTurno extends JPanel {
         botonAsignarTurno.addActionListener(e -> asignarTurno());
     }
 
-    private void buscarPaciente() {
-        String busqueda = campoBuscarPaciente.getText().trim();
-        if (busqueda.isEmpty()) return;
-        
-        try {
-            // también puede ser por dni, en ese caso hay que agregar el método en el repo de pacientes
-            int idPaciente = Integer.parseInt(busqueda);
-            pacienteSeleccionado = pacienteRepo.obtenerPorId(idPaciente);
-            
-            if (pacienteSeleccionado != null) {
-                labelPacienteEncontrado.setText("Paciente: " + pacienteSeleccionado.getNombre() + " " + pacienteSeleccionado.getApellido());
-                labelPacienteEncontrado.setForeground(Color.BLACK);
-            } else {
-                labelPacienteEncontrado.setText("Paciente no encontrado.");
-                labelPacienteEncontrado.setForeground(Color.RED);
+
+
+private void buscarPaciente() {
+    String busqueda = campoBuscarPaciente.getText().trim();
+    if (busqueda.isEmpty()) return;
+    
+    pacienteSeleccionado = null; 
+
+    try {
+        pacienteSeleccionado = pacienteRepo.obtenerPorDni(busqueda);
+        if (pacienteSeleccionado == null) {
+            try {
+               
+                int idPaciente = Integer.parseInt(busqueda);
+               
+                pacienteSeleccionado = pacienteRepo.obtenerPorId(idPaciente);
+            } catch (NumberFormatException e) {
+                
             }
-        } catch (Exception e) {
-            labelPacienteEncontrado.setText("Error al buscar: " + e.getMessage());
-            labelPacienteEncontrado.setForeground(Color.RED);
         }
+       
+        if (pacienteSeleccionado != null) {
+            labelPacienteEncontrado.setText("Paciente: " + pacienteSeleccionado.getNombre() + " " + pacienteSeleccionado.getApellido() + " (ID: " + pacienteSeleccionado.getIdPaciente() + ")");
+            labelPacienteEncontrado.setForeground(Color.BLACK);
+            
+            System.out.println("Paciente encontrado: " + pacienteSeleccionado.getNombreCompleto() + " DNI: " + pacienteSeleccionado.getDni());
+        } else {
+            labelPacienteEncontrado.setText("Paciente no encontrado (ID o DNI: " + busqueda + ")");
+            labelPacienteEncontrado.setForeground(Color.RED);
+            System.out.println("Búsqueda fallida para: " + busqueda);
+        }
+        
+    } catch (SQLException ex) {
+        labelPacienteEncontrado.setText("Error de base de datos.");
+        labelPacienteEncontrado.setForeground(Color.RED);
+        System.err.println("Error SQL al buscar paciente: " + ex.getMessage());
     }
+}
 
         private void filtrarMedicosPorEspecialidad() {
         Especialidad especialidad = (Especialidad) comboEspecialidades.getSelectedItem();

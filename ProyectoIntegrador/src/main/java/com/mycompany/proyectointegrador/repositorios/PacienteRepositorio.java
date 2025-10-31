@@ -87,6 +87,36 @@ public class PacienteRepositorio implements IRepositorio<Paciente> {
 
         return null;
     }
+    
+   
+
+    public Paciente obtenerPorDni(String dni) throws SQLException {
+    String sql = """
+        SELECT 
+            per.idPersona, per.nombre, per.apellido, per.fechaNacimiento, per.direccion, per.telefono, per.dni,
+            u.idUsuario, u.nombreUsuario, u.hashContraseña,
+            pa.idPaciente, pa.idHospital, pa.fechaRegistro
+        FROM personas per
+        JOIN usuarios u ON per.idPersona = u.idUsuario
+        JOIN pacientes pa ON u.idUsuario = pa.idPaciente
+        WHERE per.dni = ?  
+    """; 
+
+    try (Connection conn = ConexionDB.conectar();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        stmt.setString(1, dni); 
+
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return mapearPaciente(rs); 
+            }
+        }
+    } catch (SQLException e) {
+        throw new SQLException("Error al obtener el paciente por DNI: " + e.getMessage(), e);
+    }
+    return null; 
+}
 
     @Override
     public List<Paciente> obtenerTodos() throws SQLException {
