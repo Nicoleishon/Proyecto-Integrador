@@ -21,6 +21,7 @@ public class VentanaPrincipal extends JFrame {
     private final ControladorRegistrarPaciente controladorRegistrar = new ControladorRegistrarPaciente();
     private final ControladorTurno controladorTurno = new ControladorTurno();
     private PanelAsignarTurno panelAsignarTurno;
+    private PanelListados panelListados;
 
     public VentanaPrincipal() {
         setTitle("Sistema Gestor de Turnos");
@@ -38,6 +39,7 @@ public class VentanaPrincipal extends JFrame {
         panelPaciente = new PanelPaciente(this);
         panelRecepcionista = new PanelRecepcionista(this);
         panelAsignarTurno = new PanelAsignarTurno(this);
+        panelListados = new PanelListados(this);
 
         // Agregar las vistas al contenedor
         contenedorVistas.add(panelIniciarSesion, "panelIniciarSesion");
@@ -45,6 +47,7 @@ public class VentanaPrincipal extends JFrame {
         contenedorVistas.add(panelPaciente, "panelPaciente");
         contenedorVistas.add(panelRecepcionista, "panelRecepcionista");
         contenedorVistas.add(panelAsignarTurno, "panelAsignarTurno");
+        contenedorVistas.add(panelListados, "panelListados");
 
         add(contenedorVistas);
         mostrarVista("panelIniciarSesion"); // vista inicial
@@ -81,6 +84,11 @@ public class VentanaPrincipal extends JFrame {
         if (nombreVista.equals("panelPaciente")) {
             panelPaciente.cargarTurnosPaciente();
         }
+
+        if (nombreVista.equals("panelListados")) {
+        panelListados.cargarListas();
+        }
+
     }
 
     public ControladorIniciarSesion getControladorIniciarSesion(){
