@@ -64,5 +64,14 @@ public class VentanaPrincipal extends JFrame {
     }
     
     
-    
+    public String obtenerPanelSesion() {
+        Usuario usuarioActual = controladorIniciarSesion.getUsuarioActual();
+        if (usuarioActual instanceof Paciente)
+            return "panelPaciente";
+        else if (usuarioActual instanceof Recepcionista)
+            return "panelRecepcionista";
+        else
+            return "panelIniciarSesion";
+    }
+
 }

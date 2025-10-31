@@ -46,7 +46,8 @@ public class PanelPaciente extends JPanel {
         });
 
         btnCerrarSesion.addActionListener(e -> {
-            ventana.mostrarVista("login");
+            ventana.getControladorIniciarSesion().cerrarSesion();
+            ventana.mostrarVista("panelIniciarSesion");
         });
     }
 }

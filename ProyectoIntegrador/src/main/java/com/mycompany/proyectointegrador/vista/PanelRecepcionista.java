@@ -50,6 +50,10 @@ public class PanelRecepcionista extends JPanel {
         btnReprogramarTurno.addActionListener(e -> 
             JOptionPane.showMessageDialog(this, "Funcionalidad pendiente: Reprogramar Turno"));
 
-        btnCerrarSesion.addActionListener(e -> ventana.mostrarVista("login"));
+        btnCerrarSesion.addActionListener(e -> {
+            ventana.getControladorIniciarSesion().cerrarSesion();
+            ventana.mostrarVista("panelIniciarSesion");
+        });
+
     }
 }

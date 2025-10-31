@@ -42,16 +42,14 @@ public class ControladorIniciarSesion {
         }
     }
     
-
-
-    public String obtenerPanelSesion() {
-        if (usuarioActual instanceof com.mycompany.proyectointegrador.modelo.Paciente)
-            return "panelPaciente";
-        else if (usuarioActual instanceof com.mycompany.proyectointegrador.modelo.Recepcionista)
-            return "panelRecepcionista";
-        else
-            return "panelIniciarSesion";
+    public void cerrarSesion() {
+        if (usuarioActual != null) {
+            usuarioActual.setSesionIniciada(false); // Marca la sesión como cerrada
+            usuarioActual = null;                   // Limpia la referencia al usuario
+        }
     }
+
+    
 
     public Usuario getUsuarioActual() {
         return usuarioActual;

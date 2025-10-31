@@ -87,7 +87,7 @@ public class PanelIniciarSesion extends JPanel {
                 if (exito) {
                     limpiarCampos();
                     JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso.");
-                    String tipoPanel = ventana.getControladorIniciarSesion().obtenerPanelSesion();
+                    String tipoPanel = ventana.obtenerPanelSesion();
                     ventana.mostrarVista(tipoPanel);
                 }
             } catch (CredencialesInvalidasException ex) {
