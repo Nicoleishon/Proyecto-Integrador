@@ -2,6 +2,7 @@ package com.mycompany.proyectointegrador.vista;
 
 import com.mycompany.proyectointegrador.controlador.ControladorIniciarSesion;
 import com.mycompany.proyectointegrador.controlador.ControladorRegistrarPaciente;
+import com.mycompany.proyectointegrador.controlador.ControladorTurno;
 import com.mycompany.proyectointegrador.modelo.*;
 import javax.swing.*;
 import java.awt.*;
@@ -18,6 +19,7 @@ public class VentanaPrincipal extends JFrame {
     private final PanelPaciente panelPaciente;
     private final ControladorIniciarSesion controladorIniciarSesion = new ControladorIniciarSesion();
     private final ControladorRegistrarPaciente controladorRegistrar = new ControladorRegistrarPaciente();
+    private final ControladorTurno controladorTurno = new ControladorTurno();
     private final PanelAsignarTurno panelAsignarTurno;
 
     public VentanaPrincipal() {

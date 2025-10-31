@@ -3,6 +3,7 @@ package com.mycompany.proyectointegrador.repositorios;
 import com.mycompany.proyectointegrador.modelo.*;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -173,4 +174,30 @@ public class TurnoRepositorio implements IRepositorio<Turno> {
         }
         return turnos;
     }
+    
+    public List<Turno> obtenerPorMedicoYFecha(int idMedico, LocalDate fecha) throws SQLException {
+        String sql = "SELECT * FROM turnos WHERE idMedico = ? AND fechaHora LIKE ?";
+        List<Turno> turnos = new ArrayList<>();
+
+        try (Connection conn = ConexionDB.conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, idMedico);
+            // convertir LocalDate a string YYYY-MM-DD y añadir '%' para buscar cualquier hora
+            stmt.setString(2, fecha.toString() + "%");
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    turnos.add(mapearTurno(rs));
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new SQLException("Error al obtener turnos por médico y fecha: " + e.getMessage(), e);
+        }
+
+        return turnos;
+    }
+
+    
 }
