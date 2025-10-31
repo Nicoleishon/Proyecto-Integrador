@@ -87,6 +87,9 @@ public class VentanaPrincipal extends JFrame {
         return controladorRegistrar;
     }
     
+    public ControladorTurno getControladorTurno() {
+        return controladorTurno;
+    }
     
     public String obtenerPanelSesion() {
         Usuario usuarioActual = controladorIniciarSesion.getUsuarioActual();

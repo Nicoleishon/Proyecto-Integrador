@@ -72,8 +72,7 @@ public class PanelRecepcionista extends JPanel {
             ventana.mostrarVista("panelAsignarTurno"));
 
         
-        btnCancelarTurno.addActionListener(e -> 
-            JOptionPane.showMessageDialog(this, "Funcionalidad pendiente: Cancelar Turno"));
+        btnCancelarTurno.addActionListener(e -> cancelarTurnoSeleccionado());
 
         btnReprogramarTurno.addActionListener(e -> 
             JOptionPane.showMessageDialog(this, "Funcionalidad pendiente: Reprogramar Turno"));
@@ -133,6 +132,51 @@ public class PanelRecepcionista extends JPanel {
                     "Error al cargar los turnos: " + e.getMessage(),
                     "Error de Base de Datos",
                     JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void cancelarTurnoSeleccionado() {
+        
+        int filaSeleccionada = tablaTurnos.getSelectedRow();
+
+        
+        if (filaSeleccionada == -1) { // -1 = ninguna fila seleccionada
+            JOptionPane.showMessageDialog(this,
+                    "Por favor, seleccione un turno de la tabla para cancelar.",
+                    "Ningún turno seleccionado",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int idTurno = (int) tablaTurnos.getModel().getValueAt(filaSeleccionada, 0);
+        String pacienteNombre = tablaTurnos.getModel().getValueAt(filaSeleccionada, 1).toString();
+        String fecha = tablaTurnos.getModel().getValueAt(filaSeleccionada, 3).toString();
+
+        
+        int confirmacion = JOptionPane.showConfirmDialog(this,
+                "¿Está seguro de cancelar el turno de " + pacienteNombre + "\nPara: " + fecha + "?",
+                "Confirmar cancelación",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+
+        // el usuario presiona sí
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            try {
+                
+                ventana.getControladorTurno().cancelarTurno(idTurno);
+                
+                JOptionPane.showMessageDialog(this,
+                        "Turno (ID: " + idTurno + ") cancelado correctamente.",
+                        "Cancelación exitosa",
+                        JOptionPane.INFORMATION_MESSAGE);
+                cargarTurnos(); 
+            } catch (Exception ex) {
+                
+                JOptionPane.showMessageDialog(this,
+                        "Error al cancelar el turno:\n" + ex.getMessage(),
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
     

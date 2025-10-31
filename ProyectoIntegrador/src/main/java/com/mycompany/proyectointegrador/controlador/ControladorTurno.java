@@ -117,6 +117,32 @@ public class ControladorTurno {
         dias.sort(Comparator.comparing(Enum::ordinal));
         return dias;
     }
+    
+    public void cancelarTurno(int idTurno) throws SQLException, Exception {
+     Turno turno = turnoRepo.obtenerPorId(idTurno);
+
+     if (turno == null) {
+         throw new Exception("El turno (ID: " + idTurno + ") no existe.");
+     }
+
+     if (turno.getEstado() == EstadoTurno.REALIZADO) {
+         throw new Exception("No se puede cancelar un turno que ya ha sido realizado.");
+     }
+
+     if (turno.getEstado() == EstadoTurno.CANCELADO) {
+         throw new Exception("Este turno ya figura como cancelado.");
+     }
+     
+     turno.setEstado(EstadoTurno.CANCELADO);
+
+     try {
+         turnoRepo.actualizar(turno);
+         System.out.println("El turno (ID: " + idTurno + ") fue cancelado correctamente.");
+     } catch (SQLException e) {
+         throw new SQLException("Error al cancelar el turno en la base de datos: " + e.getMessage());
+     }
+ }
+
 
 
     
