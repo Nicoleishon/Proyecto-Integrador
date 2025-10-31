@@ -73,6 +73,10 @@ public class VentanaPrincipal extends JFrame {
         if (nombreVista.equals("panelIniciarSesion")) {
             panelIniciarSesion.limpiarCampos();
         }
+        
+        if (nombreVista.equals("panelRecepcionista")) {
+            panelRecepcionista.cargarTurnos();
+        }
     }
 
     public ControladorIniciarSesion getControladorIniciarSesion(){
