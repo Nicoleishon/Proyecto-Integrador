@@ -36,9 +36,7 @@ public class PanelPaciente extends JPanel {
 
         // Acciones
         btnSolicitarTurno.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, 
-                "Funcionalidad pendiente: Solicitar Turno");
-        });
+            ventana.mostrarVista("panelAsignarTurno");});
 
         btnCancelarTurno.addActionListener(e -> {
             JOptionPane.showMessageDialog(this, 

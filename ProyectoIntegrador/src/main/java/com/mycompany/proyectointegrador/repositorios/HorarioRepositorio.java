@@ -148,4 +148,28 @@ public class HorarioRepositorio implements IRepositorio<Horario> {
             throw new SQLException("Error al eliminar horarios por ID de medico: " + e.getMessage(), e);
         }
     }
+    
+    public List<Horario> obtenerPorMedicoYDia(int idMedico, DiaSemana dia) throws SQLException {
+        String sql = "SELECT * FROM horarios WHERE idMedico = ? AND diaSemana = ?";
+        List<Horario> horarios = new ArrayList<>();
+
+        try (Connection conn = ConexionDB.conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, idMedico);
+            stmt.setString(2, dia.toString());
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    horarios.add(mapearHorario(rs));
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new SQLException("Error al obtener horarios por médico y día: " + e.getMessage(), e);
+        }
+        return horarios;
+    }
+
+
 }
