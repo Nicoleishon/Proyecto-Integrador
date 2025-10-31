@@ -1,8 +1,12 @@
 package com.mycompany.proyectointegrador.vista;
 
 import com.mycompany.proyectointegrador.controlador.ControladorIniciarSesion;
+import com.mycompany.proyectointegrador.modelo.Medico;
+import com.mycompany.proyectointegrador.modelo.Paciente;
 import com.mycompany.proyectointegrador.modelo.Recepcionista;
 import com.mycompany.proyectointegrador.modelo.Turno;
+import com.mycompany.proyectointegrador.repositorios.MedicoRepositorio;
+import com.mycompany.proyectointegrador.repositorios.PacienteRepositorio;
 import com.mycompany.proyectointegrador.repositorios.TurnoRepositorio;
 import javax.swing.*;
 import java.awt.*;
@@ -15,6 +19,8 @@ public class PanelRecepcionista extends JPanel {
     private JTable tablaTurnos;
     private DefaultTableModel modeloTabla;
     private final TurnoRepositorio turnoRepo = new TurnoRepositorio();
+    private final MedicoRepositorio medicoRepo = new MedicoRepositorio();
+    private final PacienteRepositorio pacienteRepo = new PacienteRepositorio();
 
     public PanelRecepcionista(VentanaPrincipal ventana) {
         this.ventana = ventana;
@@ -99,15 +105,17 @@ public class PanelRecepcionista extends JPanel {
 
             for (Turno turno : turnos) {
                 String pacienteNombre = "N/A";
-                if (turno.getPaciente() != null) {
+                Paciente paciente = pacienteRepo.obtenerPorId(turno.getIdPaciente());
+                Medico medico = medicoRepo.obtenerPorId(turno.getIdMedico());
+                if (paciente != null) {
                     
-                    pacienteNombre = turno.getPaciente().obtenerNombreCompleto(); 
+                    pacienteNombre = paciente.obtenerNombreCompleto(); 
                 }
                 
                 String medicoNombre = "N/A";
-                if (turno.getMedico() != null) {
+                if (medico != null) {
                     
-                    medicoNombre = turno.getMedico().toString();
+                    medicoNombre = medico.toString();
                 }
 
                 modeloTabla.addRow(new Object[]{
