@@ -1,5 +1,6 @@
 package com.mycompany.proyectointegrador.vista;
 
+import com.mycompany.proyectointegrador.excepciones.NombreUsuarioOcupadoException;
 import com.mycompany.proyectointegrador.excepciones.SesionInvalidaException;
 import javax.swing.*;
 import java.awt.*;
@@ -253,16 +254,17 @@ public class PanelRegistro extends JPanel {
             );
             return true;
         } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Datos inválidos", JOptionPane.WARNING_MESSAGE);
-            return false;
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Datos inválidos", JOptionPane.WARNING_MESSAGE);       
+        } catch (NombreUsuarioOcupadoException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(),
+                    "Nombre de usuario inválido", JOptionPane.ERROR_MESSAGE);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Error al registrar el usuario en la base de datos:\n" + e.getMessage(),
                     "Error de base de datos", JOptionPane.ERROR_MESSAGE);
-            return false;
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error inesperado: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
         }
+        return false;
     }
 
 
