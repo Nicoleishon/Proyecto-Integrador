@@ -51,9 +51,20 @@ public class PanelRecepcionista extends JPanel {
             JOptionPane.showMessageDialog(this, "Funcionalidad pendiente: Reprogramar Turno"));
 
         btnCerrarSesion.addActionListener(e -> {
-            ventana.getControladorIniciarSesion().cerrarSesion();
-            ventana.mostrarVista("panelIniciarSesion");
+            int opcion = JOptionPane.showConfirmDialog(
+                    ventana,
+                    "¿Está seguro que desea cerrar sesión?",
+                    "Confirmar cierre de sesión",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE
+            );
+
+            if (opcion == JOptionPane.YES_OPTION) {
+                ventana.getControladorIniciarSesion().cerrarSesion();
+                ventana.mostrarVista("panelIniciarSesion");
+            }
         });
+
 
     }
 }
