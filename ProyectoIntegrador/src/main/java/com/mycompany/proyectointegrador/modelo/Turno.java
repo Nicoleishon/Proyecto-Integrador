@@ -1,5 +1,3 @@
-
-
 package com.mycompany.proyectointegrador.modelo;
 import java.time.LocalDateTime;
 
@@ -87,6 +85,6 @@ public class Turno {
     public void setIdPaciente(int idPaciente) {
         this.idPaciente = idPaciente;
     }
-    
+
     
 }
