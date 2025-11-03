@@ -1,4 +1,4 @@
-# Proyecto Integrador - Sistema de Gestión de Turnos Médicos
+# Proyecto Integrador - Sistema de Gestión de Turnos de Hospital
 
 ## Información Relevante
 
