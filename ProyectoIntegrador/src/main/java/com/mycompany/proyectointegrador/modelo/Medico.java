@@ -41,21 +41,12 @@ public class Medico extends Persona {
     }
     
     
-    
-    public void iniciarAtencion() {
-        if (turnoEnCurso != null) {
-            turnoEnCurso.setEstado(EstadoTurno.INICIALIZADO);
-        }
-    }
 
     public void finalizarAtencion(Turno turno) {
         // implementación
     }
 
-    public Boolean puedeAtender() {
-        return turnoEnCurso != null &&
-               EstadoTurno.CONFIRMADO.equals(turnoEnCurso.getEstado());
-    }
+
 
     public int getIdMedico() {
         return idMedico;

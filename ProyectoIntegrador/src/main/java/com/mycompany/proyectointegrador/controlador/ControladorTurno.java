@@ -166,10 +166,6 @@ public class ControladorTurno {
          throw new Exception("El turno (ID: " + idTurno + ") no existe.");
      }
 
-     if (turno.getEstado() == EstadoTurno.REALIZADO) {
-         throw new Exception("No se puede cancelar un turno que ya ha sido realizado.");
-     }
-
      if (turno.getEstado() == EstadoTurno.CANCELADO) {
          throw new Exception("Este turno ya figura como cancelado.");
      }

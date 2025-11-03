@@ -51,15 +51,6 @@ public class Paciente extends Usuario {
     }
     
 
-    public Turno solicitarTurno(Medico medico, LocalDate fechaHora) {
-        // implementación
-        return null;
-    }
-
-    public void cancelarTurno(Turno turno) {
-        // implementación
-    }
-
     public int getIdHospital() {
         return idHospital;
     }
